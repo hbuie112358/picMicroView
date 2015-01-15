@@ -1,0 +1,83 @@
+gpasm-0.13.7 beta               toggle1sec.asm1-2-2015  14:00:30           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; toggle1sec.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00004 ;
+               00005 ; Mainline
+               00006 ;  
+               00007 ;
+               00008 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 
+               00010         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00011         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+300000 FAFF    00012         __CONFIG  _CONFIG1H, _HS_OSC_1H  ;HS oscillator
+               00013         __CONFIG  _CONFIG2L, _PWRT_ON_2L & _BOR_ON_2L & _BORV_42_2L  ;Reset
+300002 FEF6    00014         __CONFIG  _CONFIG2H, _WDT_OFF_2H  ;Watchdog timer disabled
+300004 FFFF    00015         __CONFIG  _CONFIG3H, _CCP2MX_ON_3H  ;CCP2 to RC1 (rather than to RB3)
+300006 FFFB    00016         __CONFIG  _CONFIG4L, _LVP_OFF_4L  ;RB5 enabled for I/O
+               00017 
+               00018 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019 
+               00020                         cblock  0x000           ;Beginning of Access RAM
+               00021                         temp
+               00022                         temp1
+               00023                         temp2
+               00024                         endc
+               00025 
+               00026 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00027 
+               00028 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00029 
+               00030 
+0000           00031         org  0x0000             ;Reset vector
+0000 0000      00032         nop
+0002 EF0E F000 00033         goto  Mainline
+               00034 
+0008           00035         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00036         goto  $                 ;Trap
+               00037 
+0018           00038         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00039         goto  $                 ;Trap
+               00040 
+               00041 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00042 
+001C 00043 Mainline
+001C 0E00      00044                 movlw           0
+001E 6E80      00045                 movwf           PORTA
+               00046 
+0020 0E27      00047 wrap            movlw           39
+0022 6E00      00048                 movwf           temp
+0024 0600      00049 decw            decf            temp, f
+0026 E00E      00050                 bz              toggle
+0028 EF16 F000 00051                 goto            outer
+               00052                 
+002C 0EFF      00053 outer           movlw           255
+002E 6E01      00054                 movwf           temp1
+0030 0601      00055 dec1            decf            temp1, f
+0032 E0F8      00056                 bz              decw
+0034 D802      00057 rc              rcall           inner
+0036 EF18 F000 00058                 goto            dec1
+003A 0EFF      00059 inner           movlw           255
+003C 6E02      00060                 movwf           temp2
+003E 0602      00061 dec             decf            temp2, f
+0040 E1FE      00062                 bnz             dec
+0042 0012      00063                 return
+               00064 
+0044 7480      00065 toggle          btg             PORTA, RA2
+0046 EF10 F000 00066                 goto            wrap
+004A EF25 F000 00067 stop            goto            stop
+               00068 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+
