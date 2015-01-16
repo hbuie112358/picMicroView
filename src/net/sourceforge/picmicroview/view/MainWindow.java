@@ -35,7 +35,6 @@ import javax.swing.table.AbstractTableModel;
 import net.sourceforge.picmicroview.controller.RequestController;
 
 
-
 public class MainWindow extends JFrame{
 
 	private static final long serialVersionUID = 782592750591591329L;
@@ -49,10 +48,15 @@ public class MainWindow extends JFrame{
 	private JFileChooser fc;
 	
 	private JMenu program;
-	private JMenuItem run;
-	private JMenuItem step;
-	private JMenuItem assemble;
-	private JMenuItem stop;
+	private JMenuItem runItem;
+	private JMenuItem stepItem;
+	private JMenuItem assembleItem;
+	private JMenuItem stopItem;
+	
+	private LoadAction loadAction;
+	private RunAction runAction;
+	private StepAction stepAction;
+	private StopAction stopAction;
 	
 	private JMenu window;
 	private JMenu chip;
@@ -61,17 +65,17 @@ public class MainWindow extends JFrame{
 	
 	private JPanel mainPanel;
 	private Box vBox;
-	private Box hBox;
 	private JPanel rightPanel;
 	private JPanel upperRightPanel;
 	private JPanel lowerRightPanel;
 	private JPanel leftPanel;
 	private JPanel centerPanel;
 	
-	private JButton upperRight;
-	private JButton lowerRight;
 	private JButton left;
 	private JButton center;
+	private JButton runButton;
+	private JButton stepButton;
+	private JButton stopButton;
 	
 	private JTable dataMemTable;
 	private DefaultTableModel dtm_data;
@@ -106,7 +110,7 @@ public class MainWindow extends JFrame{
 		setTitle("picMicroView");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
 		file = new JMenu("File");
@@ -114,11 +118,12 @@ public class MainWindow extends JFrame{
 		file.setMnemonic('F');
 		
 		load = new JMenuItem("Load");
+		loadAction = new LoadAction();
 		file.add(load);
 		load.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
 
 		fc = new JFileChooser();
-		load.addActionListener(new LoadAction());
+		load.addActionListener(loadAction);
 		
 		newFile = new JMenuItem("New");
 		file.add(newFile);
@@ -128,22 +133,34 @@ public class MainWindow extends JFrame{
 		program = new JMenu("Program");
 		menuBar.add(program);
 		program.setMnemonic('P');
-		run = new JMenuItem("Run");
-		run.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
-		program.add(run);
-		run.addActionListener(new RunAction());
 		
-		step = new JMenuItem("Step");
-		program.add(step);
-		step.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
-		assemble = new JMenuItem("Assemble");
-		program.add(assemble);
-		stop = new JMenuItem("Stop");
-		program.add(stop);
-		stop.setAccelerator(KeyStroke.getKeyStroke('H', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
-		step.addActionListener(new StepAction());
-		stop.addActionListener(new StopAction());
+		runItem = new JMenuItem("Run");
+		runAction = new RunAction();
+		runButton = new JButton("Run");
+		runItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		runItem.addActionListener(runAction);
+		runButton.addActionListener(runAction);
+		program.add(runItem);
 		
+		stepItem = new JMenuItem("Step");
+		stepAction = new StepAction();
+		stepButton = new JButton("Step");
+		stepItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		stepItem.addActionListener(stepAction);
+		stepButton.addActionListener(stepAction);
+		program.add(stepItem);
+		
+		assembleItem = new JMenuItem("Assemble");
+		program.add(assembleItem);
+		
+		stopItem = new JMenuItem("Stop");
+		stopAction = new StopAction();
+		stopButton = new JButton("Stop");
+		stopItem.setAccelerator(KeyStroke.getKeyStroke('H', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		stopItem.addActionListener(stopAction);
+		stopButton.addActionListener(stopAction);
+		program.add(stopItem);
+
 		window = new JMenu("Window");
 		menuBar.add(window);
 		chip = new JMenu("Chip");
@@ -161,12 +178,10 @@ public class MainWindow extends JFrame{
 		leftPanel = new JPanel();
 		centerPanel = new JPanel();
 		JToolBar toolBar = new JToolBar(JToolBar.HORIZONTAL);
-		toolBar.add(new JButton("Step"));
-		toolBar.add(new JButton("Run"));
-		toolBar.add(new JButton("Stop"));
+		toolBar.add(stepButton);
+		toolBar.add(runButton);
+		toolBar.add(stopButton);
 
-		
-//		upperRight = new JButton("Registers");
 		porta = new JLabel("****");
 		
 		dataMemTable = new JTable(){
@@ -218,16 +233,19 @@ public class MainWindow extends JFrame{
 		
 		mainPanel.add(toolBar, BorderLayout.NORTH);
 		mainPanel.add(leftPanel, BorderLayout.WEST);
-		//add(mainPanel);
 		add(mainPanel);
 		initialize();
-		setVisible(true);
-		
+		setVisible(true);		
 	}
 	
 	class DataTableModel extends AbstractTableModel{
 		
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int getRowCount() {
 			// TODO Auto-generated method stub

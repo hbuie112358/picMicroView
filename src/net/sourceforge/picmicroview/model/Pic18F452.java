@@ -11,7 +11,6 @@ import net.sourceforge.picmicroview.controller.ReplyController;
 public class Pic18F452{
 
 	private HashMap<Integer, ArrayList<Integer> > program;
-	//private PicListener picListener;
 	
 	int[] programMem;
 	Alu alu;
@@ -50,6 +49,7 @@ public class Pic18F452{
 		programMem = new int[65536];
 		dataMem = new DataMemory(this);
 		initPic();
+		clock = new Clock(this);
 		alu = new Alu(this);
 		stack = new Stack(this);
 		
@@ -85,7 +85,7 @@ public class Pic18F452{
 	public void initPic(){
 	pc = new ProgramCounter(this);
 	timer0 = new Timer(this, "Timer0");
-	clock = new Clock(this);
+	//clock = new Clock(this);
 	}
 	
 	public Clock getClock(){

@@ -14,18 +14,14 @@ import net.sourceforge.picmicroview.model.Pic18F452;
  *
  */
 public class RequestController{
-
-	//private Model model;
 	private Pic18F452 pic18;
 	private ReplyController repCont;
 	static ExecutorService pool = Executors.newCachedThreadPool();
 	
 	public RequestController(Pic18F452 pic18, ReplyController repCont){
-		//this.model = model;
 		 this.pic18 = pic18;
 		 this.repCont = repCont;
 	}
-
 
 	public void loadAction(final String fileName) {
 		pool.execute(new Runnable(){
@@ -44,14 +40,6 @@ public class RequestController{
 			}		
 		});	
 	}
-	
-//	private void loadActionThread(String fileName){
-//		pool.execute(new Runnable(){
-//			public void run() {
-//				pic18.loadHexFile(fileName);
-//			}		
-//		});	
-//	}
 
 	public void runAction() {
 		pool.execute(new Runnable(){
@@ -85,8 +73,7 @@ public class RequestController{
 		updateDataMemory();
 		ArrayList<Integer> pm = getPgmMemory_pvt();
 		repCont.updatePgmMemTable(pm);
-		int wreg = getWreg_pvt();
-		
+		int wreg = getWreg_pvt();	
 	}
 	
 	private void updateDataMemory(){
@@ -105,21 +92,4 @@ public class RequestController{
 	private int getWreg_pvt(){
 		return pic18.getWreg();
 	}
-
-//	public void sum(int left, int right){
-//		pool.execute(new Runnable(){
-//			public void run() {
-//				model.sum(left, right);
-//			}		
-//		});
-//
-//	}
-//	
-//	public void increment(int val){
-//		pool.execute(new Runnable(){
-//			public void run() {
-//				model.increment(val);
-//			}		
-//		});
-//	}
 }
