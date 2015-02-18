@@ -3,6 +3,7 @@ package net.sourceforge.picmicroview.model;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import net.sourceforge.picmicroview.controller.ReplyController;
 public class Pic18F452{
 
 	private HashMap<Integer, ArrayList<Integer> > program;
+	private int DATA_MEMORY_SIZE = 65536;
 	
 	int[] programMem;
 	Alu alu;
@@ -23,9 +25,11 @@ public class Pic18F452{
 	
 	//instructions:
 	Goto GOTO;
+	Movlb movlb;
 	Movlw movlw;
 	Movwf movwf;
 	Decf decf;
+	Decfsz decfsz;
 	Bz bz;
 	Rcall rcall;
 	Bnz bnz;
@@ -36,6 +40,7 @@ public class Pic18F452{
 	Iorwf iorwf;
 	Addwf addwf;
 	Addwfc addwfc;
+	Lfsr lfsr;
 	Movf movf;
 	Bsf bsf;
 	Bcf bcf;
@@ -46,7 +51,9 @@ public class Pic18F452{
 	public Pic18F452(ReplyController repCont){
 		
 		this.repCont = repCont;
-		programMem = new int[65536];
+		programMem = new int[DATA_MEMORY_SIZE];
+		//programMem = new int[4194304];
+		//int [] testMem = new int [524288];
 		dataMem = new DataMemory(this);
 		initPic();
 		clock = new Clock(this);
@@ -54,26 +61,29 @@ public class Pic18F452{
 		stack = new Stack(this);
 		
 		//create instruction objects:
-		GOTO = new Goto(0, 0, this, "goto");
-		movlw = new Movlw(0, this, "movlw");
-		movwf = new Movwf(0, this, "movwf");
-		decf = new Decf(0, this, "decf");
-		bz = new Bz(0, this, "bz");
-		rcall = new Rcall(0, this, "rcall");
-		bnz = new Bnz(0, this, "bnz");
-		Return = new Return(0, this, "return");
-		btg = new Btg(0, this, "btg");
-		andlw = new Andlw(0, this, "andlw");
-		nop = new Nop(0, this, "nop");
-		iorwf = new Iorwf(0, this, "iorwf");
 		addwf = new Addwf(0, this, "addwf");
 		addwfc = new Addwfc(0, this, "addwfc");
-		movf = new Movf(0, this, "movf");
-		bsf = new Bsf(0, this, "bsf");
+		andlw = new Andlw(0, this, "andlw");
 		bcf = new Bcf(0, this, "bcf");
-		btfss = new Btfss(0, this, "btfss");
-		movff = new Movff(0, this, "movff");
+		bnz = new Bnz(0, this, "bnz");
 		bra = new Bra(0, this, "bra");
+		bsf = new Bsf(0, this, "bsf");
+		btfss = new Btfss(0, this, "btfss");
+		btg = new Btg(0, this, "btg");
+		bz = new Bz(0, this, "bz");
+		decf = new Decf(0, this, "decf");
+		decfsz = new Decfsz(0, this, "decfsz");
+		GOTO = new Goto(0, 0, this, "goto");
+		iorwf = new Iorwf(0, this, "iorwf");
+		lfsr = new Lfsr(0, this, "lfsr");
+		movf = new Movf(0, this, "movf");
+		movff = new Movff(0, this, "movff");
+		movlb = new Movlb(0, this, "movlb");
+		movlw = new Movlw(0, this, "movlw");
+		movwf = new Movwf(0, this, "movwf");
+		nop = new Nop(0, this, "nop");
+		rcall = new Rcall(0, this, "rcall");
+		Return = new Return(0, this, "return");
 	}
 	
 	/*
@@ -92,11 +102,18 @@ public class Pic18F452{
 		return clock;
 	}
 	
+	public int getPc(){
+		return pc.getPc();
+	}
+	
+	public int getNextInstructionAddress(){
+		return pc.getNextAddress();
+	}
+	
 	public ArrayList<Integer> getDataMemory(){
 		ArrayList<Integer> dm = new ArrayList<Integer>();
 		for(int i = 0; i < dataMem.gpMem.length; i++){
-			dm.add(dataMem.gpMem[i].read());
-//			System.out.println("gpMem[" + i + "] is :" + dataMem.gpMem[i].read());
+			dm.add(dataMem.gpMem[i].getContents());
 		}
 		return dm;
 	}
@@ -143,6 +160,7 @@ public class Pic18F452{
 		//printPgmMem(limit);
 		//System.out.println("finished loading file: " + fileName);
 		repCont.setTitle(fileName);
+		pc.setPc(0);
 	}
 	
 	
@@ -186,6 +204,11 @@ public class Pic18F452{
 				GOTO.initialize(instruction, nextWord);
 				GOTO.execute();
 			}
+			else if(hByteLnibble == 0x0e00){
+				nextWord = pc.getWord();
+				lfsr.initialize(instruction, nextWord);
+				lfsr.execute();
+			}
 			else if(hByteLnibble == 0x0100){
 				bnz.initialize(instruction);
 				bnz.execute();
@@ -225,6 +248,11 @@ public class Pic18F452{
 				decf.initialize(instruction);
 				decf.execute();
 			}
+			
+			else if (hByteLnibble == 0x0100){
+				movlb.initialize(instruction);
+				movlb.execute();
+			}
 			else{
 				System.out.println("instruction not implemented");
 				System.exit(0);
@@ -244,18 +272,23 @@ public class Pic18F452{
 			}
 		}
 		else if(hByteHnibble ==	0x2000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
+//			System.out.println("command high nibble has been decoded as 0x2000");				
 			if((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
 					|| (hByteLnibble == 0x0400)){
-				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+//				System.out.println("in inner case addwf " + Integer.toHexString(hByteLnibble));
 				addwf.initialize(instruction);
 				addwf.execute();
 			}
 			else if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
 					|| (hByteLnibble == 0x0300)){
-				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+//				System.out.println("in inner case addwfc " + Integer.toHexString(hByteLnibble));
 				addwfc.initialize(instruction);
 				addwfc.execute();
+			}
+			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+					|| (hByteLnibble == 0x0f00)){
+				decfsz.initialize(instruction);
+				decfsz.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");
@@ -277,7 +310,7 @@ public class Pic18F452{
 		}
 		else if(hByteHnibble == 0x6000){
 			//System.out.println("command high nibble has been decoded as 0x6000");
-			if(hByteLnibble == 0x0E00){
+			if((hByteLnibble == 0x0E00) || (hByteLnibble == 0x0F00)){
 				//System.out.println("command low nibble has been decoded as 0X0E00");
 				movwf.initialize(instruction);
 				movwf.execute();
@@ -349,6 +382,10 @@ public class Pic18F452{
 	 * "No access specifier" functions section, available only within package
 	 * **********************************************************************
 	 */
+	
+	int getDataMemorySize(){
+		return DATA_MEMORY_SIZE;
+	}
 	
 	void setProgramMem(int index, int value){
 		programMem[index] = (byte)value;

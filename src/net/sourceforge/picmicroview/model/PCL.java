@@ -13,7 +13,8 @@ public class PCL extends Register {
 	//pcu bits 23-21 are maintained at zero
 	protected void write(int value){
 		System.out.println("in PCL write()");
-		this.setContents(value); 
+		//this.setContents(value); 
+		this.write(value); 
 		clearBit(0);
 		int newValue, pch, pcu;
 		pch = pic18.dataMem.pclatH.read() * 256;
@@ -25,10 +26,12 @@ public class PCL extends Register {
 	
 	int read(){	
 		int pclatH = pic18.pc.getPc() & 0x0000ff00;
-		pic18.dataMem.pclatH.setContents(pclatH);
+		//pic18.dataMem.pclatH.setContents(pclatH);
+		pic18.dataMem.pclatH.write(pclatH);
 		
 		int pclatU = pic18.pc.getPc() & 0x00ff0000;
-		pic18.dataMem.pclatU.setContents(pclatU);
+		//pic18.dataMem.pclatU.setContents(pclatU);
+		pic18.dataMem.pclatU.write(pclatU);
 
 		return pic18.pc.getPc() & 0xff;	
 	}

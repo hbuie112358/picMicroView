@@ -10,7 +10,7 @@ public class Wreg extends Register {
 
 	@Override
 	void write(int value) {
-		this.contents = value;
+		this.contents = value & 0xff;
 		//System.out.println("in porta write()");
 		
 	}

@@ -5,8 +5,6 @@ package net.sourceforge.picmicroview.model;
 
 public class Scanner {
 
-	private Record r;
-
 	private Source source;
 	
 	//scanner makes source object.
@@ -16,7 +14,7 @@ public class Scanner {
 		
 	//a record is a line in the file, essentially returns a line at a time
 	public Record nextRecord(){
-		return r = new Record(source);	
+		return new Record(source);	
 
 		
 

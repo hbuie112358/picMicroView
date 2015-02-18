@@ -1,0 +1,119 @@
+gpasm-0.13.7 beta               indf.asm    2-14-2015  12:10:14          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; indf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;Tests indirect addressing mechanism writes/reads to INDFx
+               00004 ;
+               00005 ;
+               00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00007 ;
+               00008 ; Mainline
+               00009 ;  
+               00010 ;
+               00011 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00012 
+               00013         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00014         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00015 
+               00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00017 
+               00018         cblock  0x000           ;Beginning of Access RAM
+               00019 
+               00020         endc
+               00021 
+               00022 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00023 
+               00024 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00025 
+               00026 
+0000           00027         org  0x0000             ;Reset vector
+0000 0000      00028         nop
+0002 EF0E F000 00029         goto  Mainline
+               00030 
+0008           00031         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00032         goto  $                 ;Trap
+               00033 
+0018           00034         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00035         goto  $                 ;Trap
+               00036 
+               00037 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00038 
+001C 00039 Mainline
+               00040 ;This portion tests writing function of indf by loading an address in fsr and
+               00041 ;then writing to indf0, 1, and 2. Value in wreg is written to access memory 
+               00042 ;locations 0x105, 0x107, and 0x109.
+               00043 ;       movlw   5
+               00044 ;       movwf   FSR0L
+               00045 ;       movlw   1
+               00046 ;       movwf   FSR0H
+001C EE01 F005 00047         lfsr    0, 0x105
+0020 0EF1      00048         movlw   241
+0022 6EEF      00049         movwf   INDF0
+               00050 
+               00051 ;       movlw   7
+               00052 ;       movwf   FSR1L
+               00053 ;       movlw   1
+               00054 ;       movwf   FSR1H
+0024 EE11 F007 00055         lfsr    1, 0x107
+0028 0EA3      00056         movlw   163
+002A 6EE7      00057         movwf   INDF1
+               00058 
+               00059 ;       movlw   9
+               00060 ;       movwf   FSR2L
+               00061 ;       movlw   1
+               00062 ;       movwf   FSR2H
+002C EE21 F009 00063         lfsr    2, 0x109
+0030 0EC9      00064         movlw   201
+0032 6EDF      00065         movwf   INDF2
+               00066 
+               00067 ;This tests to see if an indf register can be loaded with a value indirectly.
+               00068 ;An indirect write to an indf should have no effect.
+               00069 ;This attempts to write the value 10 into indf0 by loading indf0's address
+               00070 ;into fsr1 and telling indf1 to write into indf0.
+               00071 ;       movlw   0xef            ;Load address of INDF0 into FSR1
+               00072 ;       movwf   FSR1L
+               00073 ;       movlw   0
+               00074 ;       movwf   FSR1H
+0034 EE10 F0EF 00075         lfsr    1, 0x0ef
+0038 0E0A      00076         movlw   10
+003A 6EE7      00077         movwf   INDF1           ;Try to load value of 10 into INDF0 register
+               00078 
+               00079 ;This section tests to see if it is possible to address memory locations that do 
+               00080 ;not exist in access memory, such as 0xddff. The write to FSR1H should mask 0xdd
+               00081 ;into 0x0d and the value 0xdd should be written into access memory address 0xdff.
+               00082 
+003C 0EFF      00083         movlw   0xff            
+003E 6EE1      00084         movwf   FSR1L
+0040 0EDD      00085         movlw   0xdd
+0042 6EE2      00086         movwf   FSR1H
+0044 6EE7      00087         movwf   INDF1
+               00088 
+               00089 ;This section tests the indirect read function, then loads fsr1 with address
+               00090 ;of indf0, then attempts to indirectly read indf0 contents. This should always return 0.
+               00091 
+0046 0E00      00092         movlw   0               ;Clear value in wreg
+0048 CFE7 FFE8 00093         movff   INDF1, WREG     ;read location pointed to by fsr1, place in wreg
+               00094 ;       movlw   0xef            ;Load address of INDF0 into FSR1
+               00095 ;       movwf   FSR1L
+               00096 ;       movlw   0
+               00097 ;       movwf   FSR1H
+004C EE10 F0EF 00098         lfsr    1, 0x0ef
+0050 0E0A      00099         movlw   10              ;Place 10 in wreg
+0052 CFE7 FFE8 00100         movff   INDF1, WREG     ;Try to indirectly read indf0, should place 0 in wreg
+               00101 
+               00102 
+0056 EF2B F000 00103 stop    goto            stop
+               00104 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

@@ -1,16 +1,16 @@
 package net.sourceforge.picmicroview.model;
 
-import java.util.Date;
+//import java.util.Date;
 
 public class Clock{
 	
-	private long CYCLE = 400;
+//	private long CYCLE = 400;
 	public long last, now, outTimer;
-	private int inTimer;
+//	private int inTimer;
 	private boolean go;
-	private int data;
-	private Output output;
-	private Thread print;
+//	private int data;
+//	private Output output;
+//	private Thread print;
 	public long time1;
 	public long time2;
 	private Pic18F452 pic18;
@@ -20,7 +20,7 @@ public class Clock{
 	public Clock(Pic18F452 pic18) {
 		this.pic18 = pic18;
 		outTimer = 0;
-		inTimer = 0;
+//		inTimer = 0;
 		clockDelay = 300;
 		a = new int[clockDelay];
 	}
@@ -60,17 +60,17 @@ public class Clock{
 		//pic18.printDataMem();
 	}
 	
-	private void printOutput(){
-		//System.out.print("porta is " + pic18.dataMem.porta.read());
-
-
-		if(data != pic18.dataMem.porta.read()){
-			data = pic18.dataMem.porta.read();
-			output = new Output(pic18);
-			print = new Thread(output);
-			print.start();
-		}
-		//System.out.println("intcon is " + pic18.dataMem.intcon.read());
-	}
+//	private void printOutput(){
+//		//System.out.print("porta is " + pic18.dataMem.porta.read());
+//
+//
+//		if(data != pic18.dataMem.porta.read()){
+//			data = pic18.dataMem.porta.read();
+//			output = new Output(pic18);
+//			print = new Thread(output);
+//			print.start();
+//		}
+//		//System.out.println("intcon is " + pic18.dataMem.intcon.read());
+//	}
 	
 }

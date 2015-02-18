@@ -1,0 +1,52 @@
+gpasm-0.13.7 beta               movlw.asm   2-9-2015  10:49:38           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; movlwExample.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00004 ;
+               00005 ; Mainline
+               00006 ;  
+               00007 ;
+               00008 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 
+               00010         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00011 
+               00012 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00013 
+               00014                         cblock  0x000           ;Beginning of Access RAM
+               00015                         temp
+               00016                         endc
+               00017 
+               00018 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019 
+               00020 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00021 
+               00022 
+0000           00023         org  0x0000             ;Reset vector
+0000 0000      00024         nop
+0002 EF0E F000 00025         goto  Mainline
+               00026 
+0008           00027         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00028         goto  $                 ;Trap
+               00029 
+0018           00030         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00031         goto  $                 ;Trap
+               00032 
+               00033 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00034 
+001C 00035 Mainline
+001C 0E4B      00036                 movlw           75      ;Loads the value 75 in wreg
+001E 6E00      00037                 movwf           temp    ;Places wreg value of 75 into memory at address temp
+0020 0E00      00038                 movlw           temp    ;Places value of memory address itself, 00h, not contents, into wreg
+0022 EF11 F000 00039 stop            goto            stop
+               00040 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

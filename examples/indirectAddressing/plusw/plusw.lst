@@ -1,0 +1,90 @@
+gpasm-0.13.7 beta               plusw.asm   2-14-2015  16:52:17          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; plusw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests indirect addressing mechanism writes/reads to PLUSWx
+               00004 ;
+               00005 ;
+               00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00007 ;
+               00008 ; Mainline
+               00009 ;  
+               00010 ;
+               00011 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00012 
+               00013         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00014         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00015 
+               00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00017 
+               00018         cblock  0x000           ;Beginning of Access RAM
+               00019         temp1
+               00020         temp2
+               00021         endc
+               00022 
+               00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
+               00025 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
+               00027 
+0000           00028         org  0x0000             ;Reset vector
+0000 0000      00029         nop
+0002 EF0E F000 00030         goto  Mainline
+               00031 
+0008           00032         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00033         goto  $                 ;Trap
+               00034 
+0018           00035         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00036         goto  $                 ;Trap
+               00037 
+               00038 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00039 
+001C 00040 Mainline
+               00041 ;This section tests indirect addressing plusw operation. It uses plusw to assign values
+               00042 ;to memory locations in access memory by placing a signed value in wreg. Plusw then adds
+               00043 ;this signed wreg value as an offset to the FSR and places a value from a register into 
+               00044 ;the memory location pointed to by fsr + wreg.
+               00045 
+               00046 ;Write test:
+               00047 ;Check writing with rollunder from 0x000 to 0xfff
+               00048 
+001C EE00 F002 00049         lfsr    0, 0x002        ;Place 0x002 in FSR0
+0020 0E06      00050         movlw   0x06            ;Place 0x06 in wreg
+0022 6EEB      00051         movwf   PLUSW0          ;Write wreg to address pointed to by FSR0 + wreg
+0024 0EFA      00052         movlw   0xfa            ;Place 0xfa (-6) in wreg
+0026 6EEB      00053         movwf   PLUSW0          ;Write wreg to address pointed to by FSR0 + wreg
+               00054 
+               00055 ;Read test:
+               00056 ;Check reading with rollunder from 0x000 to 0xfff
+               00057 
+0028 0E06      00058         movlw   0x06            ;Place 0x06 in wreg
+002A CFEB F000 00059         movff   PLUSW0, temp1   ;Put value in memory location pointed to by FSR0+wreg into temp1
+002E 0EFA      00060         movlw   0xfa            ;Place 0xfa (-6) in wreg
+0030 CFEB F001 00061         movff   PLUSW0, temp2   ;Put value in memory location pointed to by FSR0+wreg into temp2
+               00062 
+               00063 ;Write test:
+               00064 ;Check writing with rollover from 0xfff to 0x000
+               00065 
+0034 EE1F F0FE 00066         lfsr    1, 0xffe        ;Place 0xffe in FSR1
+0038 0E0E      00067         movlw   0x0e            ;Place 0x0e in wreg
+003A C000 FFE3 00068         movff   temp1, PLUSW1   ;Write temp1 into memory location pointed to by FSR1+wreg (0x009)
+003E 0EF2      00069         movlw   0xf2            ;Place 0xf2 (-14) in wreg
+0040 C001 FFE3 00070         movff   temp2, PLUSW1   ;Write temp1 into memory location pointed to by FSR1+wreg (0xff3)
+               00071 
+               00072 
+               00073 
+0044 EF22 F000 00074 stop    goto            stop
+               00075 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

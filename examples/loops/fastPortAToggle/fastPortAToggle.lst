@@ -1,0 +1,73 @@
+gpasm-0.13.7 beta               fastPortAToggle.asm2-14-2015  19:29:52          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; fastPortAToggle.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program shows an example of a simple loop. PORTA, bit 2 toggles
+               00004 ;quickly, approximately every 255X255 instructions.
+               00005 ;
+               00006 ;
+               00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00008 ;
+               00009 ; Mainline
+               00010 ;  
+               00011 ;
+               00012 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00013 
+               00014         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00015         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00016 
+               00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00018                         cblock  0x000           ;Beginning of Access RAM
+               00019                         temp1
+               00020                         temp2
+               00021                         endc
+               00022 
+               00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
+               00025 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
+               00027 
+0000           00028         org  0x0000             ;Reset vector
+0000 0000      00029         nop
+0002 EF0E F000 00030         goto  Mainline
+               00031 
+0008           00032         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00033         goto  $                 ;Trap
+               00034 
+0018           00035         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00036         goto  $                 ;Trap
+               00037 
+               00038 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00039 
+001C 00040 Mainline
+001C 0E00      00041                 movlw           0
+001E 6E80      00042                 movwf           PORTA
+0020 0EFF      00043 outer           movlw           255
+0022 6E00      00044                 movwf           temp1
+0024 0600      00045 dec1            decf            temp1, f
+0026 E008      00046                 bz              toggle
+0028 D802      00047 rc              rcall           inner
+002A EF12 F000 00048                 goto            dec1
+002E 0EFF      00049 inner           movlw           255
+0030 6E01      00050                 movwf           temp2
+0032 0601      00051 dec             decf            temp2, f
+0034 E1FE      00052                 bnz             dec
+0036 0012      00053                 return
+               00054 
+0038 7480      00055 toggle          btg             PORTA, RC2
+003A EF10 F000 00056                 goto            outer
+003E EF1F F000 00057 stop            goto            stop
+               00058 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

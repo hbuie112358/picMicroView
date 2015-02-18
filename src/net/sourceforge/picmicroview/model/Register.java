@@ -22,9 +22,28 @@ public class Register {
 		this.contents = value;
 		//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 	}
+	
+	//This method is overridden in indf for indirect addressing to have the effect that
+	//if an indf register is read or written indirectly through another indf register, then the 
+	//contents are read as 0 and a write has no effect. Sending the register as a parameter
+	//allows indf to know who is calling for read/write. If not overridden, works same as 
+	//write(int value). See Indf for overriding implementation
+	void write(int value, Register r){
+		this.contents = value;
+		//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
+	}
 
 	
 	int read(){
+		return contents;
+	}
+	
+	//This method is overridden in indf for indirect addressing to have the effect that
+	//if an indf register is read or written indirectly through another indf register, then the 
+	//contents are read as 0 and a write has no effect. Sending the register as a parameter
+	//allows indf to know who is calling for read/write. If not overridden, works same as 
+	//read(). See Indf for overriding implementation
+	int read(Register r){
 		return contents;
 	}
 	
@@ -54,8 +73,12 @@ public class Register {
 		contents++;
 	}
 	
-	void setContents(int value){
-		contents = value;
+	//Returns the register contents via the read() method. Used by pic18.getDataMemory()
+	//to report memory contents to reply controller. Overridden in indirect registers 
+	//postdec, postinc, preinc, plusw so that reading the contents for the sake of reporting
+	//does not change the contents
+	int getContents(){
+		return read();
 	}
 	
 	int getBit(int bit){

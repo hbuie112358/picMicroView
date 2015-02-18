@@ -1,8 +1,8 @@
 package net.sourceforge.picmicroview.model;
 
-import java.awt.BorderLayout;
+//import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
+//import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

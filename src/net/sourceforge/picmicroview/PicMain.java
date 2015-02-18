@@ -3,7 +3,6 @@ import java.awt.EventQueue;
 
 import net.sourceforge.picmicroview.controller.ReplyController;
 import net.sourceforge.picmicroview.controller.RequestController;
-import net.sourceforge.picmicroview.model.Model;
 import net.sourceforge.picmicroview.model.Pic18F452;
 import net.sourceforge.picmicroview.view.MainWindow;
 

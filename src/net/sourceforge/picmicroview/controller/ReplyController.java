@@ -20,7 +20,7 @@ public class ReplyController {
 	 */
 	private MainWindow mw;
 	private RequestController reqCont;
-	private long now; //testing, remove when no longer needed
+//	private long now; //testing, remove when no longer needed
 	
 	/**
 	 * Causes mw data member to point to MainWindow instance, which completes
@@ -58,22 +58,41 @@ public class ReplyController {
 		});
 	}
 	
-	public void updateDataMemTable(final ArrayList<Integer> dm){
+	//Called by RequestController.updateDataMemory()
+	public void updateMemTables(ArrayList<Integer> dm){
 		EventQueue.invokeLater(new Runnable(){
 			public void run(){
 				mw.updateDataMemTable(dm);
 			}
 		});
 	}
-//	
-//	public void setIncVal(int val){
-//		EventQueue.invokeLater(new Runnable(){
-//			public void run(){
-//				mw.setIncValue(Integer.toString(val));
-//			}
-//		});
-//	}
 
+	public void initDataMemTable(final ArrayList<Integer> dm){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.initDataMemTable(dm);
+			}
+		});
+	}
+	
+	//Sends MainWindow value of program counter, called by 
+	//RequestController.loadAction();
+	public void updatePc(int pc){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.updatePc(pc);
+			}
+		});
+	}
+
+	/**
+	 * Called by request controller initialize_pvt. Calls mw.updatePgmMemTable()
+	 * which loads values from pic18 program memory into main window's pgmMemTable's
+	 * TableModel. Called when request controller initializes on pgm boot, when a file
+	 * is loaded, and each time step button is pressed
+	 * @param pm - program memory values from pic18
+	 * @param pc - program counter value from pic18
+	 */
 	public void updatePgmMemTable(final ArrayList<Integer> pm) {
 		EventQueue.invokeLater(new Runnable(){
 			public void run(){
@@ -82,12 +101,58 @@ public class ReplyController {
 		});
 	}
 	
+	public void initPgmMemTable(final ArrayList<Integer> pm){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.initPgmMemTable(pm);
+			}
+		});
+	}
+	
+	public void initPortRegMemTable(final ArrayList<Integer> dm){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.initPortRegMemTable(dm);
+			}
+		});
+	}
+	
 	public void updatePortA(final int value){
-//		System.out.println(System.nanoTime() - now);
-//		now = System.nanoTime();
 		EventQueue.invokeLater(new Runnable(){
 			public void run(){
 				mw.updatePortA(value);
+			}
+		});
+	}
+	
+	public void updatePortB(final int value){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.updatePortB(value);
+			}
+		});
+	}
+	
+	public void updatePortC(final int value){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.updatePortC(value);
+			}
+		});
+	}
+	
+	public void updatePortD(final int value){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.updatePortD(value);
+			}
+		});
+	}
+	
+	public void updatePortE(final int value){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.updatePortE(value);
 			}
 		});
 	}

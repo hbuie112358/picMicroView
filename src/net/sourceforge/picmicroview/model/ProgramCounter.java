@@ -12,19 +12,27 @@ public class ProgramCounter {
 	}
 	
 	public void increment(){
-		pc = pc + 2;
-		//System.out.println("pc is " + Integer.toHexString(pc));
+		if(pc == pic18.getDataMemorySize() - 2)
+			pc = 0;
+		else
+			pc = pc + 2;
 	}
 	
 	public void setPc(int value){
 		pc = value;
-		//System.out.println("in setPc, value is " + Integer.toHexString(value));
 	}
 	
 	public int getPc(){
 		return pc;
 	}
 	
+	/**
+	 * Gets high byte of instruction from memory, shifts bits to msb position
+	 * in word (which shifts zeros into least significant 8 bytes, then gets 
+	 * low byte from memory, adds high byte and low byte together to form 
+	 * instruction word
+	 * @return
+	 */
 	public int getWord(){
 		int highByte = pic18.programMem[pc] * 256;
 		int lowByte = pic18.programMem[pc + 1];
@@ -48,5 +56,9 @@ public class ProgramCounter {
 	public int getReturnAddress(){
 		return pc + 2;
 	}
-
+	
+	public int getNextAddress(){
+		return pc + 2;
+	}
+	
 }

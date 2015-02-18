@@ -4,8 +4,6 @@ package net.sourceforge.picmicroview.controller;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import net.sourceforge.picmicroview.model.Model;
 import net.sourceforge.picmicroview.model.Pic18F452;
 
 /**
@@ -27,7 +25,10 @@ public class RequestController{
 		pool.execute(new Runnable(){
 			public void run() {
 				pic18.loadHexFile(fileName);
-				initialize_pvt();
+				ArrayList<Integer> pm = pic18.getPgmMemory();
+				repCont.updatePgmMemTable(pm);
+				repCont.updatePc(pic18.getPc());
+
 			}		
 		});	
 	}
@@ -36,7 +37,9 @@ public class RequestController{
 		pool.execute(new Runnable(){
 			public void run() {
 				pic18.run();
-				initialize_pvt();
+				updateDataMemory();
+				repCont.updatePc(pic18.getPc());
+				
 			}		
 		});	
 	}
@@ -44,6 +47,7 @@ public class RequestController{
 	public void runAction() {
 		pool.execute(new Runnable(){
 			public void run() {
+			//	repCont.updatePc(pic18.getPc());/////////////***********?????????
 				pic18.getClock().start();
 			}		
 		});		
@@ -53,7 +57,9 @@ public class RequestController{
 		pool.execute(new Runnable(){
 			public void run() {
 				pic18.getClock().stop();
+				repCont.updatePc(pic18.getPc());
 				updateDataMemory();
+
 				pic18.initPic();
 			}		
 		});		
@@ -67,18 +73,20 @@ public class RequestController{
 		});	
 	}
 
+	//called as a thread by loadAction(), stepAction, and initialize()
 	private void initialize_pvt() {
-//		ArrayList<Integer> dm = getDataMemory_pvt();
-//		repCont.updateDataMemTable(dm);
-		updateDataMemory();
+		//updateDataMemory();
+		ArrayList<Integer> dm = getDataMemory_pvt();
+		repCont.initDataMemTable(dm);
+		repCont.initPortRegMemTable(dm);
 		ArrayList<Integer> pm = getPgmMemory_pvt();
-		repCont.updatePgmMemTable(pm);
-		int wreg = getWreg_pvt();	
+		repCont.initPgmMemTable(pm);
 	}
 	
+	//called by RequestControler.stepAction() and RequestController.stopAction()
 	private void updateDataMemory(){
 		ArrayList<Integer> dm = getDataMemory_pvt();
-		repCont.updateDataMemTable(dm);
+		repCont.updateMemTables(dm);
 	}
 	
 	private ArrayList<Integer> getDataMemory_pvt(){
@@ -87,9 +95,5 @@ public class RequestController{
 	
 	private ArrayList<Integer> getPgmMemory_pvt(){
 		return pic18.getPgmMemory();
-	}
-	
-	private int getWreg_pvt(){
-		return pic18.getWreg();
 	}
 }

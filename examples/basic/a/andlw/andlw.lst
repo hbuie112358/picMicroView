@@ -1,0 +1,61 @@
+gpasm-0.13.7 beta               andlw.asm   2-14-2015  20:49:20          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;;andlw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of andlw instruction. WREG contents are
+               00004 ;ANDed literal L, result placed in WREG
+               00005 ;
+               00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00007 ;
+               00008 ; Mainline
+               00009 ;  
+               00010 ;
+               00011 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00012 
+               00013         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00014         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00015 
+               00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00017 
+               00018         cblock  0x000           ;Beginning of Access RAM
+               00019 
+               00020         endc
+               00021 
+               00022 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00023 
+               00024 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00025 
+               00026 
+0000           00027         org  0x0000             ;Reset vector
+0000 0000      00028         nop
+0002 EF0E F000 00029         goto  Mainline
+               00030 
+0008           00031         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00032         goto  $                 ;Trap
+               00033 
+0018           00034         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00035         goto  $                 ;Trap
+               00036 
+               00037 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00038 
+001C 00039 Mainline
+               00040 
+001C 0E06      00041 start           movlw           6               
+001E 0B02      00042                 andlw           2
+               00043 
+               00044 
+0020 EF10 F000 00045 stop            goto            stop
+               00046 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

@@ -1,10 +1,10 @@
 package net.sourceforge.picmicroview.model;
 
-import java.util.ArrayList;
-import java.awt.*;
-import java.awt.event.*;
+//import java.util.ArrayList;
+//import java.awt.*;
+//import java.awt.event.*;
 
-import javax.swing.*;
+//import javax.swing.*;
 
 public class testPic {
 

@@ -1,6 +1,6 @@
 package net.sourceforge.picmicroview.model;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class Stack {
 

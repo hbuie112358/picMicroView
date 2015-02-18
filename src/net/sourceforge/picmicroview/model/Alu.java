@@ -13,20 +13,24 @@ public class Alu {
 	
 	public void execute(Addwf instruction){
 		//System.exit(0);
-		int highByte = instruction.instruction & 0xff00;
+		int highByte = instruction.instruction & 0xff00; //isolate command portion of instruction
 		int address = instruction.instruction & 0x00ff; //address held in data portion of instruction
 		result = pic18.dataMem.wreg.read() + pic18.dataMem.gpMem[address].read();
 		if ((highByte ^ 0x2400) == 0){//if d,a are both 0, result to wreg
 		
 			
 			//pic18.setWreg(result);
-			pic18.dataMem.wreg.write(result);
+			pic18.dataMem.wreg.write(result & 0xff);
 			adjustZbit();
+			adjustCbit();
+			adjustNbit();
 		}
 		else if ((highByte ^ 0x2600) == 0){ //if d = 1, a = 0, result to f
 			//System.out.println("value at address " + address + " is " + pic18.dataMem.gpMem[address].read());
-			pic18.dataMem.gpMem[address].write(result);
+			pic18.dataMem.gpMem[address].write(result & 0xff);
 			adjustZbit();
+			adjustCbit();
+			adjustNbit();
 		}
 		else{
 			System.out.println("unimplemented addwf command " + Integer.toHexString(highByte));
@@ -39,16 +43,23 @@ public class Alu {
 		address = instruction.instruction & 0x00FF; //address held in data portion of instruction	
 		result = pic18.dataMem.gpMem[address].read();
 		//System.out.println("result before decrement is " + result);
-		result--;
+		
+		//rollover to 255 if register value to be decremented is 0
+		if(result == 0)
+			result = 0xff;
+		else
+			result--;
 		if ((highByte ^ 0x0400) == 0){ //if d,a are both 0, result to wreg
 			pic18.dataMem.wreg.write(result);
 			//System.out.println("value in wreg is " + pic18.dataMem.wreg.read());
 			adjustZbit();
+			adjustNbit();
 		}
 		else if ((highByte ^ 0x0600) == 0){ //if d = 1, a = 0, result to f
 			pic18.dataMem.gpMem[address].write(result);
 			//System.out.println("value at address " + address + " is " + pic18.dataMem.gpMem[address].read());
 			adjustZbit();
+			adjustNbit();
 		}
 		else{
 			System.out.println("unimplemented decf command " + Integer.toHexString(highByte));
@@ -126,34 +137,27 @@ public class Alu {
 		result = 0;
 		highByte = instruction.instruction & 0xff00; //isolate command portion of instruction
 		address = instruction.instruction & 0x00FF; //isolate data portion of instruction
-		int wreg = pic18.dataMem.wreg.read();
-		int freg = pic18.dataMem.gpMem[address].read();
-		int carry = pic18.dataMem.status.getBit(0);
-		result = wreg + freg + carry;
-		adjustCbit();
 		
-//		System.out.println("wreg: " + Integer.toHexString(pic18.dataMem.wreg.read()));
-//		System.out.println("mem : " + Integer.toHexString(pic18.dataMem.gpMem[address].read()));
-//		System.out.println("rslt: " + Integer.toHexString(result));
-		if ((highByte ^ 0x2000) == 0){ //if d,a are both 0, result to wreg
-			pic18.dataMem.wreg.write(result & 0xff);
-			//System.out.println("value in wreg is " + pic18.dataMem.wreg.read());
-			adjustZbit();
-			adjustNbit();
-		}
-		else if ((highByte ^ 0x2200) == 0){ //if d = 1, a = 0, result to f
-			pic18.dataMem.gpMem[address].write(result & 0xff);
-			//System.out.println("value at address " + address + " is " + pic18.dataMem.gpMem[address].read());
-			adjustZbit();
-			adjustNbit();
-		}
-		else{
-			System.out.println("unimplemented addwfc command " + Integer.toHexString(highByte));
-			System.exit(0);
-		}
-	//	System.out.println("status reg is " + Integer.toBinaryString(pic18.dataMem.status.read()));
-//		System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
-//		System.out.println("");
+		//get wreg value
+		int wreg = pic18.dataMem.wreg.read();
+		
+		//get register address
+		int freg = getRegAddress(instruction.instruction);
+		System.out.println("in alu.addwfc, freg address is: " + Integer.toHexString(freg));
+		
+		//get value of carry bit
+		int carry = pic18.dataMem.status.getBit(0);
+		
+		//find sum of wreg, value in gpMem[freg], + carry bit
+		result = wreg + pic18.dataMem.gpMem[freg].read() + carry;
+		
+		//if bit 17 of instruction is high, write result to f register
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustCbit();
+		adjustZbit();
+		adjustNbit();
 	}
 	
 	private void adjustZbit(){
@@ -182,6 +186,18 @@ public class Alu {
 		else if(pic18.dataMem.status.getBit(0) == 1){
 			pic18.dataMem.status.clearBit(0);
 		}
+	}
+	
+	private int getRegAddress(int instruction){
+		int address = 0, bsrVal;
+		System.out.println("instruction is: " + Integer.toHexString(instruction) + 
+				", bit 16 is: " + (instruction & 0x100));
+		if((instruction & 0x100) == 0x100){
+			bsrVal = pic18.dataMem.bsr.read();
+			address = (bsrVal << 8) | (instruction & 0xff);
+		}
+		else address = instruction & 0xff;
+		return address;
 	}
 }
 

@@ -1,0 +1,61 @@
+gpasm-0.13.7 beta               addwf.asm   2-9-2015  17:13:39           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; templateExample.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00004 ;
+               00005 ; Mainline
+               00006 ;  
+               00007 ;
+               00008 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 
+               00010         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00011         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00012 
+               00013 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015         cblock  0x000           ;Beginning of Access RAM
+               00016         temp
+               00017         endc
+               00018 
+               00019 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00020 
+               00021 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00022 
+               00023 
+0000           00024         org  0x0000             ;Reset vector
+0000 0000      00025         nop
+0002 EF0E F000 00026         goto  Mainline
+               00027 
+0008           00028         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00029         goto  $                 ;Trap
+               00030 
+0018           00031         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00032         goto  $                 ;Trap
+               00033 
+               00034 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00035 
+001C 00036 Mainline
+001C 0E05      00037         movlw   5               ;Place 5 in wreg
+001E 6E00      00038         movwf   temp            ;Move 5 to temp
+0020 0E06      00039         movlw   6               ;Place 6 in wreg
+0022 2600      00040         addwf   temp, f         ;Add contents of wreg and temp, place result in temp
+0024 0EFE      00041         movlw   0xfe            ;Place 0xfe in wreg
+0026 2400      00042         addwf   temp, w         ;Add wreg, temp, status reg bit 0 (C) goes high
+0028 2400      00043         addwf   temp, w         ;Add wreg, temp, status reg bit 0 (C) goes low
+               00044 
+002A EF15 F000 00045 stop    goto            stop
+               00046 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+
