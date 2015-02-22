@@ -19,6 +19,7 @@ public class PortE extends Register {
 
 	void write(int value){
 		this.contents = value;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortE(contents);
 		//System.out.println("in portE write()");
 	}
@@ -41,16 +42,19 @@ public class PortE extends Register {
 	
 	void decrement(){
 		contents--;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortE(contents);
 	}
 	
 	void increment(){
 		contents++;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortE(contents);
 	}
 	
 	void setContents(int value){
 		contents = value;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortE(contents);
 	}
 }

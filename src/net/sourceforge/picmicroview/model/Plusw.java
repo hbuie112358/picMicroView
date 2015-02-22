@@ -32,11 +32,8 @@ public class Plusw extends Register {
 	//that if the register being written to is another indf register, the write will have 
 	//no effect. After write operation, decrements FSR
 	void write(int value){
-		
-		//increment before getting address
 		getFullAddress();
 		
-
 		//tells callee that caller is an indf register
 		pic18.dataMem.gpMem[fullAddress].write(value, this);
 
@@ -66,8 +63,8 @@ public class Plusw extends Register {
 			
 			//cast wregVal to byte and add signed value
 			lowAddress = lowAddress + (byte)wregVal;
-			System.out.println("in plusw negative, lowAddress is: " + Integer.toHexString(lowAddress));
-			System.out.println("in plusw just negative, wregVal is: " + Integer.toHexString(wregVal));
+//			System.out.println("in plusw negative, lowAddress is: " + Integer.toHexString(lowAddress));
+//			System.out.println("in plusw just negative, wregVal is: " + Integer.toHexString(wregVal));
 			
 			//if result is negative, decrement highAddress
 			if(lowAddress < 0){
@@ -101,9 +98,6 @@ public class Plusw extends Register {
 	//know that it is being called by another indf. It is inherited from Register. After 
 	//read, decrements FSR.
 	int read(){
-		
-		//increment before getting full address
-//		pic18.dataMem.gpMem[fsrl].increment();
 		getFullAddress();
 		
 		//tells callee that caller is an indf register

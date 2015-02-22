@@ -1,4 +1,7 @@
-;;;;;;; decf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; movwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;This program tests the operation of the movwf command by implementing the
+;test conditions for the examples shown on page 745 of the manual.
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -13,11 +16,11 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
-	CNT
+	OPTION_REG
 	endc
 
 ;	cblock	0x100		;Beginning of 0x100 block, just above Access Ram
-;	tempBank1
+;	OPTION_REG
 ;	endc	
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -37,41 +40,35 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;See manual chapter 31 for more detail on individual instructions
-;Syntax: 	decf	f, d, a		(register, destination register, bank select)
-					;"d", "a" both default to 0. For d, can use "f" 
-					;instead of 1, can use "w" instead of 0.
-
-;		movwf	f, a		(register, bank select)
+;Syntax: 	movwf	f, a		(register, bank select)
 ;		movlw	k		(literal)
 ;		movlb	k		(literal)
+;		lfsr	f, k		(f in {0, 1, 2}, literal)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 Mainline
-
+	
 ;Example 1:
 
-	movlb	1		;Set bank select register to 1
-	movlw	1		;Place 1 in wreg
-	movwf	CNT, 1		;Using bank select, copy wreg value into CNT
-	decf	CNT, 1, 1	;Using bank select, decrement CNT, place result in CNT
-
-	decf	CNT, 1, 1	;Decrement CNT again to test rollover from 0x00 to 0xff
+	movlb	1
+	movlw	0xff
+	movwf	0x00, 1
+	movlw	0x4f
+	movwf	OPTION_REG, 1
 
 ;Example 2:
 
-	lfsr	0, 0x1c2	;Load FSR0 with 0x1c2
-	movlw	1		;Place 1 in wreg
-	movwf	INDF0		;Copy wreg value to location pointed to by FSR0
-	decf	INDF0, 1, 1	;Decrement value in location pointed to by FSR0,
-				;place result in location pointed to by FSR0. Ignores
-				;banked addressing since register argument is an INDF register
+	movlw	0x17
+	lfsr	0, 0x5c2
+	movwf	INDF0, 1
+	
 
-;Check writing to wreg
-	decf	INDF0, 0
-					
-stop	goto	stop
+
+
+
+
+
+
+stop	goto		stop
 
 	end
 

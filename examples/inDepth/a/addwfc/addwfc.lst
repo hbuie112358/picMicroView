@@ -1,4 +1,4 @@
-gpasm-0.13.7 beta               addwfc.asm  2-15-2015  07:32:13          PAGE  1
+gpasm-0.13.7 beta               addwfc.asm  2-21-2015  19:54:10          PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -6,102 +6,144 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
  
                00001 ;;;;;;;addwfc.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00002 ;
-               00003 ;This program tests operation of the addwfc instruction. It adds the 
-               00004 ;contents of the WREG and the carry bit to the contents of register f.
-               00005 ;
+               00003 ;This program tests operation of the addwfc instruction using the examples starting
+               00004 ;on page 676 of the PIC 18 user manual. It adds the contents of the WREG and the 
+               00005 ;carry bit to the contents of register f.
                00006 ;
-               00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00008 ;
-               00009 ; Mainline
-               00010 ;  
-               00011 ;
-               00012 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00013 
-               00014         #include p18f452.inc
+               00007 ;
+               00008 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 ;
+               00010 ; Mainline
+               00011 ;  
+               00012 ;
+               00013 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015         #include p18f452.inc
                00001         LIST
                00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
                00983         LIST
-               00015         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
-               00016 
-               00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00018 
-               00019         cblock  0x000           ;Beginning of Access RAM
-               00020         temp
-               00021         endc
-               00022 
-               00023 ;Define variable temp1 at ram address 0x100
-               00024         cblock  0x100           ;Beginning of bank 1 RAM
-               00025         tempBank1
-               00026         endc
-               00027 
-               00028 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00029 
-               00030 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00031 
+               00016         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00017 
+               00018 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019 
+               00020         cblock  0x000           ;Beginning of Access RAM
+               00021         temp
+               00022         endc
+               00023 
+               00024 ;Define variable temp1 at ram address 0x100
+               00025         cblock  0x100           ;Beginning of bank 1 RAM
+               00026         tempBank1
+               00027         endc
+               00028 
+               00029 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00030 
+               00031 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00032 
-0000           00033         org  0x0000             ;Reset vector
-0000 0000      00034         nop
-0002 EF0E F000 00035         goto  Mainline
-               00036 
-0008           00037         org  0x0008             ;High priority interrupt vector
-0008 EF04 F000 00038         goto  $                 ;Trap
-               00039 
-0018           00040         org  0x0018             ;Low priority interrupt vector
-0018 EF0C F000 00041         goto  $                 ;Trap
-               00042 
-               00043 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00044 
-001C 00045 Mainline
-               00046 ;Test no carry, use bsr, write wreg:
-               00047 
-001C 0E17      00048         movlw   0x17
-001E 0101      00049         movlb   1
-0020 6F00      00050         movwf   tempBank1       ;Store 0x17 at address 0x100
-0022 0EC2      00051         movlw   0xc2
-0024 2100      00052         addwfc  tempBank1, 0, 1 ;Add WREG, C bit, and temp, 
-               00053                                 ;place result (0xd9) in WREG (no carry)
-               00054 
-               00055 ;Test no carry, use bsr, write freg:
-0026 0E18      00056         movlw   0x18
-0028 0101      00057         movlb   1
-002A 6F00      00058         movwf   tempBank1       ;Store 0x18 at address 0x100
-002C 0EC2      00059         movlw   0xc2
-002E 2300      00060         addwfc  tempBank1, 1, 1 ;Add WREG, C bit, and temp, 
-               00061                                 ;place result (0xd9) in tempBank1 (no carry)
-               00062 
-               00063 ;Test no carry, no bsr, write wreg:
-               00064 
-0030 0E17      00065         movlw   0x17
-0032 0101      00066         movlb   1
-0034 6E00      00067         movwf   temp            ;Store 0x17 at address 0x100
-0036 0EC2      00068         movlw   0xc2
-0038 2000      00069         addwfc  temp, 0         ;Add WREG, C bit, and temp, 
-               00070                                 ;place result (0xd9) in WREG (no carry)
-               00071 
-               00072 ;Test no carry, no bsr, write freg:
-003A 0E18      00073         movlw   0x18
-003C 0101      00074         movlb   1
-003E 6E00      00075         movwf   temp            ;Store 0x18 at address 0x000
-0040 0EC2      00076         movlw   0xc2
-0042 2200      00077         addwfc  temp, 1         ;Add WREG, C bit, and temp, 
-               00078                                 ;place result (0xd9) in temp (no carry)
-               00079 
-               00080 ;Cause carry bit to be set:
-               00081 
-0044 0EFE      00082         movlw   0xfe
-0046 6E00      00083         movwf   temp
-0048 0EAD      00084         movlw   0xad
-004A 2000      00085         addwfc  temp, 0         ;Set carry bit
-               00086 
-               00087 ;Test add with carry:
-               00088 
-004C 6E00      00089         movwf   temp            
-004E 0E02      00090         movlw   0x02
-0050 2000      00091         addwfc  temp, 0         ;Add WREG, C bit, and temp (0x02 + 1 + 0xab), 
-               00092                                 ;place result (0xae) in WREG (clears carry bit)
-               00093 
-0052 EF29 F000 00094 stop    goto            stop
-               00095 
+               00033 
+0000           00034         org  0x0000             ;Reset vector
+0000 0000      00035         nop
+0002 EF0E F000 00036         goto  Mainline
+               00037 
+0008           00038         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00039         goto  $                 ;Trap
+               00040 
+0018           00041         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00042         goto  $                 ;Trap
+               00043 
+               00044 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00045 
+               00046 
+               00047 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00048 ;See manual chapter 31 for more detail on individual instructions
+               00049 ;Syntax:        addwfc  f, d, a         (register, destination register, bank select)
+               00050                                         ;"d", "a" both default to 0. For d, can use "f" 
+               00051                                         ;instead of 1, can use "w" instead of 0.
+               00052 
+               00053 ;               movwf   f, a            (register, bank select)
+               00054 ;               movlw   k               (literal)
+               00055 ;               movlb   k               (literal)
+               00056 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+001C 00057 Mainline
+               00058 
+               00059 ;Example 1, Case 1:
+               00060 
+001C 0101      00061         movlb   1               ;Set BSR to bank 1
+001E EE09 F0C2 00062         lfsr    0, 0x9c2        ;Place 0x9c2 in FSR0
+0022 0E17      00063         movlw   0x17            ;Place 0x17 in wreg
+0024 21E9      00064         addwfc  FSR0L, 0, 1     ;Using banked addressing add with carry wreg, FSR0L,
+               00065                                 ;place value in wreg (ignores "a" bit of 1 because 
+               00066                                 ;register argument is FSR, part of INDF scheme
+               00067 
+               00068 ;Example 1, Case 2:
+               00069         
+0026 EE07 F0C2 00070         lfsr    0, 0x7c2        ;Place 0x7c2 in FSR0
+002A 0E17      00071         movlw   0x17            ;Place 0x17 in wreg
+002C 80D8      00072         bsf     STATUS, 0       ;Set carry bit in status register
+002E 21E9      00073         addwfc  FSR0L, 0, 1     ;Using banked addressing, add with carry wreg, FSR0L,
+               00074                                 ;place value in wreg (ignores "a" bit of 1 because 
+               00075                                 ;register argument is FSR, part of INDF scheme
+               00076 
+               00077 ;Example 2:
+               00078 
+0030 EE00 F0C2 00079         lfsr    0, 0x0c2        ;Place 0x0c2 in FSR
+0034 0E20      00080         movlw   0x20            ;Place 0x20 in wreg
+0036 6EEF      00081         movwf   INDF0           ;Copy wreg value into location pointed to by INDF0
+0038 0E17      00082         movlw   0x17            ;Place 0x17 in wreg
+003A 23EF      00083         addwfc  INDF0, 1, 1     ;Using banked addressing, add with carry wreg, INDF0,
+               00084                                 ;place value in INDF0 (ignores "a" bit of 1 because 
+               00085                                 ;register argument is an INDF register
+               00086         
+               00087 
+               00088 ;General tests:
+               00089 
+               00090 ;Test no carry, use bsr, write wreg:
+               00091 
+003C 0E17      00092         movlw   0x17
+003E 0101      00093         movlb   1
+0040 6F00      00094         movwf   tempBank1       ;Store 0x17 at address 0x100
+0042 0EC2      00095         movlw   0xc2
+0044 2100      00096         addwfc  tempBank1, 0, 1 ;Add WREG, C bit, and temp, place result (0xd9) in WREG (no carry)
+               00097 
+               00098 ;Test no carry, use bsr, write freg:
+0046 0E18      00099         movlw   0x18
+0048 0101      00100         movlb   1
+004A 6F00      00101         movwf   tempBank1       ;Store 0x18 at address 0x100
+004C 0EC2      00102         movlw   0xc2
+004E 2300      00103         addwfc  tempBank1, 1, 1 ;Add WREG, C bit, and temp, place result (0xd9) in tempBank1 (no carry)
+               00104 
+               00105 ;Test no carry, no bsr, write wreg:
+               00106 
+0050 0E17      00107         movlw   0x17
+0052 0101      00108         movlb   1
+0054 6E00      00109         movwf   temp            ;Store 0x17 at address 0x100
+0056 0EC2      00110         movlw   0xc2
+0058 2000      00111         addwfc  temp, 0         ;Add WREG, C bit, and temp, 
+               00112                                 ;place result (0xd9) in WREG (no carry)
+               00113 
+               00114 ;Test no carry, no bsr, write freg:
+005A 0E18      00115         movlw   0x18
+005C 0101      00116         movlb   1
+005E 6E00      00117         movwf   temp            ;Store 0x18 at address 0x000
+0060 0EC2      00118         movlw   0xc2
+0062 2200      00119         addwfc  temp, 1         ;Add WREG, C bit, and temp, 
+               00120                                 ;place result (0xd9) in temp (no carry)
+               00121 
+               00122 ;Cause carry bit to be set:
+               00123 
+0064 0EFE      00124         movlw   0xfe
+0066 6E00      00125         movwf   temp
+0068 0EAD      00126         movlw   0xad
+006A 2000      00127         addwfc  temp, 0         ;Set carry bit
+               00128 
+               00129 ;Test add with carry:
+               00130 
+006C 6E00      00131         movwf   temp            
+006E 0E02      00132         movlw   0x02
+0070 2000      00133         addwfc  temp, 0         ;Add WREG, C bit, and temp (0x02 + 1 + 0xab), 
+               00134                                 ;place result (0xae) in WREG (clears carry bit)
+               00135 
+0072 EF39 F000 00136 stop    goto            stop
+               00137 
 
 
 Errors   :       0

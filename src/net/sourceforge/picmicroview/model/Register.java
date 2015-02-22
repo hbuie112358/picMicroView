@@ -19,7 +19,8 @@ public class Register {
 	}
 	
 	void write(int value){
-		this.contents = value;
+		this.contents = value & 0xff;
+		
 		//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 	}
 	
@@ -29,7 +30,8 @@ public class Register {
 	//allows indf to know who is calling for read/write. If not overridden, works same as 
 	//write(int value). See Indf for overriding implementation
 	void write(int value, Register r){
-		this.contents = value;
+		this.contents = value & 0xff;
+		
 		//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 	}
 
@@ -67,10 +69,12 @@ public class Register {
 	
 	void decrement(){
 		contents--;
+		contents = contents & 0xff;
 	}
 	
 	void increment(){
 		contents++;
+		contents = contents & 0xff;
 	}
 	
 	//Returns the register contents via the read() method. Used by pic18.getDataMemory()

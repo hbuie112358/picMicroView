@@ -9,7 +9,6 @@ public class PclatH extends Register {
 
 	@Override
 	void write(int value) {
-		// TODO Auto-generated method stub
 		
 	}
 	

@@ -11,6 +11,7 @@ public class FsrH extends Register {
 	//denoted as unimplemented in manual.
 	void write(int value){
 		this.contents = value & 0x000f;
+		
 		//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 	}
 	

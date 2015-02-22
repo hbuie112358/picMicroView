@@ -32,15 +32,14 @@ public class Preinc extends Register {
 	//that if the register being written to is another indf register, the write will have 
 	//no effect. After write operation, decrements FSR
 	void write(int value){
-		
+//		System.out.println("in preinc, incrementing address from " 
+//				+ Integer.toHexString(pic18.dataMem.gpMem[fsrl].getContents()));
 		//increment before getting address
 		pic18.dataMem.gpMem[fsrl].increment();	
 		getFullAddress();
 		
 		//tells callee that caller is an indf register
 		pic18.dataMem.gpMem[fullAddress].write(value, this);
-
-		//System.out.println("in " + name", written by register at address: " + Integer.toHexString(address));
 	}
 	
 	//This function overrides parent function.

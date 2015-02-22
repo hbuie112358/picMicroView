@@ -36,10 +36,16 @@
 
 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;See manual chapter 31 for more detail on individual instructions
+;Syntax: 	andlw	k		(literal)
+;		movlb	k		(literal)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 Mainline
 
-start		movlw		6		
-		andlw		2
+start		movlw		6	;Place 6 in wreg
+		andlw		2	;AND contents of wreg with 2, result in wreg
 
 
 stop		goto		stop

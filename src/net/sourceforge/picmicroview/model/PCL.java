@@ -5,14 +5,13 @@ public class PCL extends Register {
 	
 	public PCL(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
-		// TODO Auto-generated constructor stub
 	}
 	
 	//PCL lsb only allowed to be zero. This is to keep pc at instruction border
 	//A write to PCL loads program counter with contents of pclatU, pclatH, and PCL
 	//pcu bits 23-21 are maintained at zero
 	protected void write(int value){
-		System.out.println("in PCL write()");
+		//System.out.println("in PCL write()");
 		//this.setContents(value); 
 		this.write(value); 
 		clearBit(0);

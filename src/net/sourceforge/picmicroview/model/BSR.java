@@ -15,6 +15,7 @@ public class BSR extends Register {
 			//mask bits 7-4 so that only lower nibble is used
 			value = value & 0x000f;
 			this.contents = value;
+			
 			//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 		}
 

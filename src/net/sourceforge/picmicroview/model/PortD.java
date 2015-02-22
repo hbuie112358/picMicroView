@@ -19,6 +19,7 @@ public class PortD extends Register {
 
 	void write(int value){
 		this.contents = value;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortD(contents);
 		//System.out.println("in portD write()");
 	}
@@ -41,16 +42,19 @@ public class PortD extends Register {
 	
 	void decrement(){
 		contents--;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortD(contents);
 	}
 	
 	void increment(){
 		contents++;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortD(contents);
 	}
 	
 	void setContents(int value){
 		contents = value;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortD(contents);
 	}
 }

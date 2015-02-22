@@ -19,7 +19,9 @@ public class PortA extends Register {
 
 	void write(int value){
 		this.contents = value;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortA(contents);
+//		pic18.changes.add((Integer)address);	//track writes to registers
 		//System.out.println("in porta write()");
 	}
 	
@@ -27,6 +29,7 @@ public class PortA extends Register {
 		int orValue = baseSet << bit;
 		contents = contents | orValue;
 		pic18.repCont.updatePortA(contents);
+//		pic18.changes.add((Integer)address);	//track writes to registers
 	}
 	
 	void clearBit(int bit){
@@ -36,21 +39,28 @@ public class PortA extends Register {
 
 		contents = contents & andValue;
 		pic18.repCont.updatePortA(contents);
+//		pic18.changes.add((Integer)address);	//track writes to registers
 		//System.out.println("Contents of " + name + " at address " + address + ": " + contents);
 	}
 	
 	void decrement(){
 		contents--;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortA(contents);
+//		pic18.changes.add((Integer)address);	//track writes to registers
 	}
 	
 	void increment(){
 		contents++;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortA(contents);
+//		pic18.changes.add((Integer)address);	//track writes to registers
 	}
 	
 	void setContents(int value){
 		contents = value;
+		contents = contents & 0xff;
 		pic18.repCont.updatePortA(contents);
+//		pic18.changes.add((Integer)address);	//track writes to registers
 	}
 }

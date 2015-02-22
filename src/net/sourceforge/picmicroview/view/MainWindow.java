@@ -94,6 +94,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem movf = new JMenuItem("movf");
 	private JMenuItem movff = new JMenuItem("movff");
 	private JMenuItem movlw = new JMenuItem("movlw");
+	private JMenuItem movwf = new JMenuItem("movwf");
 	
 	private JMenu mID = new JMenu("M");
 	private JMenuItem addwfcIDItem = new JMenuItem("addwfc");
@@ -206,6 +207,8 @@ public class MainWindow extends JFrame{
 		movff.addActionListener(new ExampleAction("basic","movff"));
 		m.add(movlw);
 		movlw.addActionListener(new ExampleAction("basic","movlw"));
+		m.add(movwf);
+		movwf.addActionListener(new ExampleAction("basic", "movwf"));
 		
 		inDepth.add(mID);
 		mID.add(addwfcIDItem);
@@ -291,7 +294,7 @@ public class MainWindow extends JFrame{
 		portRegTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
 		
 		JTabbedPane accessMemTab = new JTabbedPane();
-		accessMemTab.add("Access Memory", dataMemTable);
+		accessMemTab.add("Data Memory", dataMemTable);
 		accessMemTab.setToolTipText("Address | Contents");
 		JTabbedPane portRegTab = new JTabbedPane();
 		portRegTab.add("Special Function", portRegTable);
@@ -734,46 +737,6 @@ public class MainWindow extends JFrame{
 		
 	}
 	
-//	class GeneralConceptsAction implements ActionListener{
-//		private String name = "", directory = "";
-//
-//		public GeneralConceptsAction(String directory, String name){
-//			this.name = name;
-//			this.directory = directory;
-//		}
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			fileName = "./examples/" + directory + "/" + name + "/" + name + ".hex";
-//			reqCont.loadAction(fileName);
-//			System.out.println(fileName);
-//			lstFileName = fileName.substring(0, fileName.length() -3) + "lst";
-//			System.out.println("lstFileName is: " + lstFileName);
-//			lstPanel.loadLstFile();
-//			
-//		}
-//		
-//	}
-//	
-//	class InDepthAction implements ActionListener{
-//		private String name = "", directory = "";
-//		
-//		public InDepthAction(String directory, String name){
-//			this.name = name;
-//			this.directory = directory;
-//		}
-//
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			fileName = "./examples/" + directory + "/" + name + "/" + name + ".hex";
-//			reqCont.loadAction(fileName);
-//			System.out.println(fileName);
-//			lstFileName = fileName.substring(0, fileName.length() -3) + "lst";
-//			System.out.println("lstFileName is: " + lstFileName);
-//			lstPanel.loadLstFile();
-//			
-//		}
-//	}
-	
 	class LstFileWindow extends JPanel{
 		/**
 		 * 
@@ -871,8 +834,8 @@ public class MainWindow extends JFrame{
 			try{
 				textArea.getHighlighter().removeAllHighlights();
 				textArea.getHighlighter().addHighlight(lineList.get(key)[0], lineList.get(key)[1], highlighter);
-				System.out.println("in LstFileWindow.highlight(), highlighting: " + lineList.get(key)[0]
-						+ ", " + lineList.get(key)[1]);
+//				System.out.println("in LstFileWindow.highlight(), highlighting: " + lineList.get(key)[0]
+//						+ ", " + lineList.get(key)[1]);
 			}
 			catch(BadLocationException e){
 				System.out.println(e.getMessage() + " highlight");
@@ -908,8 +871,8 @@ public class MainWindow extends JFrame{
 		dataMemTable.clearChanges();
 		portRegTable.clearChanges();
 		for(int i = 0; i < dm.size(); i++){
-			if(i == 0x0e8)
-				dtm_portReg.setValueAt((int)dm.get(i), 0, 1);
+//			if(i == 0x0e8)
+//				dtm_portReg.setValueAt((int)dm.get(i), 0, 1);
 			if(!(Integer.parseInt((String)dtm_data.getValueAt(i, 1), 2) ==(dm.get(i)))){
 				if(i == 0x0d8){
 					dtm_portReg.setValueAt((int)dm.get(i), 1, 1);

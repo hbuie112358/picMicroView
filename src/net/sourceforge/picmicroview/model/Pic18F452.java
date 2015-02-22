@@ -181,6 +181,7 @@ public class Pic18F452{
 	@SuppressWarnings("unused")
 	public void run(){
 
+//		changes.clear();
 		int instruction, i = 0, hByteHnibble, hByteLnibble, hByte, lByte, nextWord;
 			
 		//fetch
