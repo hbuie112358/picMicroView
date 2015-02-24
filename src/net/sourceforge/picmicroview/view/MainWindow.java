@@ -39,7 +39,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
+
 import org.icepdf.ri.common.*;
+
 import net.sourceforge.picmicroview.controller.RequestController;
 
 public class MainWindow extends JFrame{
@@ -129,6 +131,8 @@ public class MainWindow extends JFrame{
 	private TableCellRenderer colRenderer;
 	
 	private PortRegTableModel dtm_portReg;
+	
+	private HashMap<Integer, Integer> portRegList;
 
 	
 	/**
@@ -350,7 +354,24 @@ public class MainWindow extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		pack();
 		setVisible(true);		
-
+		
+		//initialize hashmap for portRegTable  changes during stepping
+		//(address of change, row in portRegTable)
+		portRegList = new HashMap<Integer, Integer>();
+		portRegList.put(0xfd8, 1);
+		portRegList.put(0xfe8, 0);
+		portRegList.put(0xf80, 4);
+		portRegList.put(0xf81, 6);
+		portRegList.put(0xf82, 8);
+		portRegList.put(0xf83, 10);
+		portRegList.put(0xf84, 12);
+		portRegList.put(0xfe0, 13);
+		portRegList.put(0xfe9, 14);
+		portRegList.put(0xfea, 15);
+		portRegList.put(0xfe1, 16);
+		portRegList.put(0xfe2, 17);
+		portRegList.put(0xfd9, 18);
+		portRegList.put(0xfda, 19);
 	}
 	
 	class PortRegTable extends JTable{
@@ -633,10 +654,10 @@ public class MainWindow extends JFrame{
 			super(columnNames);
 		}
 		
-		public void setValueAt(int value, int row, int column){
-			data.get(row).set(column, Integer.toBinaryString(value));
-			while(data.get(row).get(column).length() < 8)
-				data.get(row).set(column, "0" + data.get(row).get(column));
+		public void setValueAt(int value, int row, int col){
+			data.get(row).set(col, Integer.toBinaryString(value));
+			while(data.get(row).get(col).length() < 8)
+				data.get(row).set(col, "0" + data.get(row).get(col));
 			super.fireTableDataChanged();
 		}
 	}
@@ -751,6 +772,7 @@ public class MainWindow extends JFrame{
 		//be used by highlighter to know range of characters to highlight when
 		//key matches program counter value.
 		private HashMap<String, int[]> lineList = new HashMap<String, int[]>();
+		
 		private JTextPane textArea = new JTextPane();
 		private StringBuilder fileContents; 
 		private Highlighter.HighlightPainter highlighter;
@@ -834,8 +856,6 @@ public class MainWindow extends JFrame{
 			try{
 				textArea.getHighlighter().removeAllHighlights();
 				textArea.getHighlighter().addHighlight(lineList.get(key)[0], lineList.get(key)[1], highlighter);
-//				System.out.println("in LstFileWindow.highlight(), highlighting: " + lineList.get(key)[0]
-//						+ ", " + lineList.get(key)[1]);
 			}
 			catch(BadLocationException e){
 				System.out.println(e.getMessage() + " highlight");
@@ -865,73 +885,46 @@ public class MainWindow extends JFrame{
 		}
 	}
 	
-	//called by ReplyController.updateMemTables(), originally initiated by
-	//stepAction or stopAction
+	//called by ReplyController.updateMemTables(Object[]), originally initiated by
+	//RequestController.stepAction(). Receives object array containing hashset of which 
+	//addresses in data memory were written to during the previous instruction and the
+	//arraylist of data memory
+	public void updateDataMemTable(Object[] dm_changes){
+		dataMemTable.clearChanges();
+		portRegTable.clearChanges();
+		HashSet<Integer> changes = (HashSet<Integer>)dm_changes[0];
+		ArrayList<Integer> dm = (ArrayList<Integer>) dm_changes[1];
+		for(Integer change : changes){
+			if(portRegList.containsKey(change)){
+				dtm_portReg.setValueAt((int)dm.get(change), (int)portRegList.get(change), 1);
+				portRegTable.addChange((int)portRegList.get(change));
+			}
+			dtm_data.setValueAt((int)dm.get(change), (int)change, 1);
+			dataMemTable.addChange(change);
+		}
+	}
+		
+	//called by ReplyController.updateMemTables(ArrayList), originally initiated by
+	//RequestController.stopAction(). Since no updates are made to the pic18.changes
+	//hashmap in run mode, this method receives the data memory array and compares 
+	//values currently in the jtable with values in the data memory array. If there 
+	//are differences, the jtable is updated for that particular row. If that row also
+	//belongs in the ports/registers jtable, that jtable's row is updated as well. The 
+	//purpose of all this is to show what is different now in the data memory compared 
+	//to when run mode was initiated.
 	public void updateDataMemTable(ArrayList<Integer> dm) {
 		dataMemTable.clearChanges();
 		portRegTable.clearChanges();
 		for(int i = 0; i < dm.size(); i++){
-//			if(i == 0x0e8)
-//				dtm_portReg.setValueAt((int)dm.get(i), 0, 1);
-			if(!(Integer.parseInt((String)dtm_data.getValueAt(i, 1), 2) ==(dm.get(i)))){
-				if(i == 0x0d8){
-					dtm_portReg.setValueAt((int)dm.get(i), 1, 1);
-					portRegTable.addChange(1);
-				}
-				if(i == 0x0e8){
-					dtm_portReg.setValueAt((int)dm.get(i), 0, 1);
-					portRegTable.addChange(0);
-				}
-				if(i == 0x080){
-					dtm_portReg.setValueAt((int)dm.get(i), 4, 1);
-					portRegTable.addChange(4);
-				}
-				if(i == 0x081){
-					dtm_portReg.setValueAt((int)dm.get(i), 6, 1);
-					portRegTable.addChange(6);
-				}
-				if(i == 0x082){
-					dtm_portReg.setValueAt((int)dm.get(i), 8, 1);
-					portRegTable.addChange(8);
-				}
-				if(i == 0x083){
-					dtm_portReg.setValueAt((int)dm.get(i), 10, 1);
-					portRegTable.addChange(10);
-				}
-				if(i == 0x084){
-					dtm_portReg.setValueAt((int)dm.get(i), 12, 1);
-					portRegTable.addChange(12);
-				}
-				if(i == 0xfe0){
-					dtm_portReg.setValueAt((int)dm.get(i), 13, 1);
-					portRegTable.addChange(13);
-				}
-				if(i == 0x0e9){
-					dtm_portReg.setValueAt((int)dm.get(i), 14, 1);
-					portRegTable.addChange(14);
-				}
-				if(i == 0x0ea){
-					dtm_portReg.setValueAt((int)dm.get(i), 15, 1);
-					portRegTable.addChange(15);
-				}
-				if(i == 0x0e1){
-					dtm_portReg.setValueAt((int)dm.get(i), 16, 1);
-					portRegTable.addChange(16);
-				}
-				if(i == 0x0e2){
-					dtm_portReg.setValueAt((int)dm.get(i), 17, 1);
-					portRegTable.addChange(17);
-				}
-				if(i == 0x0d9){
-					dtm_portReg.setValueAt((int)dm.get(i), 18, 1);
-					portRegTable.addChange(18);
-				}
-				if(i == 0x0da){
-					dtm_portReg.setValueAt((int)dm.get(i), 19, 1);
-					portRegTable.addChange(19);
-				}
+			
+			//if value currently in jtable is different from value in pic data memory
+			if(!(Integer.parseInt((String)dtm_data.getValueAt(i, 1), 2) == (dm.get(i)))){
 				dtm_data.setValueAt((int)dm.get(i), i, 1);
 				dataMemTable.addChange(i);
+				if(portRegList.containsKey(i)){
+					dtm_portReg.setValueAt((int)dm.get(i), (int)portRegList.get(i), 1);
+					portRegTable.addChange((int)portRegList.get(i));
+				}	
 			}
 		}
 	}
@@ -962,7 +955,6 @@ public class MainWindow extends JFrame{
 			if(!pm.get(i).equals(0)){
 				dtm_pgm.setValueAt((int)pm.get(i), i, 1);
 			}
-
 		}	
 	}
 	

@@ -12,6 +12,7 @@ public class Lfsr extends Instruction{
 		fsrhVal = instruction & 0x0f;
 		fsrNum = (instruction & 0x30) >> 4;
 		fsrlVal = nextWord & 0xff;
+//		System.out.println("in lfsr, fsrlVal is: " + Integer.toHexString(fsrlVal));
 		if(fsrNum == 0){
 			pic18.dataMem.fsr0L.write(fsrlVal);
 			pic18.dataMem.fsr0h.write(fsrhVal);

@@ -8,7 +8,7 @@ public class Intcon extends Register {
 	}
 
 	@Override
-	void write(int value) {
+	public void write(int value) {
 		
 		
 	}

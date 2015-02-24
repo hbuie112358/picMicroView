@@ -1,27 +1,41 @@
 package net.sourceforge.picmicroview.model;
 
 
-public class Register {
+public class Register implements SetState{
 	protected int address;
 	protected String name;
 	protected Pic18F452 pic18;
 	protected int contents;
 	protected int baseSet;
 	protected int baseClear;
+	RegisterState registerState;
+	RegisterState regRunState;
+	protected RegisterState regStepState;
 	
 	public Register(Pic18F452 pic18, int address,  String name){
 		this.name = name;
 		this.pic18 = pic18;
 		this.address = address;
+		regRunState = new RegRunState(this);
+		regStepState = new RegStepState(this);
+		registerState = regStepState;
 		baseSet = 0x1;
 		baseClear = 0xfe;
 		clear();
 	}
 	
-	void write(int value){
-		this.contents = value & 0xff;
-		
-		//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
+	public void setRunState(){
+		registerState = regRunState;
+	}
+	
+	public void setStepState(){
+		registerState = regStepState;
+//		System.out.println("in Register.setStepState(), setting " + name + " to regStepState");
+	}
+	
+	public void write(int value){
+//		System.out.println("in Register.write, calling registerState.write()");
+		registerState.write(value);	
 	}
 	
 	//This method is overridden in indf for indirect addressing to have the effect that
@@ -29,10 +43,8 @@ public class Register {
 	//contents are read as 0 and a write has no effect. Sending the register as a parameter
 	//allows indf to know who is calling for read/write. If not overridden, works same as 
 	//write(int value). See Indf for overriding implementation
-	void write(int value, Register r){
-		this.contents = value & 0xff;
-		
-		//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
+	public void write(int value, Register r){
+		registerState.write(value, r);
 	}
 
 	
@@ -49,32 +61,24 @@ public class Register {
 		return contents;
 	}
 	
-	void clear(){
-		contents = 0;
+	public void clear(){
+		registerState.clear();
 	}
 	
-	void setBit(int bit){
-		int orValue = baseSet << bit;
-		contents = contents | orValue;
+	public void setBit(int bit){
+		registerState.setBit(bit);
 	}
 	
-	void clearBit(int bit){
-		//shifts a zero left and adds ones back in to the right
-		int andValue = (baseClear << bit) + ((int)(Math.pow(2, bit) - 1));
-		//System.out.println("clearBit receives bit value of " + bit + ", decodes andValue as " + andValue);
-
-		contents = contents & andValue;
-		//System.out.println("Contents of " + name + " at address " + address + ": " + contents);
+	public void clearBit(int bit){
+		registerState.clearBit(bit);
 	}
 	
-	void decrement(){
-		contents--;
-		contents = contents & 0xff;
+	public void decrement(){
+		registerState.decrement();
 	}
 	
-	void increment(){
-		contents++;
-		contents = contents & 0xff;
+	public void increment(){
+		registerState.increment();
 	}
 	
 	//Returns the register contents via the read() method. Used by pic18.getDataMemory()

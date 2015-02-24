@@ -8,7 +8,7 @@ public class Stkptr extends Register {
 	}
 
 	@Override
-	void write(int value) {
+	public void write(int value) {
 		
 	}
 }

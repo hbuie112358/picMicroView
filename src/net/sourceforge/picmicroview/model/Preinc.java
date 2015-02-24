@@ -7,6 +7,8 @@ public class Preinc extends Register {
 
 	public Preinc(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
+		regRunState = new PreincRunState(this);
+		regStepState = new PreincStepState(this);
 		if(name.equals("preinc0")){
 			fsrl = 0x0e9;
 			fsrh = 0x0ea;
@@ -21,8 +23,6 @@ public class Preinc extends Register {
 		}
 
 		this.contents = 0;
-//		System.out.println("in preinc " + name + ", fsrl: " + Integer.toHexString(fsrl) + ", fsrh: " + 
-//				Integer.toHexString(fsrh));
 	}
 	
 	//This function overrides parent function.
@@ -31,23 +31,16 @@ public class Preinc extends Register {
 	//then writes value to that register using the write(int value, Register r) method so 
 	//that if the register being written to is another indf register, the write will have 
 	//no effect. After write operation, decrements FSR
-	void write(int value){
-//		System.out.println("in preinc, incrementing address from " 
-//				+ Integer.toHexString(pic18.dataMem.gpMem[fsrl].getContents()));
-		//increment before getting address
-		pic18.dataMem.gpMem[fsrl].increment();	
-		getFullAddress();
-		
-		//tells callee that caller is an indf register
-		pic18.dataMem.gpMem[fullAddress].write(value, this);
+	public void write(int value){
+		registerState.write(value);
 	}
 	
 	//This function overrides parent function.
 	//The only entity that calls this function is another indf register. Its purpose is to 
 	//cause an attempt by one indf to access another indf to have no effect by letting the function
 	//know that it is being called by another indf. It is inherited from Register.
-	void write(int value, Register r){
-		return;
+	public void write(int value, Register r){
+		registerState.write(value, r);
 	}
 	
 	//Gets full address based on whether it is an instance of indf0, indf1, or indf2.
@@ -80,6 +73,67 @@ public class Preinc extends Register {
 	//does not change the contents
 	int getContents(){
 		return contents;
+	}
+	
+	class PreincRunState extends RegRunState{
+		
+		public PreincRunState(Register register){
+			super(register);
+		}
+		
+		//This function overrides parent function.
+		//Writes value to memory location pointed to by fsrh:fsrL 
+		//Gets full address based on whether this in an instance of indf0, indf1, or indf2, 
+		//then writes value to that register using the write(int value, Register r) method so 
+		//that if the register being written to is another indf register, the write will have 
+		//no effect. After write operation, decrements FSR
+		public void write(int value){
+			//increment before getting address
+			pic18.dataMem.gpMem[fsrl].increment();	
+			getFullAddress();
+		
+			//tells callee that caller is an indf register
+			pic18.dataMem.gpMem[fullAddress].write(value, register);
+		}
+		
+		//This function overrides parent function.
+		//The only entity that calls this function is another indf register. Its purpose is to 
+		//cause an attempt by one indf to access another indf to have no effect by letting the function
+		//know that it is being called by another indf. It is inherited from Register.
+		public void write(int value, Register r){
+			return;
+		}
+	}
+	
+	class PreincStepState extends RegStepState{
+		
+		public PreincStepState(Register register){
+			super(register);
+		}
+		
+		//This function overrides parent function.
+		//Writes value to memory location pointed to by fsrh:fsrL 
+		//Gets full address based on whether this in an instance of indf0, indf1, or indf2, 
+		//then writes value to that register using the write(int value, Register r) method so 
+		//that if the register being written to is another indf register, the write will have 
+		//no effect. After write operation, decrements FSR
+		public void write(int value){
+			//increment before getting address
+			pic18.dataMem.gpMem[fsrl].increment();	
+			getFullAddress();
+			
+			//tells callee that caller is an indf register
+			pic18.dataMem.gpMem[fullAddress].write(value, register);
+			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+		}
+		
+		//This function overrides parent function.
+		//The only entity that calls this function is another indf register. Its purpose is to 
+		//cause an attempt by one indf to access another indf to have no effect by letting the function
+		//know that it is being called by another indf. It is inherited from Register.
+		public void write(int value, Register r){
+			return;
+		}
 	}
 }
 

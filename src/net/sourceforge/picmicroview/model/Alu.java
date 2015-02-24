@@ -61,7 +61,7 @@ public class Alu {
 		if((instruction.instruction & 0x200) == 0x200){
 			pic18.dataMem.gpMem[freg].write(result);
 			if(pic18.dataMem.status.getBit(0) == 1){
-				System.out.println("in alu.addwf, fsr0L address is " + Integer.toHexString(pic18.dataMem.fsr0L.address));
+//				System.out.println("in alu.addwf, fsr0L address is " + Integer.toHexString(pic18.dataMem.fsr0L.address));
 				if(freg == (pic18.dataMem.fsr0L.address & 0xff))	//& 0xff because register actually lives at 0xfe9,
 					pic18.dataMem.fsr0h.increment();				//but is mapped to 0x0e9 for Access Memory
 				if(freg == (pic18.dataMem.fsr1L.address & 0xff))

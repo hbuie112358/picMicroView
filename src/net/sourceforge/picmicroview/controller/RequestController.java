@@ -2,8 +2,10 @@ package net.sourceforge.picmicroview.controller;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import net.sourceforge.picmicroview.model.Pic18F452;
 
 /**
@@ -36,10 +38,10 @@ public class RequestController{
 	public void stepAction(){
 		pool.execute(new Runnable(){
 			public void run() {
+				pic18.setStepState();
 				pic18.run();
 				updateDataMemory();
-				repCont.updatePc(pic18.getPc());
-				
+				repCont.updatePc(pic18.getPc());				
 			}		
 		});	
 	}
@@ -47,7 +49,7 @@ public class RequestController{
 	public void runAction() {
 		pool.execute(new Runnable(){
 			public void run() {
-			//	repCont.updatePc(pic18.getPc());/////////////***********?????????
+				pic18.setRunState();
 				pic18.getClock().start();
 			}		
 		});		
@@ -57,10 +59,12 @@ public class RequestController{
 		pool.execute(new Runnable(){
 			public void run() {
 				pic18.getClock().stop();
+				pic18.setStepState();
+				pic18.run();
+//				updateDataMemory();
+				updateDataMemoryOnStop();
 				repCont.updatePc(pic18.getPc());
-				updateDataMemory();
-
-				pic18.initPic();
+				//pic18.initPic();
 			}		
 		});		
 	}
@@ -85,6 +89,15 @@ public class RequestController{
 	
 	//called by RequestControler.stepAction() and RequestController.stopAction()
 	private void updateDataMemory(){
+		ArrayList<Integer> dm = getDataMemory_pvt();
+		HashSet<Integer> changes = pic18.getChanges();
+		Object[] dm_changes = new Object[2];
+		dm_changes[0] = changes;	//address of change
+		dm_changes[1] = dm;			//data memory array
+		repCont.updateMemTables(dm_changes);
+	}
+	
+	private void updateDataMemoryOnStop(){
 		ArrayList<Integer> dm = getDataMemory_pvt();
 		repCont.updateMemTables(dm);
 	}

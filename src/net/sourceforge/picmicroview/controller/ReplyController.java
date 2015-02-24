@@ -59,6 +59,15 @@ public class ReplyController {
 	}
 	
 	//Called by RequestController.updateDataMemory()
+	public void updateMemTables(Object[] dm_changes){
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				mw.updateDataMemTable(dm_changes);
+			}
+		});
+	}
+	
+	//Called by RequestController.stopAction
 	public void updateMemTables(ArrayList<Integer> dm){
 		EventQueue.invokeLater(new Runnable(){
 			public void run(){

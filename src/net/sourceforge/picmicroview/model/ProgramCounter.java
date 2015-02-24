@@ -34,7 +34,8 @@ public class ProgramCounter {
 	 * @return
 	 */
 	public int getWord(){
-		int highByte = pic18.programMem[pc] * 256;
+//		int highByte = pic18.programMem[pc] * 256;
+		int highByte = pic18.programMem[pc] << 8;
 		int lowByte = pic18.programMem[pc + 1];
 		increment();
 		return highByte + lowByte;

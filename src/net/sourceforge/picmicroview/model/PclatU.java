@@ -9,7 +9,7 @@ public class PclatU extends Register {
 	}
 
 	@Override
-	void write(int value) {
+	public void write(int value) {
 		
 	}
 

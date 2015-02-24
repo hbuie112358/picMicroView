@@ -9,10 +9,15 @@ import java.util.Set;
 
 import net.sourceforge.picmicroview.controller.ReplyController;
 
-public class Pic18F452{
+public class Pic18F452 implements SetState{
 
 	private HashMap<Integer, ArrayList<Integer> > program;
 	private int DATA_MEMORY_SIZE = 65536;
+	HashSet<Integer> changes;
+	
+	private Pic18F452State picState;
+	private Pic18F452State runState;
+	private Pic18F452State stepState;
 	
 	int[] programMem;
 	Alu alu;
@@ -51,6 +56,10 @@ public class Pic18F452{
 	public Pic18F452(ReplyController repCont){
 		
 		this.repCont = repCont;
+		changes = new HashSet<Integer>();
+		runState = new RunState(this);
+		stepState = new StepState(this);
+//		picState = runState;
 		programMem = new int[DATA_MEMORY_SIZE];
 		//programMem = new int[4194304];
 		//int [] testMem = new int [524288];
@@ -178,8 +187,29 @@ public class Pic18F452{
 	 * does not need to access the program memory array.
 	 */
 	
-	@SuppressWarnings("unused")
 	public void run(){
+		picState.run();
+	}
+	
+	public void setRunState(){
+		picState = runState;
+		for(int i = 0; i < dataMem.gpMem.length; i++)
+			dataMem.gpMem[i].setRunState();
+	}
+	
+	public void setStepState(){
+		picState = stepState;
+		for(int i = 0; i < dataMem.gpMem.length; i++){
+			dataMem.gpMem[i].setStepState();
+//			System.out.println("in Pic.setStepState, state for " + Integer.toHexString(i)+ "is: " + dataMem.gpMem[i].registerState);
+		}
+	}
+	
+	public HashSet<Integer> getChanges(){
+		return changes;
+	}
+	
+	public void runInstruction(){
 
 //		changes.clear();
 		int instruction, i = 0, hByteHnibble, hByteLnibble, hByte, lByte, nextWord;

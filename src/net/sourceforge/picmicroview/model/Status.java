@@ -8,7 +8,7 @@ public class Status extends Register {
 	}
 
 	@Override
-	void write(int value) {
+	public void write(int value) {
 		
 	}
 }
