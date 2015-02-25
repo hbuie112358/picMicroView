@@ -13,11 +13,19 @@ public class Pic18F452 implements SetState{
 
 	private HashMap<Integer, ArrayList<Integer> > program;
 	private int DATA_MEMORY_SIZE = 65536;
+	
+	//HashSet of register addresses that were written to during execution
+	//of an instruction. Changes are monitored during step mode but not 
+	//during run mode, which defines the difference between step and run modes.
 	HashSet<Integer> changes;
 	
 	private Pic18F452State picState;
 	private Pic18F452State runState;
 	private Pic18F452State stepState;
+	
+	private TestMain testMain;
+	
+	int instruction = 0;
 	
 	int[] programMem;
 	Alu alu;
@@ -59,15 +67,13 @@ public class Pic18F452 implements SetState{
 		changes = new HashSet<Integer>();
 		runState = new RunState(this);
 		stepState = new StepState(this);
-//		picState = runState;
 		programMem = new int[DATA_MEMORY_SIZE];
-		//programMem = new int[4194304];
-		//int [] testMem = new int [524288];
 		dataMem = new DataMemory(this);
 		initPic();
 		clock = new Clock(this);
 		alu = new Alu(this);
 		stack = new Stack(this);
+		testMain = new TestMain(this);
 		
 		//create instruction objects:
 		addwf = new Addwf(0, this, "addwf");
@@ -102,9 +108,8 @@ public class Pic18F452 implements SetState{
 	 */
 	
 	public void initPic(){
-	pc = new ProgramCounter(this);
-	timer0 = new Timer(this, "Timer0");
-	//clock = new Clock(this);
+		pc = new ProgramCounter(this);
+		timer0 = new Timer(this, "Timer0");
 	}
 	
 	public Clock getClock(){
@@ -127,9 +132,13 @@ public class Pic18F452 implements SetState{
 		return dm;
 	}
 	
-	public int getWreg(){
-		return dataMem.wreg.read();
+	public void executeTest(){
+		testMain.execute();
 	}
+	
+//	public int getWreg(){
+//		return dataMem.wreg.read();
+//	}
 	
 	public ArrayList<Integer> getPgmMemory(){
 		ArrayList<Integer> pm = new ArrayList<Integer>();
@@ -212,7 +221,7 @@ public class Pic18F452 implements SetState{
 	public void runInstruction(){
 
 //		changes.clear();
-		int instruction, i = 0, hByteHnibble, hByteLnibble, hByte, lByte, nextWord;
+		int i = 0, hByteHnibble, hByteLnibble, hByte, lByte, nextWord;
 			
 		//fetch
 		instruction = pc.getWord();//increments program counter

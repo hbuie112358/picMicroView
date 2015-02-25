@@ -69,6 +69,14 @@ public class RequestController{
 		});		
 	}
 	
+	public void testAction(){
+		pool.execute(new Runnable(){
+			public void run(){
+				pic18.executeTest();
+			}
+		});
+	}
+	
 	public void initialize(){
 		pool.execute(new Runnable(){
 			public void run() {

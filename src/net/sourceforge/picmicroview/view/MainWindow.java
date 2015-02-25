@@ -112,6 +112,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem fastPortAToggleItem = new JMenuItem("Fast PORTA Toggle");
 	
 	private JMenu helpMenu = new JMenu("Help");
+	private JMenuItem testItem = new JMenuItem("Test");
 	
 	private JPanel mainPanel = new JPanel();
 	
@@ -170,6 +171,9 @@ public class MainWindow extends JFrame{
 		fileMenu.add(newFileItem);
 		fileMenu.add(quitItem);
 		quitItem.addActionListener(new QuitAction());
+		
+		testItem.addActionListener(new HelpAction("instructionTest", "instructionTest"));
+		helpMenu.add(testItem);
 
 		examples.add(instructions);
 		instructions.add(basic);
@@ -755,7 +759,26 @@ public class MainWindow extends JFrame{
 			System.out.println("lstFileName is: " + lstFileName);
 			lstPanel.loadLstFile();
 		}
+	}
+	
+	class HelpAction implements ActionListener{
+		private String name = "", directory = "", subDirectory = "";
 		
+		public HelpAction(String directory, String name){
+			this.name = name;
+			this.directory = directory;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fileName = "./tests/" + directory + "/" + name + ".hex";
+			reqCont.loadAction(fileName);
+			System.out.println(fileName);
+			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
+			System.out.println("lstFileName is: " + lstFileName);
+			lstPanel.loadLstFile();	
+			reqCont.testAction();
+		}
 	}
 	
 	class LstFileWindow extends JPanel{

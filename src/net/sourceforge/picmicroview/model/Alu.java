@@ -84,7 +84,7 @@ public class Alu {
 		
 		//get register address
 		getRegAddress(instruction.instruction);
-		System.out.println("in alu.addwfc, freg address is: " + Integer.toHexString(freg));
+//		System.out.println("in alu.addwfc, freg address is: " + Integer.toHexString(freg));
 		
 		//get value of carry bit
 		carry = pic18.dataMem.status.getBit(0);
