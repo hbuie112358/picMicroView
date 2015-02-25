@@ -44,7 +44,7 @@ public class Clock{
 			for(i = 2; i < time.length; i++){
 				timeAvg += time[i];
 			}
-			System.out.println(timeAvg / 10);
+//			System.out.println(timeAvg / 10);
 
 			while(go == true){
 

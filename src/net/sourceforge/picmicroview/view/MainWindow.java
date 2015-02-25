@@ -40,7 +40,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
-import org.icepdf.ri.common.*;
+//import org.icepdf.ri.common.*;
 
 import net.sourceforge.picmicroview.controller.RequestController;
 
@@ -98,7 +98,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem movlw = new JMenuItem("movlw");
 	private JMenuItem movwf = new JMenuItem("movwf");
 	
-	private JMenu mID = new JMenu("M");
+	private JMenu aID = new JMenu("A");
 	private JMenuItem addwfcIDItem = new JMenuItem("addwfc");
 
 	private JMenu generalConcepts = new JMenu("General Concepts");
@@ -173,7 +173,8 @@ public class MainWindow extends JFrame{
 		quitItem.addActionListener(new QuitAction());
 		
 		testItem.addActionListener(new HelpAction("instructionTest", "instructionTest"));
-		helpMenu.add(testItem);
+//		helpMenu.add(testItem);///////////////////////////////////////////////////////////
+		
 
 		examples.add(instructions);
 		instructions.add(basic);
@@ -218,8 +219,8 @@ public class MainWindow extends JFrame{
 		m.add(movwf);
 		movwf.addActionListener(new ExampleAction("basic", "movwf"));
 		
-		inDepth.add(mID);
-		mID.add(addwfcIDItem);
+		inDepth.add(aID);
+		aID.add(addwfcIDItem);
 		addwfcIDItem.addActionListener(new ExampleAction("inDepth", "addwfc"));
 		
 		examples.add(generalConcepts);
@@ -326,15 +327,16 @@ public class MainWindow extends JFrame{
 		rightHalf.getLeftComponent().setMinimumSize(new Dimension(200, 300));
 		rightHalf.getRightComponent().setMinimumSize(new Dimension(200, 300));
 		
-		String leftPdf = "./documentation/pic18C39500a.pdf";
-		SwingController controller = new SwingController();
-		SwingViewBuilder factory = new SwingViewBuilder(controller);
-		JPanel viewerComponentPanel = factory.buildViewerPanel();
-		ComponentKeyBinding.install(controller, viewerComponentPanel);
-		controller.getDocumentViewController().setAnnotationCallback(
-			      new org.icepdf.ri.common.MyAnnotationCallback(
-			             controller.getDocumentViewController()));
-		controller.openDocument(leftPdf);
+		//this creates an ICEpdf jpanel showing the pic user manual in a separate tab
+//		String leftPdf = "./documentation/pic18C39500a.pdf";
+//		SwingController controller = new SwingController();
+//		SwingViewBuilder factory = new SwingViewBuilder(controller);
+//		JPanel viewerComponentPanel = factory.buildViewerPanel();
+//		ComponentKeyBinding.install(controller, viewerComponentPanel);
+//		controller.getDocumentViewController().setAnnotationCallback(
+//			      new org.icepdf.ri.common.MyAnnotationCallback(
+//			             controller.getDocumentViewController()));
+//		controller.openDocument(leftPdf);
 		
 		lstPanel = new LstFileWindow();
 		JScrollPane lstPanelScroll = new JScrollPane(lstPanel);
@@ -347,7 +349,9 @@ public class MainWindow extends JFrame{
 		
 		JTabbedPane mainTabs = new JTabbedPane();
 		mainTabs.add("Microprocessor", whole);
-		mainTabs.add("Reference", viewerComponentPanel);
+		
+		//adds tab showing pic usr manual, removed for license considerations
+//		mainTabs.add("Reference", viewerComponentPanel);
 		mainPanel.setLayout(new BorderLayout());
 		
 		mainPanel.add(toolBar, BorderLayout.NORTH);
@@ -691,9 +695,9 @@ public class MainWindow extends JFrame{
 				fileName = fc.getSelectedFile().toString();
 			else return;
 			reqCont.loadAction(fileName);	
-			System.out.println(fileName);
+//			System.out.println(fileName);
 			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-			System.out.println("lstFileName is: " + lstFileName);
+//			System.out.println("lstFileName is: " + lstFileName);
 			lstPanel.loadLstFile();
 			lstPanel.highlight("0000");
 		}	
@@ -750,13 +754,13 @@ public class MainWindow extends JFrame{
 			if(directory.equals("basic") || directory.equals("inDepth"))
 				subDirectory = "/" + Character.toString(name.charAt(0))+ "/";
 			else subDirectory = "/";
-			System.out.println("directory is: " + directory);
+//			System.out.println("directory is: " + directory);
 			fileName = "./examples/" + directory  + subDirectory + name +
 					"/" + name + ".hex";
 			reqCont.loadAction(fileName);
-			System.out.println(fileName);
+//			System.out.println(fileName);
 			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-			System.out.println("lstFileName is: " + lstFileName);
+//			System.out.println("lstFileName is: " + lstFileName);
 			lstPanel.loadLstFile();
 		}
 	}
@@ -773,9 +777,9 @@ public class MainWindow extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			fileName = "./tests/" + directory + "/" + name + ".hex";
 			reqCont.loadAction(fileName);
-			System.out.println(fileName);
+//			System.out.println(fileName);
 			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-			System.out.println("lstFileName is: " + lstFileName);
+//			System.out.println("lstFileName is: " + lstFileName);
 			lstPanel.loadLstFile();	
 			reqCont.testAction();
 		}
@@ -835,7 +839,7 @@ public class MainWindow extends JFrame{
 			try{
 				file = new File(lstFileName);
 				BufferedReader reader = new BufferedReader(new FileReader(file));
-				System.out.println("in loadLstFile");
+//				System.out.println("in loadLstFile");
 				
 				//Reads each line from file, appends to StringBuilder after adding a new line.
 				//Then checks beginning of each line to see if the line starts with a 4 digit

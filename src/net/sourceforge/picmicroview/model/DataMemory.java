@@ -102,7 +102,6 @@ public class DataMemory {
 	}
 	
 	private void initialize(){
-		System.out.println("in datamemory.initialize");
 		int i = 0;
 		while(i < 0x080){
 			gpMem[i] = new Register(pic18, i, "gpr");
