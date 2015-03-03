@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,6 +42,8 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
 //import org.icepdf.ri.common.*;
+
+
 
 import net.sourceforge.picmicroview.controller.RequestController;
 
@@ -755,18 +758,49 @@ public class MainWindow extends JFrame{
 				subDirectory = "/" + Character.toString(name.charAt(0))+ "/";
 			else subDirectory = "/";
 //			System.out.println("directory is: " + directory);
-			fileName = "./examples/" + directory  + subDirectory + name +
+			
+			//for development purposes in eclipse, to modify 	///////////////////
+			//example files while working						///////////////////
+//			fileName = "./examples/" + directory  + subDirectory + name +
+//					"/" + name + ".hex";
+			
+			//for jar file creation
+			fileName = "/" + directory  + subDirectory + name +
 					"/" + name + ".hex";
+			
 			reqCont.loadAction(fileName);
 //			System.out.println(fileName);
 			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-//			System.out.println("lstFileName is: " + lstFileName);
+			System.out.println("lstFileName is: " + lstFileName);
 			lstPanel.loadLstFile();
 		}
 	}
 	
+//	class ExampleAction implements ActionListener{
+//		private String name = "", directory = "", subDirectory = "";
+//		
+//		public ExampleAction(String directory, String name){
+//			this.name = name;
+//			this.directory = directory;
+//		}
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			if(directory.equals("basic") || directory.equals("inDepth"))
+//				subDirectory = "/" + Character.toString(name.charAt(0))+ "/";
+//			else subDirectory = "/";
+////			System.out.println("directory is: " + directory);
+//			fileName = "./examples/" + directory  + subDirectory + name +
+//					"/" + name + ".hex";
+//			reqCont.loadAction(fileName);
+////			System.out.println(fileName);
+//			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
+////			System.out.println("lstFileName is: " + lstFileName);
+//			lstPanel.loadLstFile();
+//		}
+//	}
+	
 	class HelpAction implements ActionListener{
-		private String name = "", directory = "", subDirectory = "";
+		private String name = "", directory = "";
 		
 		public HelpAction(String directory, String name){
 			this.name = name;
@@ -830,15 +864,19 @@ public class MainWindow extends JFrame{
 		
 		public void loadLstFile(){
 			lineStartPos = 0; lineEndPos = -1; filePos = 0;
-			//remove all key value pairs from listList hashmap
+			//remove all key value pairs from lineList hashmap
 			lineList.clear();
 			fileContents = new StringBuilder();
+			@SuppressWarnings("unused")
 			File file;
 			String line = null, key;
 			int count = 0;
 			try{
 				file = new File(lstFileName);
-				BufferedReader reader = new BufferedReader(new FileReader(file));
+//				BufferedReader reader = new BufferedReader(new FileReader(file));
+				
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+	                    this.getClass().getResourceAsStream(lstFileName)));
 //				System.out.println("in loadLstFile");
 				
 				//Reads each line from file, appends to StringBuilder after adding a new line.

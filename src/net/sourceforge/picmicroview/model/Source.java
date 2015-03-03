@@ -6,6 +6,7 @@ package net.sourceforge.picmicroview.model;
 	import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 
 public class Source {
 
@@ -21,14 +22,21 @@ public class Source {
 
 			
 	public Source(String fileName){
-	
+		String name = "/basic/a/addwf/addwf.hex";
 		try{	//open file
-			file = new File(fileName);
-			fileReader = new FileReader(file);
-			bufferedReader = new BufferedReader(fileReader);
+			
+			//for development purposes in eclipse, to modify 
+			//example files while working
+//			file = new File(fileName);
+//			fileReader = new FileReader(file);
+//			bufferedReader = new BufferedReader(fileReader);
+			
+			//for jar file creation
+			bufferedReader = new BufferedReader(new InputStreamReader(
+                    this.getClass().getResourceAsStream(fileName)));
 		}
 		catch(Exception e){
-			printError("File not found");
+			printError(name + ": File not found");
 			System.exit(0);
 		}				
 		try{	//read first line
