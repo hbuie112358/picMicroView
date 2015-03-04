@@ -37,29 +37,32 @@ public class Pic18F452 implements SetState{
 	ReplyController repCont;
 	
 	//instructions:
+	
+	Addwf addwf;
+	Addwfc addwfc;
+	Andlw andlw;
+	Bcf bcf;
+	Bnz bnz;
+	Bra bra;
+	Bsf bsf;
+	Btfss btfss;
+	Btg btg;
+	Bz bz;
+	Decf decf;
+	Decfsz decfsz;
 	Goto GOTO;
+	Iorwf iorwf;
+	Lfsr lfsr;
+	Movf movf;
+	Movff movff;
 	Movlb movlb;
 	Movlw movlw;
 	Movwf movwf;
-	Decf decf;
-	Decfsz decfsz;
-	Bz bz;
-	Rcall rcall;
-	Bnz bnz;
-	Return Return;
-	Btg btg;
-	Andlw andlw;
+	Mullw mullw;
+	Mulwf mulwf;
 	Nop nop;
-	Iorwf iorwf;
-	Addwf addwf;
-	Addwfc addwfc;
-	Lfsr lfsr;
-	Movf movf;
-	Bsf bsf;
-	Bcf bcf;
-	Btfss btfss;
-	Movff movff;
-	Bra bra;
+	Rcall rcall;
+	Return Return;
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -97,6 +100,8 @@ public class Pic18F452 implements SetState{
 		movlb = new Movlb(0, this, "movlb");
 		movlw = new Movlw(0, this, "movlw");
 		movwf = new Movwf(0, this, "movwf");
+		mullw = new Mullw(0, this, "mullw");
+		mulwf = new Mulwf(0, this, "mulwf");
 		nop = new Nop(0, this, "nop");
 		rcall = new Rcall(0, this, "rcall");
 		Return = new Return(0, this, "return");
@@ -286,6 +291,10 @@ public class Pic18F452 implements SetState{
 				andlw.initialize(instruction);
 				andlw.execute();
 			}	
+			else if (hByteLnibble == 0x0d00){
+				mullw.initialize(instruction);
+				mullw.execute();
+			}
 			else if(hByteLnibble == 0x0e00){
 				//System.out.println("command low nibble has been decoded as 0X0E00");
 				movlw.initialize(instruction);
@@ -300,6 +309,10 @@ public class Pic18F452 implements SetState{
 			else if (hByteLnibble == 0x0100){
 				movlb.initialize(instruction);
 				movlb.execute();
+			}
+			else if((hByteLnibble == 0x0200) || (hByteLnibble == 0x0300)){
+				mulwf.initialize(instruction);
+				mulwf.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");

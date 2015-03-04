@@ -108,6 +108,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem movlb = new JMenuItem("movlb");
 	private JMenuItem movlw = new JMenuItem("movlw");
 	private JMenuItem movwf = new JMenuItem("movwf");
+	private JMenuItem mullw = new JMenuItem("mullw");
 	private JMenu n = new JMenu("N");
 	private JMenuItem nop = new JMenuItem("nop");
 	private JMenu r = new JMenu("R");
@@ -125,6 +126,7 @@ public class MainWindow extends JFrame{
 	private JMenu mID = new JMenu("M");
 	private JMenuItem movfIDItem = new JMenuItem("movf");
 	private JMenuItem movwfIDItem = new JMenuItem("movwf");
+	private JMenuItem mullwIDItem = new JMenuItem("mullw");
 
 	private JMenu generalConcepts = new JMenu("General Concepts");
 	private JMenu indirectAddressing = new JMenu("Indirect Addressing");
@@ -256,6 +258,8 @@ public class MainWindow extends JFrame{
 		nop.addActionListener(new ExampleAction("basic", "nop"));
 		m.add(movwf);
 		movwf.addActionListener(new ExampleAction("basic", "movwf"));
+		m.add(mullw);
+		mullw.addActionListener(new ExampleAction("basic", "mullw"));
 		r.add(rcall);
 		rcall.addActionListener(new ExampleAction("basic", "rcall"));
 		r.add(returnItem);
@@ -277,6 +281,8 @@ public class MainWindow extends JFrame{
 		movfIDItem.addActionListener(new ExampleAction("inDepth", "movf"));
 		mID.add(movwfIDItem);
 		movwfIDItem.addActionListener(new ExampleAction("inDepth", "movwf"));
+		mID.add(mullwIDItem);
+		mullwIDItem.addActionListener(new ExampleAction("inDepth", "mullw"));
 		
 		examples.add(generalConcepts);
 		generalConcepts.add(indirectAddressing);
@@ -430,6 +436,8 @@ public class MainWindow extends JFrame{
 		portRegList.put(0xfe2, 17);
 		portRegList.put(0xfd9, 18);
 		portRegList.put(0xfda, 19);
+		portRegList.put(0xff3, 20);
+		portRegList.put(0xff4, 21);
 	}
 	
 	class PortRegTable extends JTable{
@@ -1003,7 +1011,6 @@ public class MainWindow extends JFrame{
 		HashSet<Integer> changes = (HashSet<Integer>)dm_changes[0];
 		ArrayList<Integer> dm = (ArrayList<Integer>) dm_changes[1];
 		for(Integer change : changes){
-			
 			//for every change, if it's in the ports/reg list, change the value
 			if(portRegList.containsKey(change)){
 				dtm_portReg.setValueAt((int)dm.get(change), (int)portRegList.get(change), 1);
@@ -1331,6 +1338,26 @@ public class MainWindow extends JFrame{
 		ob = new Vector<String>();
 		i = 0x0da;
 		ob.add("FSR2H");
+		value = Integer.toBinaryString(dm.get(i));
+		while(value.length() < 8)
+			value = "0" + value;
+		ob.add(value);
+		dtm_portReg.addRow(ob);
+		
+		//add ProdL
+		ob = new Vector<String>();
+		i = 0x0f3;
+		ob.add("PRODL");
+		value = Integer.toBinaryString(dm.get(i));
+		while(value.length() < 8)
+			value = "0" + value;
+		ob.add(value);
+		dtm_portReg.addRow(ob);
+		
+		//add Prodh
+		ob = new Vector<String>();
+		i = 0x0f4;
+		ob.add("PRODH");
 		value = Integer.toBinaryString(dm.get(i));
 		while(value.length() < 8)
 			value = "0" + value;

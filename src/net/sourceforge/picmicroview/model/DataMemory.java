@@ -41,6 +41,8 @@ public class DataMemory {
 	Register postdec2;
 	Register postinc2;
 	Register indf2;
+	Register prodL;
+	Register prodh;
 	
 	public DataMemory(Pic18F452 pic18) {
 		this.pic18 = pic18;
@@ -80,7 +82,8 @@ public class DataMemory {
 		postdec2 = gpMem[0x0dd];
 		postinc2 = gpMem[0x0de];
 		indf2 = gpMem[0x0df];
-		
+		prodL = gpMem[0x0f3];
+		prodh = gpMem[0x0f4];
 		
 		
 	}
@@ -224,8 +227,8 @@ public class DataMemory {
 		gpMem[0x0f0] = gpMem[0xff0] = new Register(pic18, 0xff0, "unused");
 		gpMem[0x0f1] = gpMem[0xff1] = new Register(pic18, 0xff1, "unused");
 		gpMem[0x0f2] = gpMem[0xff2] = new Intcon(pic18, 0xff2, "unused");
-		gpMem[0x0f3] = gpMem[0xff3] = new Register(pic18, 0xff3, "unused");
-		gpMem[0x0f4] = gpMem[0xff4] = new Register(pic18, 0xff4, "unused");
+		gpMem[0x0f3] = gpMem[0xff3] = new ProdL(pic18, 0xff3, "prodL");
+		gpMem[0x0f4] = gpMem[0xff4] = new Prodh(pic18, 0xff4, "prodh");
 		gpMem[0x0f5] = gpMem[0xff5] = new Register(pic18, 0xff5, "unused");
 		gpMem[0x0f6] = gpMem[0xff6] = new Register(pic18, 0xff6, "unused");
 		gpMem[0x0f7] = gpMem[0xff7] = new Register(pic18, 0xff7, "unused");

@@ -1,0 +1,63 @@
+gpasm-0.13.7 beta               mullw.asm   3-4-2015  15:55:05           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; mullw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of mullw instruction. Mullw carries out 
+               00004 ;unsigned multiplication between literal k and contents of wreg. 16 bit
+               00005 ;result is placed in PRODH:PRODL register pair. Wreg is unchanged, no 
+               00006 ;status bits affected.
+               00007 ;
+               00008 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 ;
+               00010 ; Mainline
+               00011 ;  
+               00012 ;
+               00013 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00016         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00017 
+               00018 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019 
+               00020         cblock  0x000           ;Beginning of Access RAM
+               00021         temp1
+               00022         temp2
+               00023         endc
+               00024 
+               00025 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
+               00027 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00028 
+               00029 
+0000           00030         org  0x0000             ;Reset vector
+0000 0000      00031         nop
+0002 EF0E F000 00032         goto  Mainline
+               00033 
+0008           00034         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00035         goto  $                 ;Trap
+               00036 
+0018           00037         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00038         goto  $                 ;Trap
+               00039 
+               00040 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00041 
+001C 00042 Mainline
+               00043 
+001C 0E14      00044 start   movlw           20              ;Place 20 in wreg
+001E 0D14      00045         mullw           20              ;Copy wreg value into temp1 (at address 0x000)
+               00046 
+0020 EF10 F000 00047 stop    goto            stop
+               00048 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+
