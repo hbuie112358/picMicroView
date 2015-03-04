@@ -95,7 +95,6 @@ public class Postdec extends Register {
 	}
 	
 	class PostdecStepState extends RegStepState{
-		Register register;
 		
 		public PostdecStepState(Register register){
 			super(register);

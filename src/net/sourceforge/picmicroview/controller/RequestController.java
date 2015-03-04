@@ -6,7 +6,10 @@ import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.JOptionPane;
+
 import net.sourceforge.picmicroview.model.Pic18F452;
+import net.sourceforge.picmicroview.model.State;
 
 /**
  * Sends requests received from View on to Model for processing.
@@ -23,16 +26,22 @@ public class RequestController{
 		 this.repCont = repCont;
 	}
 
-	public void loadAction(final String fileName) {
-		pool.execute(new Runnable(){
-			public void run() {
-				pic18.loadHexFile(fileName);
-				ArrayList<Integer> pm = pic18.getPgmMemory();
-				repCont.updatePgmMemTable(pm);
-				repCont.updatePc(pic18.getPc());
+	public boolean loadAction(final String fileName) {
+		if(pic18.isRunning()){
+			return false;
+		}
+		else{
+			pool.execute(new Runnable(){
+				public void run() {
+					pic18.loadHexFile(fileName);
+					ArrayList<Integer> pm = pic18.getPgmMemory();
+					repCont.updatePgmMemTable(pm);
+					repCont.updatePc(pic18.getPc());
 
-			}		
-		});	
+				}		
+			});	
+			return true;
+		}
 	}
 	
 	public void stepAction(){

@@ -67,6 +67,7 @@ public class Pic18F452 implements SetState{
 		changes = new HashSet<Integer>();
 		runState = new RunState(this);
 		stepState = new StepState(this);
+		picState = stepState;
 		programMem = new int[DATA_MEMORY_SIZE];
 		dataMem = new DataMemory(this);
 		initPic();
@@ -213,6 +214,12 @@ public class Pic18F452 implements SetState{
 			dataMem.gpMem[i].setStepState();
 //			System.out.println("in Pic.setStepState, state for " + Integer.toHexString(i)+ "is: " + dataMem.gpMem[i].registerState);
 		}
+	}
+	
+	public boolean isRunning(){
+		if(picState.getState() == State.RUN)
+			return true;
+		else return false;
 	}
 	
 	public HashSet<Integer> getChanges(){

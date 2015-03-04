@@ -1,180 +1,83 @@
-gpasm-0.13.7 beta               addwf.asm   2-21-2015  12:23:10          PAGE  1
+gpasm-0.13.7 beta               addwf.asm   3-4-2015  04:50:59           PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
  
                00001 ;;;;;;; addwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00002 
-               00003 ;;In-depth note;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00004 ;
-               00005 ;Found that compiler doesn't know the difference between plusw0 (or any other 
-               00006 ;INDF register, for that matter) and a register assigned to address 0x0eb (or 
-               00007 ;other INDF register address) in the cblock. This means that the chip doesn't 
-               00008 ;know the difference either. How could "27EB" be anything other than "27EB" to 
-               00009 ;the chip? See around line 105 below. Therefore, since writes to INDF registers 
-               00010 ;ignore the "a" bit, writes to all registers whose least significant byte is the 
-               00011 ;same as an INDF register must also ignore the "a" bit. How else could it work, 
-               00012 ;since all the chip knows is what the compiler tells it? This will cause a hole 
-               00013 ;in every bank where the least significant byte is the same as an INDF register. 
-               00014 ;Specifically, from 0xXeb to 0xXef, 0xXe3 to 0xXe7, and 0xXdb to 0xXdf. This 
-               00015 ;means that the assembly language programmer must know this and not plan to put
-               00016 ;any data in that range, because anything addressed in that byte range will 
-               00017 ;result in a read or write to an INDF register.
-               00018 ;
-               00019 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00020 ;
-               00021 ; Mainline
-               00022 ;  
-               00023 ;
-               00024 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00025 
-               00026         #include p18f452.inc
+               00005 ; Mainline
+               00006 ;  
+               00007 ;
+               00008 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 
+               00010         #include p18f452.inc
                00001         LIST
                00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
                00983         LIST
-               00027         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
-               00028 
-               00029 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00030 
-               00031         cblock  0x000           ;Beginning of Access RAM
-               00032         temp
-               00033         endc
-               00034 
-               00035         cblock  0x100           ;Beginning of 0x100 block, just above Access Ram
-               00036         tempBank1
-               00037         endc    
-               00038 
-               00039         cblock  0x2eb           ;assign variables to same ls byte location as PLUSW0, PREINC0 
-               00040         testPW0
-               00041         testPI0
-               00042         endc
+               00011         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00012 
+               00013 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015         cblock  0x000           ;Beginning of Access RAM
+               00016         temp
+               00017         endc
+               00018 
+               00019         cblock  0x100           ;Beginning of 0x100 block, just above Access Ram
+               00020         tempBank1
+               00021         endc    
+               00022 
+               00023         cblock  0x2eb           ;assign variables to same ls byte location as PLUSW0, PREINC0 
+               00024         testPW0
+               00025         testPI0
+               00026         endc
+               00027 
+               00028         cblock  0x6e2           ;assign variable for example 2 and 3 test
+               00029         testAbit
+               00030         endc
+               00031 
+               00032 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00033 
+               00034 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00035 
+               00036 
+0000           00037         org  0x0000             ;Reset vector
+0000 0000      00038         nop
+0002 EF0E F000 00039         goto  Mainline
+               00040 
+0008           00041         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00042         goto  $                 ;Trap
                00043 
-               00044         cblock  0x6e2           ;assign variable for example 2 and 3 test
-               00045         testAbit
-               00046         endc
-               00047 
-               00048 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00049 
-               00050 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00051 
+0018           00044         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00045         goto  $                 ;Trap
+               00046 
+               00047 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00048 ;See manual chapter 31 for more detail on individual instructions
+               00049 ;Syntax:        addwf   f, d, a         (register, destination register, bank select)
+               00050                                         ;"d", "a" both default to 0. For d, can use "f" 
+               00051                                         ;instead of 1, can use "w" instead of 0.
                00052 
-0000           00053         org  0x0000             ;Reset vector
-0000 0000      00054         nop
-0002 EF0E F000 00055         goto  Mainline
-               00056 
-0008           00057         org  0x0008             ;High priority interrupt vector
-0008 EF04 F000 00058         goto  $                 ;Trap
-               00059 
-0018           00060         org  0x0018             ;Low priority interrupt vector
-0018 EF0C F000 00061         goto  $                 ;Trap
-               00062 
-               00063 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00064 ;See manual chapter 31 for more detail on individual instructions
-               00065 ;Syntax:        addwf   f, d, a         (register, destination register, bank select)
-               00066                                         ;"d", "a" both default to 0. For d, can use "f" 
-               00067                                         ;instead of 1, can use "w" instead of 0.
-               00068 
-               00069 ;               movwf   f, a            (register, bank select)
-               00070 ;               movlw   k               (literal)
-               00071 ;               movlb   k               (literal)
-               00072 ;               lfsr    f, k            (f in {0, 1, 2})
-               00073 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00074 
-               00075 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00076 
-001C 00077 Mainline
-001C 0E05      00078         movlw   5               ;Place 5 in wreg
-001E 6E00      00079         movwf   temp            ;Move 5 to temp
-0020 0E06      00080         movlw   6               ;Place 6 in wreg
-0022 2600      00081         addwf   temp, f         ;Add contents of wreg and temp, place result in temp
-0024 0EFE      00082         movlw   0xfe            ;Place 0xfe in wreg (in order to produce carry with next add)
-0026 2400      00083         addwf   temp, w         ;Add wreg, temp, status reg bit 0 (C) goes high
-0028 2400      00084         addwf   temp, w         ;Add wreg, temp, status reg bit 0 (C) goes low
-               00085 
-               00086 ;Test with banked addressing, addwf disregards banked addressing in certain instances. Those are 
-               00087 ;tested later. This scenario should work as normal banked addressing.
-               00088 
-002A 0101      00089         movlb   0x01            ;Place 1 in Bank Select Register (set for bank 1)
-002C 0E37      00090         movlw   0x37            ;Place 0x37 in wreg
-002E 6F00      00091         movwf   tempBank1       ;Using bank select, move wreg to tempBank1 in bank 1 at address 0x100
-0030 0E10      00092         movlw   0x10            ;Place 0x10 in wreg
-0032 2700      00093         addwf   tempBank1, 1    ;Add contents of wreg and temp, place result in tempBank1 (at address 0x100)
-0034 0EF7      00094         movlw   0xf7            ;Place 0xf7 in wreg (in order to produce carry with next add)
-0036 2500      00095         addwf   tempBank1, 0    ;Add wreg, tempBank1, result in wreg, status reg bit 0 (C) goes high
-0038 2500      00096         addwf   tempBank1, w    ;Add wreg, temp, result in wreg, status reg bit 0 (C) goes low
-               00097 
-               00098 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00099 ;This portion shows what "In-depth note" at top of this file tries to explain:
-               00100 ;This portion tests that instructions for addwf where the destination register is an INDF register, 
-               00101 ;which means INDFx, PLUSWx, PREINCx, POSTINCx, and POSTDECx (x in {0, 1, 2}), ignore the "a"bit. 
-               00102 ;Reads or writes to any register with least significant byte in the ranges 0xXeb to 0xXef, 0xXe3  
-               00103 ;to 0xXe7, and 0xXdb to 0xXdf will result in reading/writing to an INDF location. Effectively, 
-               00104 ;registers in these ranges, other than the ones in Access Memory (which is bank 0), do not exist.
-               00105 
-003A EE00 F000 00106         lfsr    0, 0x000
-003E 0102      00107         movlb   2
-0040 0E05      00108         movlw   5
-0042 6EEF      00109         movwf   INDF0
-0044 6EEB      00110         movwf   PLUSW0
-0046 6EEC      00111         movwf   PREINC0
-0048 EE00 F000 00112         lfsr    0, 0x000
-004C 27EB      00113         addwf   testPW0, 1, 1   ;Assigned to same address as PLUSW0, see instruction == 0x27EB
-               00114                                 ;Since the value is written to PLUSW0, the bsr value of 2 has 
-               00115                                 ;been ignored
-               00116 
-004E 27EC      00117         addwf   testPI0, 1, 1   ;Assigned to same address as PREINC0, see instruction == 0x27EC
-               00118                                 ;Since the value is written to PREINC0, the bsr value of 2 has 
-               00119                                 ;been ignored
-               00120 
-0050 27EE      00121         addwf   POSTINC0, 1, 1  ;Assigned to same address as temp2, see instruction == 0x27EC
-0052 EE00 F000 00122         lfsr    0, 0x000
-0056 27EB      00123         addwf   PLUSW0, 1, 1    ;Assigned to same address as temp1, see instruction == 0x27EB
-               00124 
-0058 25EC      00125         addwf   PREINC0, w, 1   ;Assigned to same address as temp2, see instruction == 0x27EC
-               00126                                 ;This instruction only adds 1 to FSR since PREINC0 is only read once.
-               00127 
-               00128 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00129 
-               00130 ;Manual, example1, case 1:
-               00131 ;Shows that adding FSR ignores "a" bit, and that addwf gives a correct answer
-               00132 
-005A EE02 F0C2 00133         lfsr    0, 0x2c2
-005E 0E17      00134         movlw   0x17
-0060 27E9      00135         addwf   FSR0L, 1, 1
-               00136 
-               00137 ;Manual, example1, case 2:
-               00138 ;Shows that adding FSR ignores "a" bit when adding to FSR, and that when adding to FSR0L creates a carry, FSR0H is incremented
-0062 EE02 F0FF 00139         lfsr    0, 0x2ff
-0066 27E9      00140         addwf   FSR0L, 1, 1
-               00141 
-               00142 ;Manual, example 2:
-               00143 ;Shows that addwf ignores "a" bit when adding to an INDF register
-               00144 
-0068 0102      00145         movlb   2               ;Set BSR value to 2
-006A EE06 F0C2 00146         lfsr    0, 0x6c2        ;Load FSR with value
-006E 0E20      00147         movlw   0x20            ;Place 0x20 in wreg
-0070 6FEF      00148         movwf   INDF0, 1        ;Place value in wreg in location pointed to by INDF0
-0072 0E17      00149         movlw   0x17            ;Place 0x17 in wreg
-0074 27EF      00150         addwf   INDF0, 1, 1     ;Add wreg with value in location pointed to by INDF0,
-               00151                                 ;place result in location pointed to by INDF0.
-               00152                                 ;Since "a" bit is set (the second 1), banked addressing 
-               00153                                 ;is called for, but since the register argument is an
-               00154                                 ;INDF register, banked addressing is ignored
-               00155 
-               00156 ;Manual, example 3:
-               00157         
-0076 0E20      00158         movlw    0x20           ;Place 0x20 in wreg
-0078 6FEF      00159         movwf   INDF0, 1        ;Place value in wreg in location pointed to by INDF0
-007A 0E17      00160         movlw   0x17            ;Place 0x17 in wreg
-007C 26EF      00161         addwf   INDF0, 1, 0     ;Add wreg with value in location pointed to by INDF0,
-               00162                                 ;place result in location pointe to by INDF0.
-               00163                                 ;Shows that "a" bit being 1 or 0 doesn't matter when 
-               00164                                 ;register argument is an INDF register.
-               00165         
-               00166 
-007E EF3F F000 00167 stop    goto            stop
-               00168 
+               00053 ;               movwf   f, a            (register, bank select)
+               00054 ;               movlw   k               (literal)
+               00055 ;               movlb   k               (literal)
+               00056 ;               lfsr    f, k            (f in {0, 1, 2})
+               00057 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00058 
+               00059 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00060 
+001C 00061 Mainline
+001C 0E05      00062         movlw   5               ;Place 5 in wreg
+001E 6E00      00063         movwf   temp            ;Move 5 to temp
+0020 0E06      00064         movlw   6               ;Place 6 in wreg
+0022 2600      00065         addwf   temp, f         ;Add contents of wreg and temp, place result in temp
+0024 0EFE      00066         movlw   0xfe            ;Place 0xfe in wreg (in order to produce carry with next add)
+0026 2400      00067         addwf   temp, w         ;Add wreg, temp, status reg bit 0 (C) goes high
+0028 2400      00068         addwf   temp, w         ;Add wreg, temp, status reg bit 0 (C) goes low
+               00069         
+002A EF15 F000 00070 stop    goto            stop
+               00071 
 
 
 Errors   :       0

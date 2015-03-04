@@ -1,0 +1,73 @@
+gpasm-0.13.7 beta               return.asm  3-4-2015  06:00:44           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; return.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00004 ;
+               00005 ; Mainline
+               00006 ;  
+               00007 ;
+               00008 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 
+               00010         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00011         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00012 
+               00013 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015                         cblock  0x000           ;Beginning of Access RAM
+               00016                         temp1
+               00017                         temp2
+               00018                         endc
+               00019 
+               00020 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00021 
+               00022 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00023 
+               00024 
+0000           00025         org  0x0000             ;Reset vector
+0000 0000      00026         nop
+0002 EF0E F000 00027         goto  Mainline
+               00028 
+0008           00029         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00030         goto  $                 ;Trap
+               00031 
+0018           00032         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00033         goto  $                 ;Trap
+               00034 
+               00035 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00036 
+001C 00037 Mainline
+001C EF13 F000 00038                 goto            branch1
+0020 0E8B      00039 sub2            movlw           139
+0022 6E00      00040                 movwf           temp1
+0024 0012      00041                 return
+               00042 
+0026 0E03      00043 branch1         movlw           3
+0028 6E00      00044                 movwf           temp1
+002A D809      00045                 rcall           sub
+002C 0000      00046                 nop
+002E 0000      00047                 nop
+0030 DFF7      00048                 rcall           sub2
+0032 EF22 F000 00049                 goto            stop
+0036 0000      00050                 nop
+0038 0000      00051                 nop
+003A 0000      00052                 nop
+003C 0000      00053                 nop
+003E 0EF7      00054 sub             movlw           247
+0040 6E01      00055                 movwf           temp2
+0042 0012      00056                 return
+0044 EF22 F000 00057 stop            goto            stop
+               00058 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

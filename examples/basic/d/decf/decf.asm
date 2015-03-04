@@ -1,4 +1,4 @@
-;;;;;;; decf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; decfExample.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -13,12 +13,12 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
-	CNT
+	temp
 	endc
 
-;	cblock	0x100		;Beginning of 0x100 block, just above Access Ram
-;	tempBank1
-;	endc	
+	cblock	0x100		;Beginning of 0x100 block, just above Access Ram
+	tempBank1
+	endc	
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -50,26 +50,18 @@
 
 Mainline
 
-;Example 1:
-
-	movlb	1		;Set bank select register to 1
-	movlw	1		;Place 1 in wreg
-	movwf	CNT, 1		;Using bank select, copy wreg value into CNT
-	decf	CNT, 1, 1	;Using bank select, decrement CNT, place result in CNT
-
-	decf	CNT, 1, 1	;Decrement CNT again to test rollover from 0x00 to 0xff
-
-;Example 2:
-
-	lfsr	0, 0x1c2	;Load FSR0 with 0x1c2
-	movlw	1		;Place 1 in wreg
-	movwf	INDF0		;Copy wreg value to location pointed to by FSR0
-	decf	INDF0, 1, 1	;Decrement value in location pointed to by FSR0,
-				;place result in location pointed to by FSR0. Ignores
-				;banked addressing since register argument is an INDF register
-
-;Check writing to wreg
-	decf	INDF0, 0
+	movlw	5		;Place 5 in wreg
+	movwf	temp		;Place value of wreg in temp
+	decf	temp, w		;Decrement value in temp, place result in wreg
+	decf	temp, 0		;Same thing, wreg stays same since temp never changed
+	decf 	temp, f		;Decrement value in temp, place result in temp
+	decf 	temp, f		;Decrement value in temp, place result in temp
+	decf 	temp, f		;Decrement value in temp, place result in temp
+	decf 	temp, f		;Decrement value in temp, place result in temp
+	decf	temp, 1		;Decrement, status register bit 2 (Z) goes high
+	decf	temp, 1		;Decrement, status register bit 4 (N) goes high, (Z) low
+	movlw	B'10000000'	;Place 128 in wreg
+	decf	WREG, w		;Decrement, status register bit 4 (N) goes low
 					
 stop	goto	stop
 

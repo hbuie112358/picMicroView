@@ -1,13 +1,13 @@
-gpasm-0.13.7 beta               movwf.asm   2-21-2015  14:48:28          PAGE  1
+gpasm-0.13.7 beta               movwf.asm   3-4-2015  05:52:40           PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
  
-               00001 ;;;;;;; movwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00001 ;;;;;;; movff.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00002 ;
-               00003 ;This program tests the operation of the movwf command by implementing the
-               00004 ;test conditions for the examples shown on page 745 of the manual.
+               00003 ;This program tests operation of movff instruction. Contents of register f
+               00004 ;are moved to the second register f
                00005 ;
                00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00007 ;
@@ -25,60 +25,36 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00017 
                00018         cblock  0x000           ;Beginning of Access RAM
-               00019         OPTION_REG
-               00020         endc
-               00021 
-               00022 ;       cblock  0x100           ;Beginning of 0x100 block, just above Access Ram
-               00023 ;       OPTION_REG
-               00024 ;       endc    
-               00025 
-               00026 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019         temp1
+               00020         temp2
+               00021         endc
+               00022 
+               00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
+               00025 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
                00027 
-               00028 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00029 
-               00030 
-0000           00031         org  0x0000             ;Reset vector
-0000 0000      00032         nop
-0002 EF0E F000 00033         goto  Mainline
+0000           00028         org  0x0000             ;Reset vector
+0000 0000      00029         nop
+0002 EF0E F000 00030         goto  Mainline
+               00031 
+0008           00032         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00033         goto  $                 ;Trap
                00034 
-0008           00035         org  0x0008             ;High priority interrupt vector
-0008 EF04 F000 00036         goto  $                 ;Trap
+0018           00035         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00036         goto  $                 ;Trap
                00037 
-0018           00038         org  0x0018             ;Low priority interrupt vector
-0018 EF0C F000 00039         goto  $                 ;Trap
-               00040 
-               00041 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00042 ;See manual chapter 31 for more detail on individual instructions
-               00043 ;Syntax:        movwf   f, a            (register, bank select)
-               00044 ;               movlw   k               (literal)
-               00045 ;               movlb   k               (literal)
-               00046 ;               lfsr    f, k            (f in {0, 1, 2}, literal)
-               00047 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-001C 00048 Mainline
-               00049         
-               00050 ;Example 1:
-               00051 
-001C 0101      00052         movlb   1
-001E 0EFF      00053         movlw   0xff
-0020 6F00      00054         movwf   0x00, 1
-0022 0E4F      00055         movlw   0x4f
-0024 6F00      00056         movwf   OPTION_REG, 1
-               00057 
-               00058 ;Example 2:
-               00059 
-0026 0E17      00060         movlw   0x17
-0028 EE05 F0C2 00061         lfsr    0, 0x5c2
-002C 6FEF      00062         movwf   INDF0, 1
-               00063         
-               00064 
-               00065 
-               00066 
-               00067 
-               00068 
-               00069 
-               00070 
-002E EF17 F000 00071 stop    goto            stop
-               00072 
+               00038 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00039 
+001C 00040 Mainline
+               00041 
+001C 0EFF      00042 start   movlw           255             ;Place 255 in wreg
+001E 6E00      00043         movwf           temp1           ;Copy wreg value into temp1 (at address 0x000)
+0020 0E05      00044         movlw           5               ;Place 5 in wreg
+0022 6E80      00045         movwf           PORTA           ;Copy wreg value into PORTA
+               00046 
+0024 EF12 F000 00047 stop    goto            stop
+               00048 
 
 
 Errors   :       0

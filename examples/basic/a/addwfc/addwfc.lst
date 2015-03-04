@@ -1,0 +1,87 @@
+gpasm-0.13.7 beta               addwfc.asm  3-4-2015  04:47:35           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;;addwfc.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;
+               00004 ;
+               00005 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00006 ;
+               00007 ; Mainline
+               00008 ;  
+               00009 ;
+               00010 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00011 
+               00012         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00013         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00014 
+               00015 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00016 
+               00017         cblock  0x000           ;Beginning of Access RAM
+               00018         temp
+               00019         endc
+               00020 
+               00021 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00022 
+               00023 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
+               00025 
+0000           00026         org  0x0000             ;Reset vector
+0000 0000      00027         nop
+0002 EF0E F000 00028         goto  Mainline
+               00029 
+0008           00030         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00031         goto  $                 ;Trap
+               00032 
+0018           00033         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00034         goto  $                 ;Trap
+               00035 
+               00036 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00037 
+               00038 
+               00039 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00040 ;See manual chapter 31 for more detail on individual instructions
+               00041 ;Syntax:        addwfc  f, d, a         (register, destination register, bank select)
+               00042                                         ;"d", "a" both default to 0. For d, can use "f" 
+               00043                                         ;instead of 1, can use "w" instead of 0.
+               00044 
+               00045 ;               movwf   f, a            (register, bank select)
+               00046 ;               movlw   k               (literal)
+               00047 ;               movlb   k               (literal)
+               00048 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+001C 00049 Mainline
+               00050 
+001C 0E17      00051         movlw   0x17
+001E 6E00      00052         movwf   temp            ;Store 0x17 at address 0x000
+0020 0EC2      00053         movlw   0xc2
+0022 2000      00054         addwfc  temp, 0         ;Add WREG, C bit, and temp, 
+               00055                                 ;place result (0xd9) in WREG (no carry)
+               00056 
+               00057 ;Cause carry bit to be set:
+               00058 
+0024 0EFE      00059         movlw   0xfe
+0026 6E00      00060         movwf   temp
+0028 0EAD      00061         movlw   0xad
+002A 2000      00062         addwfc  temp, 0         ;Set carry bit (status reg, bit 0)
+               00063 
+               00064 ;Test add with carry:
+               00065 
+002C 6E00      00066         movwf   temp            
+002E 0E02      00067         movlw   0x02
+0030 2000      00068         addwfc  temp, 0         ;Add WREG, C bit, and temp (0x02 + 1 + 0xab), 
+               00069                                 ;place result (0xae) in WREG (clears carry bit)
+               00070 
+0032 EF19 F000 00071 stop    goto            stop
+               00072 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

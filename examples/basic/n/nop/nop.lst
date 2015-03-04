@@ -1,0 +1,69 @@
+gpasm-0.13.7 beta               nop.asm     3-4-2015  06:21:55           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; nop.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00004 ;
+               00005 ; Mainline
+               00006 ;  
+               00007 ;
+               00008 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 
+               00010         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00011         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+300000 FAFF    00012         __CONFIG  _CONFIG1H, _HS_OSC_1H  ;HS oscillator
+               00013         __CONFIG  _CONFIG2L, _PWRT_ON_2L & _BOR_ON_2L & _BORV_42_2L  ;Reset
+300002 FEF6    00014         __CONFIG  _CONFIG2H, _WDT_OFF_2H  ;Watchdog timer disabled
+300004 FFFF    00015         __CONFIG  _CONFIG3H, _CCP2MX_ON_3H  ;CCP2 to RC1 (rather than to RB3)
+300006 FFFB    00016         __CONFIG  _CONFIG4L, _LVP_OFF_4L  ;RB5 enabled for I/O
+               00017 
+               00018 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019 
+               00020                         cblock  0x000           ;Beginning of Access RAM
+               00021                         temp1
+               00022                         temp2
+               00023                         endc
+               00024 
+               00025 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
+               00027 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00028 
+               00029 
+0000           00030         org  0x0000             ;Reset vector
+0000 0000      00031         nop
+0002 EF0E F000 00032         goto  Mainline
+               00033 
+0008           00034         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00035         goto  $                 ;Trap
+               00036 
+0018           00037         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00038         goto  $                 ;Trap
+               00039 
+               00040 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00041 
+001C 00042 Mainline
+001C 0E8B      00043         movlw   139             ;Place 139 in wreg
+001E 6E00      00044         movwf   temp1           ;Copy wreg value to temp1
+0020 0000      00045         nop                     ;Do nothing
+0022 0000      00046         nop                     ;Do nothing
+0024 0000      00047         nop                     ;Do nothing
+0026 0E03      00048         movlw   3               ;Place 3 in wreg
+0028 6E00      00049         movwf   temp1           ;Copy wreg value to temp1
+002A 0000      00050         nop                     ;Do nothing
+002C 0000      00051         nop                     ;Do nothing
+               00052 
+002E EF17 F000 00053 stop    goto    stop
+               00054 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

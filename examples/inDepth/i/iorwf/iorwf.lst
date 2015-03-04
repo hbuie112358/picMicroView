@@ -1,0 +1,123 @@
+gpasm-0.13.7 beta               iorwf.asm   2-21-2015  18:02:41          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; iorwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of iorwf, inclusive OR the WREG with 
+               00004 ;contents of register f using the examples starting on page 736 of 
+               00005 ;the PIC18 user manual.
+               00006 ;
+               00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00008 ;
+               00009 ; Mainline
+               00010 ;  
+               00011 ;
+               00012 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00013 
+               00014         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00015         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00016 
+               00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00018 
+               00019         cblock  0x000           ;Beginning of Access RAM
+               00020         temp
+               00021         endc
+               00022 
+               00023         cblock  0x100           ;Beginning of 0x100 block, just above Access Ram
+               00024         RESULT
+               00025         tempBank1
+               00026         endc                    
+               00027 
+               00028 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00029 
+               00030 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00031 
+               00032 
+0000           00033         org  0x0000             ;Reset vector
+0000 0000      00034         nop
+0002 EF0E F000 00035         goto  Mainline
+               00036 
+0008           00037         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00038         goto  $                 ;Trap
+               00039 
+0018           00040         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00041         goto  $                 ;Trap
+               00042 
+               00043 
+               00044 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00045 ;See manual chapter 31 for more detail on individual instructions
+               00046 ;Syntax:        iorwf   f, d, a         (register, destination register, bank select)
+               00047                                         ;"d", "a" both default to 0. For d, can use "f" 
+               00048                                         ;instead of 1, can use "w" instead of 0.
+               00049 
+               00050 ;               movwf   f, a            (register, bank select)
+               00051 ;               movlw   k               (literal)
+               00052 ;               movlb   k               (literal)
+               00053 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00054 
+               00055 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00056 
+001C 00057 Mainline
+               00058 
+               00059 ;Example 1:
+               00060 
+001C 0101      00061         movlb   1
+001E EE0D F0C2 00062         lfsr    0, 0xdc2
+0022 0E30      00063         movlw   0x30
+0024 6EEF      00064         movwf   INDF0           ;Copy 0x30 to INDF0:            0011 0000
+0026 0E17      00065         movlw   0x17            ;Place 0x17 in wreg:            0001 0111
+0028 13EF      00066         iorwf   INDF0, 1, 1     ;Bit wise OR wreg, INDF0:       0011 0111
+               00067                                 ;Ignores "a" bit of 1 
+               00068 
+               00069 ;Example 2, Case 1:
+               00070         
+002A 0E13      00071         movlw   0x13            ;Place 0x13 in wreg:            0001 0011
+002C 6F00      00072         movwf   RESULT, 1       ;Copy to RESULT
+002E 0E91      00073         movlw   0x91            ;Place 0x91 in wreg:            1001 0001
+0030 1300      00074         iorwf   RESULT, 1, 1    ;Bit wise OR wreg, INDF0:       1001 0011
+               00075         
+               00076 ;Example 2, Case 2:
+               00077 
+0032 0E00      00078         movlw   0x00
+0034 6F00      00079         movwf   RESULT, 1       
+0036 1300      00080         iorwf   RESULT, 1, 1    ;Bit wise OR wreg, INDF0:
+               00081 
+               00082 
+               00083 
+               00084 
+               00085 
+               00086 
+               00087 
+0038 0E35      00088         movlw   0x35            ;Place 0x35 in wreg
+003A 6E00      00089         movwf   temp            ;Copy value in wreg to temp1
+003C 0ECA      00090         movlw   0xca            ;Place 0xca in wreg             
+003E 1000      00091         iorwf   temp, 0         ;Inclusive OR wreg with temp1, result in wreg
+0040 0E2B      00092         movlw   0x2b            ;Place 0x2b in wreg
+0042 6E00      00093         movwf   temp            ;Copy value in wreg to temp1
+0044 0ED4      00094         movlw   0xd4            ;Place 0xd4 in wreg
+0046 1200      00095         iorwf   temp, 1         ;Inclusive OR wreg with temp1, result in temp
+               00096 
+               00097 ;Test banked addressing:
+               00098                 
+0048 0101      00099         movlb   0x01            ;Place 0x01 in bank select register
+004A 0E35      00100         movlw   0x35            ;Place 0x35 in wreg
+004C 6F01      00101         movwf   tempBank1, 1    ;Using bank select, copy value in wreg to temp2
+004E 0ECA      00102         movlw   0xca            ;Place 0xca in wreg
+0050 1301      00103         iorwf   tempBank1, f, 1 ;Using bank select, inclusive OR wreg with temp2, result in temp2
+0052 1101      00104         iorwf   tempBank1, w, 1 ;Using bank select, inclusive OR wreg with temp2, result in wreg
+               00105                 
+               00106 
+0054 EF2A F000 00107 stop            goto            stop
+               00108 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

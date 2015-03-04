@@ -1,7 +1,7 @@
-;;;;;;; movwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; movff.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-;This program tests the operation of the movwf command by implementing the
-;test conditions for the examples shown on page 745 of the manual.
+;This program tests operation of movff instruction. Contents of register f
+;are moved to the second register f
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -16,12 +16,9 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
-	OPTION_REG
+	temp1
+	temp2
 	endc
-
-;	cblock	0x100		;Beginning of 0x100 block, just above Access Ram
-;	OPTION_REG
-;	endc	
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -38,39 +35,19 @@
         org  0x0018             ;Low priority interrupt vector
         goto  $                 ;Trap
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;See manual chapter 31 for more detail on individual instructions
-;Syntax: 	movwf	f, a		(register, bank select)
-;		movlw	k		(literal)
-;		movlb	k		(literal)
-;		lfsr	f, k		(f in {0, 1, 2}, literal)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 Mainline
-	
-;Example 1:
 
-	movlb	1
-	movlw	0xff
-	movwf	0x00, 1
-	movlw	0x4f
-	movwf	OPTION_REG, 1
-
-;Example 2:
-
-	movlw	0x17
-	lfsr	0, 0x5c2
-	movwf	INDF0, 1
-	
-
-
-
-
-
-
+start	movlw		255		;Place 255 in wreg
+	movwf		temp1		;Copy wreg value into temp1 (at address 0x000)
+	movlw		5		;Place 5 in wreg
+	movwf		PORTA		;Copy wreg value into PORTA
 
 stop	goto		stop
 
 	end
+
 
 
 

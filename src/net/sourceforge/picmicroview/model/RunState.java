@@ -3,9 +3,11 @@ package net.sourceforge.picmicroview.model;
 public class RunState implements Pic18F452State {
 
 	Pic18F452 pic18;
+	State state;
 	
 	public RunState(Pic18F452 pic18) {
 		this.pic18 = pic18;
+		state = State.RUN;
 	}
 
 	@Override
@@ -18,6 +20,11 @@ public class RunState implements Pic18F452State {
 		pic18.clock.stop();
 		pic18.setStepState();
 		pic18.run();
+	}
+
+	@Override
+	public State getState() {
+		return state;
 	}
 	
 }

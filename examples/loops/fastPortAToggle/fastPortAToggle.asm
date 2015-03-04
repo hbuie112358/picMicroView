@@ -52,7 +52,7 @@ dec		decf		temp2, f
 		bnz		dec
 		return
 
-toggle		btg		PORTA, RC2
+toggle		btg		PORTA, RA2
 		goto 		outer
 stop		goto		stop
 

@@ -57,7 +57,7 @@ public class FsrL extends Register {
 		
 		//Rollover to 0xfff after reaching 0x000. FSRL decrements both FSRL and FSRH
 		public void decrement(){
-			System.out.println("in " + name + ", decrement() was called");
+//			System.out.println("in " + name + ", decrement() was called");
 			if(contents == 0x00){
 				contents = 0xff;
 				pic18.dataMem.gpMem[fsrh].decrement();
@@ -87,7 +87,7 @@ public class FsrL extends Register {
 		
 		//Rollover to 0xfff after reaching 0x000. FSRL decrements both FSRL and FSRH
 		public void decrement(){
-			System.out.println("in " + name + ", decrement() was called");
+//			System.out.println("in " + name + ", decrement() was called");
 			if(contents == 0x00){
 				contents = 0xff;
 				pic18.dataMem.gpMem[fsrh].decrement();

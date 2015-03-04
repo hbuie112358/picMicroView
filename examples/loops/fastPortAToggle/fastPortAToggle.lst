@@ -1,4 +1,4 @@
-gpasm-0.13.7 beta               fastPortAToggle.asm2-14-2015  19:29:52          PAGE  1
+gpasm-0.13.7 beta               fastPortAToggle.asm3-4-2015  08:09:35           PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -61,7 +61,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0034 E1FE      00052                 bnz             dec
 0036 0012      00053                 return
                00054 
-0038 7480      00055 toggle          btg             PORTA, RC2
+0038 7480      00055 toggle          btg             PORTA, RA2
 003A EF10 F000 00056                 goto            outer
 003E EF1F F000 00057 stop            goto            stop
                00058 

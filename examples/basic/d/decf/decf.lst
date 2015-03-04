@@ -1,10 +1,10 @@
-gpasm-0.13.7 beta               decf.asm    2-21-2015  16:29:43          PAGE  1
+gpasm-0.13.7 beta               decf.asm    3-4-2015  05:00:59           PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
  
-               00001 ;;;;;;; decf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00001 ;;;;;;; decfExample.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00002 ;
                00003 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00004 ;
@@ -22,12 +22,12 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00013 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00014 
                00015         cblock  0x000           ;Beginning of Access RAM
-               00016         CNT
+               00016         temp
                00017         endc
                00018 
-               00019 ;       cblock  0x100           ;Beginning of 0x100 block, just above Access Ram
-               00020 ;       tempBank1
-               00021 ;       endc    
+               00019         cblock  0x100           ;Beginning of 0x100 block, just above Access Ram
+               00020         tempBank1
+               00021         endc    
                00022 
                00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00024 
@@ -59,29 +59,21 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00050 
 001C 00051 Mainline
                00052 
-               00053 ;Example 1:
-               00054 
-001C 0101      00055         movlb   1               ;Set bank select register to 1
-001E 0E01      00056         movlw   1               ;Place 1 in wreg
-0020 6F00      00057         movwf   CNT, 1          ;Using bank select, copy wreg value into CNT
-0022 0700      00058         decf    CNT, 1, 1       ;Using bank select, decrement CNT, place result in CNT
-               00059 
-0024 0700      00060         decf    CNT, 1, 1       ;Decrement CNT again to test rollover from 0x00 to 0xff
-               00061 
-               00062 ;Example 2:
-               00063 
-0026 EE01 F0C2 00064         lfsr    0, 0x1c2        ;Load FSR0 with 0x1c2
-002A 0E01      00065         movlw   1               ;Place 1 in wreg
-002C 6EEF      00066         movwf   INDF0           ;Copy wreg value to location pointed to by FSR0
-002E 07EF      00067         decf    INDF0, 1, 1     ;Decrement value in location pointed to by FSR0,
-               00068                                 ;place result in location pointed to by FSR0. Ignores
-               00069                                 ;banked addressing since register argument is an INDF register
-               00070 
-               00071 ;Check writing to wreg
-0030 04EF      00072         decf    INDF0, 0
-               00073                                         
-0032 EF19 F000 00074 stop    goto    stop
-               00075 
+001C 0E05      00053         movlw   5               ;Place 5 in wreg
+001E 6E00      00054         movwf   temp            ;Place value of wreg in temp
+0020 0400      00055         decf    temp, w         ;Decrement value in temp, place result in wreg
+0022 0400      00056         decf    temp, 0         ;Same thing, wreg stays same since temp never changed
+0024 0600      00057         decf    temp, f         ;Decrement value in temp, place result in temp
+0026 0600      00058         decf    temp, f         ;Decrement value in temp, place result in temp
+0028 0600      00059         decf    temp, f         ;Decrement value in temp, place result in temp
+002A 0600      00060         decf    temp, f         ;Decrement value in temp, place result in temp
+002C 0600      00061         decf    temp, 1         ;Decrement, status register bit 2 (Z) goes high
+002E 0600      00062         decf    temp, 1         ;Decrement, status register bit 4 (N) goes high, (Z) low
+0030 0E80      00063         movlw   B'10000000'     ;Place 128 in wreg
+0032 04E8      00064         decf    WREG, w         ;Decrement, status register bit 4 (N) goes low
+               00065                                         
+0034 EF1A F000 00066 stop    goto    stop
+               00067 
 
 
 Errors   :       0

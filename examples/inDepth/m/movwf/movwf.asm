@@ -1,4 +1,7 @@
-;;;;;;; decfExample.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; movwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;This program tests the operation of the movwf command by implementing the
+;test conditions for the examples shown on page 745 of the manual.
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -13,12 +16,12 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
-	temp
+	OPTION_REG
 	endc
 
-	cblock	0x100		;Beginning of 0x100 block, just above Access Ram
-	tempBank1
-	endc	
+;	cblock	0x100		;Beginning of 0x100 block, just above Access Ram
+;	OPTION_REG
+;	endc	
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -37,33 +40,35 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;See manual chapter 31 for more detail on individual instructions
-;Syntax: 	decf	f, d, a		(register, destination register, bank select)
-					;"d", "a" both default to 0. For d, can use "f" 
-					;instead of 1, can use "w" instead of 0.
-
-;		movwf	f, a		(register, bank select)
+;Syntax: 	movwf	f, a		(register, bank select)
 ;		movlw	k		(literal)
 ;		movlb	k		(literal)
+;		lfsr	f, k		(f in {0, 1, 2}, literal)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 Mainline
+	
+;Example 1:
 
-	movlw	5		;Place 5 in wreg
-	movwf	temp		;Place value of wreg in temp
-	decf	temp, w		;Decrement value in temp, place result in wreg
-	decf	temp, 0		;Same thing, wreg stays same since temp never changed
-	decf 	temp, f		;Decrement value in temp, place result in temp
-	decf 	temp, f		;Decrement value in temp, place result in temp
-	decf 	temp, f		;Decrement value in temp, place result in temp
-	decf 	temp, f		;Decrement value in temp, place result in temp
-	decf	temp, 1		;Decrement, status register bit 2 (Z) goes high
-	decf	temp, 1		;Decrement, status register bit 4 (N) goes high, (Z) low
-	movlw	B'10000000'	;Place 128 in wreg
-	decf	WREG, w		;Decrement, status register bit 4 (N) goes low
-					
-stop	goto	stop
+	movlb	1
+	movlw	0xff
+	movwf	0x00, 1
+	movlw	0x4f
+	movwf	OPTION_REG, 1
+
+;Example 2:
+
+	movlw	0x17
+	lfsr	0, 0x5c2
+	movwf	INDF0, 1
+	
+
+
+
+
+
+
+
+stop	goto		stop
 
 	end
 

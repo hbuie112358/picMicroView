@@ -83,10 +83,13 @@ public class MainWindow extends JFrame{
 	private JMenu inDepth = new JMenu("In-depth");
 	private JMenu a = new JMenu("A");
 	private JMenuItem addwf = new JMenuItem("addwf");
+	private JMenuItem addwfc = new JMenuItem("addwfc");
 	private JMenuItem andlw = new JMenuItem("andlw");
 	private JMenu b = new JMenu("B");
+	private JMenuItem bcf = new JMenuItem("bcf");
 	private JMenuItem bz = new JMenuItem("bz");
 	private JMenuItem bnz = new JMenuItem("bnz");
+	private JMenuItem bra = new JMenuItem("bra");
 	private JMenuItem bsf = new JMenuItem("bsf");
 	private JMenuItem btfss = new JMenuItem("btfss");
 	private JMenuItem btg = new JMenuItem("btg");
@@ -102,11 +105,26 @@ public class MainWindow extends JFrame{
 	private JMenu m = new JMenu("M");
 	private JMenuItem movf = new JMenuItem("movf");
 	private JMenuItem movff = new JMenuItem("movff");
+	private JMenuItem movlb = new JMenuItem("movlb");
 	private JMenuItem movlw = new JMenuItem("movlw");
 	private JMenuItem movwf = new JMenuItem("movwf");
+	private JMenu n = new JMenu("N");
+	private JMenuItem nop = new JMenuItem("nop");
+	private JMenu r = new JMenu("R");
+	private JMenuItem rcall = new JMenuItem("rcall");
+	private JMenuItem returnItem = new JMenuItem("return");
+
 	
 	private JMenu aID = new JMenu("A");
 	private JMenuItem addwfcIDItem = new JMenuItem("addwfc");
+	private JMenuItem addwfIDItem = new JMenuItem("addwf");
+	private JMenu dID = new JMenu("D");
+	private JMenuItem decfIDItem = new JMenuItem("decf");
+	private JMenu iID = new JMenu("I");
+	private JMenuItem iorwfIDItem = new JMenuItem("iorwf");
+	private JMenu mID = new JMenu("M");
+	private JMenuItem movfIDItem = new JMenuItem("movf");
+	private JMenuItem movwfIDItem = new JMenuItem("movwf");
 
 	private JMenu generalConcepts = new JMenu("General Concepts");
 	private JMenu indirectAddressing = new JMenu("Indirect Addressing");
@@ -117,6 +135,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem preincItem = new JMenuItem("preinc");
 	private JMenu loops = new JMenu("Loops");
 	private JMenuItem fastPortAToggleItem = new JMenuItem("Fast PORTA Toggle");
+	private JMenuItem slowToggleAllPortsItem = new JMenuItem("Slow Toggle All Ports");
 	
 	private JMenu helpMenu = new JMenu("Help");
 	private JMenuItem testItem = new JMenuItem("Test");
@@ -193,12 +212,20 @@ public class MainWindow extends JFrame{
 		basic.add(i);
 		basic.add(l);
 		basic.add(m);
+		basic.add(n);
+		basic.add(r);
 		a.add(addwf);
 		addwf.addActionListener(new ExampleAction("basic", "addwf"));
+		a.add(addwfc);
+		addwfc.addActionListener(new ExampleAction("basic", "addwfc"));
 		a.add(andlw);
 		andlw.addActionListener(new ExampleAction("basic","andlw"));
+		b.add(bcf);
+		bcf.addActionListener(new ExampleAction("basic","bcf"));
 		b.add(bnz);
 		bnz.addActionListener(new ExampleAction("basic","bnz"));
+		b.add(bra);
+		bra.addActionListener(new ExampleAction("basic","bra"));
 		b.add(bsf);
 		bsf.addActionListener(new ExampleAction("basic","bsf"));
 		b.add(btfss);
@@ -221,14 +248,35 @@ public class MainWindow extends JFrame{
 		movf.addActionListener(new ExampleAction("basic","movf"));
 		m.add(movff);
 		movff.addActionListener(new ExampleAction("basic","movff"));
+		m.add(movlb);
+		movlb.addActionListener(new ExampleAction("basic","movlb"));
 		m.add(movlw);
 		movlw.addActionListener(new ExampleAction("basic","movlw"));
+		n.add(nop);
+		nop.addActionListener(new ExampleAction("basic", "nop"));
 		m.add(movwf);
 		movwf.addActionListener(new ExampleAction("basic", "movwf"));
+		r.add(rcall);
+		rcall.addActionListener(new ExampleAction("basic", "rcall"));
+		r.add(returnItem);
+		returnItem.addActionListener(new ExampleAction("basic", "return"));
 		
 		inDepth.add(aID);
+		inDepth.add(dID);
+		inDepth.add(iID);
+		inDepth.add(mID);
 		aID.add(addwfcIDItem);
 		addwfcIDItem.addActionListener(new ExampleAction("inDepth", "addwfc"));
+		aID.add(addwfIDItem);
+		addwfIDItem.addActionListener(new ExampleAction("inDepth", "addwf"));
+		dID.add(decfIDItem);
+		decfIDItem.addActionListener(new ExampleAction("inDepth", "decf"));
+		iID.add(iorwfIDItem);
+		iorwfIDItem.addActionListener(new ExampleAction("inDepth", "iorwf"));
+		mID.add(movfIDItem);
+		movfIDItem.addActionListener(new ExampleAction("inDepth", "movf"));
+		mID.add(movwfIDItem);
+		movwfIDItem.addActionListener(new ExampleAction("inDepth", "movwf"));
 		
 		examples.add(generalConcepts);
 		generalConcepts.add(indirectAddressing);
@@ -245,6 +293,8 @@ public class MainWindow extends JFrame{
 		generalConcepts.add(loops);
 		loops.add(fastPortAToggleItem);
 		fastPortAToggleItem.addActionListener(new ExampleAction("loops", "fastPortAToggle"));
+		loops.add(slowToggleAllPortsItem);
+		slowToggleAllPortsItem.addActionListener(new ExampleAction("loops", "slowToggleAllPorts"));
 
 		menuBar.add(programMenu);
 		programMenu.setMnemonic('P');
@@ -280,8 +330,6 @@ public class MainWindow extends JFrame{
 		String[] colNames = {"Address (0x)", "Data (0x)"};
 		dtm_pgm = new MemoryTableModel(colNames);
 		pgmMemTable.setModel(dtm_pgm);
-//		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
-//		pgmMemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 		colRenderer = new PgmColumnColorRenderer(leftRenderer);
 		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new PgmRtColumnColorRenderer(rightRenderer);
@@ -291,8 +339,6 @@ public class MainWindow extends JFrame{
 		String[] colNames1  = {"Address (0x)", "Data"};
 		dtm_data = new DataTableModel(colNames1);
 		dataMemTable.setModel(dtm_data);
-//		dataMemTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
-//		dataMemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 		colRenderer = new PgmColumnColorRenderer(leftRenderer);
 		dataMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new ColumnColorRenderer(rightRenderer);
@@ -302,8 +348,6 @@ public class MainWindow extends JFrame{
 		String[] colNames2 = {"Port/Register", "Data"};
 		dtm_portReg = new PortRegTableModel(colNames2);
 		portRegTable.setModel(dtm_portReg);
-//		portRegTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
-//		portRegTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 		colRenderer = new PgmColumnColorRenderer(leftRenderer);
 		portRegTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new ColumnColorRenderer(rightRenderer);
@@ -315,10 +359,9 @@ public class MainWindow extends JFrame{
 		JTabbedPane portRegTab = new JTabbedPane();
 		portRegTab.add("Special Function", portRegTable);
 		portRegTab.setToolTipText("Register | Contents");
-		//portRegTab.setMaximumSize(new Dimension(200, 300));
+		
 		//make access memory / special function vertical split pane and load components
 		JSplitPane splitPaneAccSpFunction = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-		//splitPaneAccSpFunction.setTopComponent(new JScrollPane(spFunctionPanelComplete));
 		splitPaneAccSpFunction.setTopComponent(new JScrollPane(portRegTab));
 		splitPaneAccSpFunction.setBottomComponent(new JScrollPane(accessMemTab)); 
 		splitPaneAccSpFunction.setDividerLocation(350);
@@ -701,12 +744,15 @@ public class MainWindow extends JFrame{
 			if(a == JFileChooser.APPROVE_OPTION)
 				fileName = fc.getSelectedFile().toString();
 			else return;
-			reqCont.loadAction(fileName);	
-//			System.out.println(fileName);
-			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-//			System.out.println("lstFileName is: " + lstFileName);
-			lstPanel.loadLstFile();
-			lstPanel.highlight("0000");
+			if(reqCont.loadAction(fileName)){
+//				System.out.println(fileName);
+				lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
+//				System.out.println("lstFileName is: " + lstFileName);
+				lstPanel.loadLstFile();
+				lstPanel.highlight("0000");
+			}
+			else 			
+				JOptionPane.showMessageDialog(null, "Stop current program before loading a new program");
 		}	
 	}
 	
@@ -763,15 +809,17 @@ public class MainWindow extends JFrame{
 			else subDirectory = "/";
 //			System.out.println("directory is: " + directory);
 			
-			//for jar file creation
 			fileName = "/" + directory  + subDirectory + name +
 					"/" + name + ".hex";
 			
-			reqCont.loadAction(fileName);
-//			System.out.println(fileName);
-			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-			System.out.println("lstFileName is: " + lstFileName);
-			lstPanel.loadLstFile();
+			if(reqCont.loadAction(fileName)){
+//				System.out.println(fileName);
+				lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
+				System.out.println("lstFileName is: " + lstFileName);
+				lstPanel.loadLstFile();
+			}
+			else 
+				JOptionPane.showMessageDialog(null, "Stop current program before loading a new program");
 		}
 	}
 	
