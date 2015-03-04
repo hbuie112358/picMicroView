@@ -112,12 +112,17 @@ public class Pic18F452 implements SetState{
 		timer0 = new Timer(this, "Timer0");
 	}
 	
-	public Clock getClock(){
-		return clock;
-	}
-	
 	public int getPc(){
 		return pc.getPc();
+	}
+	
+	public void stop(){
+		picState.stop();
+	}
+	
+	public void start(){
+		setRunState();
+		clock.start();
 	}
 	
 	public int getNextInstructionAddress(){
@@ -135,10 +140,6 @@ public class Pic18F452 implements SetState{
 	public void executeTest(){
 		testMain.execute();
 	}
-	
-//	public int getWreg(){
-//		return dataMem.wreg.read();
-//	}
 	
 	public ArrayList<Integer> getPgmMemory(){
 		ArrayList<Integer> pm = new ArrayList<Integer>();

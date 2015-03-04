@@ -22,23 +22,30 @@ public class Source {
 
 			
 	public Source(String fileName){
-		String name = "/basic/a/addwf/addwf.hex";
 		try{	//open file
 			
-			//for development purposes in eclipse, to modify 
-			//example files while working
-//			file = new File(fileName);
-//			fileReader = new FileReader(file);
-//			bufferedReader = new BufferedReader(fileReader);
-			
-			//for jar file creation
+			//checks first for .hex file in the example directory in classpath
 			bufferedReader = new BufferedReader(new InputStreamReader(
                     this.getClass().getResourceAsStream(fileName)));
 		}
+		
 		catch(Exception e){
-			printError(name + ": File not found");
-			System.exit(0);
-		}				
+			printError("in source, " + fileName + " not found in the example directory");
+			try{
+				
+				//if .hex file not found in examples, tries to find it in local file system
+				file = new File(fileName);
+				fileReader = new FileReader(file);
+				bufferedReader = new BufferedReader(fileReader);
+				System.out.println("in source, " + fileName + " was found in local file system");
+			}
+			catch(Exception ex){
+				//if .hex file not found either place, prints error and exits
+				printError(fileName + " not found in example directory or local file system");
+				System.exit(0);
+			}
+		}
+				
 		try{	//read first line
 			currentLine = bufferedReader.readLine();
 		}

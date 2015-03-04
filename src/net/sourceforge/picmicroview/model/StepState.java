@@ -13,4 +13,8 @@ public class StepState implements Pic18F452State {
 		pic18.changes.clear();
 		pic18.runInstruction();
 	}
+	
+	public void stop(){
+		
+	}
 }

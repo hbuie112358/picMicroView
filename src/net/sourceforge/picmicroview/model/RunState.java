@@ -13,4 +13,11 @@ public class RunState implements Pic18F452State {
 		//System.out.println("in RunState, changes.size(): " + pic18.changes.size());
 		pic18.runInstruction();
 	}
+	
+	public void stop(){
+		pic18.clock.stop();
+		pic18.setStepState();
+		pic18.run();
+	}
+	
 }

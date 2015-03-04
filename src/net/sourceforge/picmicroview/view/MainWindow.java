@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,7 @@ import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.AbstractTableModel;
@@ -42,6 +44,8 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
 //import org.icepdf.ri.common.*;
+
+
 
 
 
@@ -276,8 +280,8 @@ public class MainWindow extends JFrame{
 		String[] colNames = {"Address (0x)", "Data (0x)"};
 		dtm_pgm = new MemoryTableModel(colNames);
 		pgmMemTable.setModel(dtm_pgm);
-		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
-		pgmMemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+//		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
+//		pgmMemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 		colRenderer = new PgmColumnColorRenderer(leftRenderer);
 		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new PgmRtColumnColorRenderer(rightRenderer);
@@ -287,8 +291,8 @@ public class MainWindow extends JFrame{
 		String[] colNames1  = {"Address (0x)", "Data"};
 		dtm_data = new DataTableModel(colNames1);
 		dataMemTable.setModel(dtm_data);
-		dataMemTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
-		dataMemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+//		dataMemTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
+//		dataMemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 		colRenderer = new PgmColumnColorRenderer(leftRenderer);
 		dataMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new ColumnColorRenderer(rightRenderer);
@@ -298,8 +302,8 @@ public class MainWindow extends JFrame{
 		String[] colNames2 = {"Port/Register", "Data"};
 		dtm_portReg = new PortRegTableModel(colNames2);
 		portRegTable.setModel(dtm_portReg);
-		portRegTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
-		portRegTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+//		portRegTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
+//		portRegTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 		colRenderer = new PgmColumnColorRenderer(leftRenderer);
 		portRegTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new ColumnColorRenderer(rightRenderer);
@@ -759,11 +763,6 @@ public class MainWindow extends JFrame{
 			else subDirectory = "/";
 //			System.out.println("directory is: " + directory);
 			
-			//for development purposes in eclipse, to modify 	///////////////////
-			//example files while working						///////////////////
-//			fileName = "./examples/" + directory  + subDirectory + name +
-//					"/" + name + ".hex";
-			
 			//for jar file creation
 			fileName = "/" + directory  + subDirectory + name +
 					"/" + name + ".hex";
@@ -775,29 +774,6 @@ public class MainWindow extends JFrame{
 			lstPanel.loadLstFile();
 		}
 	}
-	
-//	class ExampleAction implements ActionListener{
-//		private String name = "", directory = "", subDirectory = "";
-//		
-//		public ExampleAction(String directory, String name){
-//			this.name = name;
-//			this.directory = directory;
-//		}
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			if(directory.equals("basic") || directory.equals("inDepth"))
-//				subDirectory = "/" + Character.toString(name.charAt(0))+ "/";
-//			else subDirectory = "/";
-////			System.out.println("directory is: " + directory);
-//			fileName = "./examples/" + directory  + subDirectory + name +
-//					"/" + name + ".hex";
-//			reqCont.loadAction(fileName);
-////			System.out.println(fileName);
-//			lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-////			System.out.println("lstFileName is: " + lstFileName);
-//			lstPanel.loadLstFile();
-//		}
-//	}
 	
 	class HelpAction implements ActionListener{
 		private String name = "", directory = "";
@@ -871,13 +847,27 @@ public class MainWindow extends JFrame{
 			File file;
 			String line = null, key;
 			int count = 0;
+			BufferedReader reader = null;
 			try{
-				file = new File(lstFileName);
-//				BufferedReader reader = new BufferedReader(new FileReader(file));
 				
-				BufferedReader reader = new BufferedReader(new InputStreamReader(
+				//checks first in the example directory in classpath
+				reader = new BufferedReader(new InputStreamReader(
 	                    this.getClass().getResourceAsStream(lstFileName)));
 //				System.out.println("in loadLstFile");
+			}
+			catch(Exception e){
+				System.out.println("in loadLstFile, " + lstFileName + " not found in example directory");
+				
+				//if file not found in examples, tries to find it in local file system
+				try{
+					file = new File(lstFileName);
+					reader = new BufferedReader(new FileReader(file));
+					System.out.println("in loadLstFile, " + lstFileName + " was found in local file system");
+				}
+				catch(Exception ex){
+					JOptionPane.showMessageDialog(this, "in loadLstFile, .lst file not found in example directory or local file system");
+				}
+			}
 				
 				//Reads each line from file, appends to StringBuilder after adding a new line.
 				//Then checks beginning of each line to see if the line starts with a 4 digit
@@ -889,32 +879,37 @@ public class MainWindow extends JFrame{
 				//character and end character numbers for that line, which will be used to highlight 
 				//that particular line in the text pane. Lines that do not contain instructions are 
 				//not placed into the hashmap.
-				while((line = reader.readLine()) != null){
-					key = "";
-					line = line + "\n";
-					fileContents.append(line);
-					lineStartPos = filePos;
-					count = 0;
-					while((line.charAt(count) != '\n') && (hexChars.contains(line.charAt(count)))){
-						count++;
+				try {
+//					while((line = reader.readLine()) != null){
+					while(((reader != null) && (line = reader.readLine()) != null)){
+						key = "";
+						line = line + "\n";
+						fileContents.append(line);
+						lineStartPos = filePos;
+						count = 0;
+						while((line.charAt(count) != '\n') && (hexChars.contains(line.charAt(count)))){
+							count++;
+						}
+						if(count == NUM_HEX_DIGITS){
+							key = line.substring(0, NUM_HEX_DIGITS);
+							lineEndPos = lineStartPos + line.length();
+							int [] lineLength = {lineStartPos, lineEndPos};
+							lineList.put(key, lineLength);
+						}
+						filePos += line.length();
 					}
-					if(count == NUM_HEX_DIGITS){
-						key = line.substring(0, NUM_HEX_DIGITS);
-						lineEndPos = lineStartPos + line.length();
-						int [] lineLength = {lineStartPos, lineEndPos};
-						lineList.put(key, lineLength);
-					}
-					filePos += line.length();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 				textArea.setText(fileContents.toString());
 				font = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
 				textArea.setForeground(Color.BLACK);
 				textArea.setFont(font);
-				reader.close();
-			}
-			catch(Exception e){
-				JOptionPane.showMessageDialog(this, ".lst file not found");
-			}
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 		
 		public void highlight(String key){
@@ -960,6 +955,8 @@ public class MainWindow extends JFrame{
 		HashSet<Integer> changes = (HashSet<Integer>)dm_changes[0];
 		ArrayList<Integer> dm = (ArrayList<Integer>) dm_changes[1];
 		for(Integer change : changes){
+			
+			//for every change, if it's in the ports/reg list, change the value
 			if(portRegList.containsKey(change)){
 				dtm_portReg.setValueAt((int)dm.get(change), (int)portRegList.get(change), 1);
 				portRegTable.addChange((int)portRegList.get(change));
@@ -967,6 +964,10 @@ public class MainWindow extends JFrame{
 			dtm_data.setValueAt((int)dm.get(change), (int)change, 1);
 			dataMemTable.addChange(change);
 		}
+		//updates port/reg table even if no changes were written, turns the previous
+		//step's highlighting off if no changes were written to portRegTable during 
+		//current step.
+		portRegTable.tableChanged(new TableModelEvent(dtm_portReg));
 	}
 		
 	//called by ReplyController.updateMemTables(ArrayList), originally initiated by

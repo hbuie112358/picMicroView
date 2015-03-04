@@ -49,8 +49,9 @@ public class RequestController{
 	public void runAction() {
 		pool.execute(new Runnable(){
 			public void run() {
-				pic18.setRunState();
-				pic18.getClock().start();
+				pic18.start();
+//				pic18.setRunState();
+//				pic18.getClock().start();
 			}		
 		});		
 	}
@@ -58,9 +59,10 @@ public class RequestController{
 	public void stopAction(){
 		pool.execute(new Runnable(){
 			public void run() {
-				pic18.getClock().stop();
-				pic18.setStepState();
-				pic18.run();
+				pic18.stop();
+//				pic18.getClock().stop();
+//				pic18.setStepState();
+//				pic18.run();
 //				updateDataMemory();
 				updateDataMemoryOnStop();
 				repCont.updatePc(pic18.getPc());
