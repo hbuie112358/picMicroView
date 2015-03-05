@@ -38,6 +38,7 @@ public class Pic18F452 implements SetState{
 	
 	//instructions:
 	
+	Addlw addlw;
 	Addwf addwf;
 	Addwfc addwfc;
 	Andlw andlw;
@@ -80,6 +81,7 @@ public class Pic18F452 implements SetState{
 		testMain = new TestMain(this);
 		
 		//create instruction objects:
+		addlw = new Addlw(0, this, "addlw");
 		addwf = new Addwf(0, this, "addwf");
 		addwfc = new Addwfc(0, this, "addwfc");
 		andlw = new Andlw(0, this, "andlw");
@@ -313,6 +315,10 @@ public class Pic18F452 implements SetState{
 			else if((hByteLnibble == 0x0200) || (hByteLnibble == 0x0300)){
 				mulwf.initialize(instruction);
 				mulwf.execute();
+			}
+			else if((hByteLnibble == 0x0f00)){
+				addlw.initialize(instruction);
+				addlw.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");

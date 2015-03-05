@@ -1,5 +1,7 @@
 package net.sourceforge.picmicroview.model;
 
+import java.util.HashSet;
+
 
 public class DataMemory {
 
@@ -44,6 +46,11 @@ public class DataMemory {
 	Register prodL;
 	Register prodh;
 	
+	private int freg, carry, address;
+//	private int highByte;
+	private int bsrVal = 0;
+	HashSet<Integer> indfs;
+	
 	public DataMemory(Pic18F452 pic18) {
 		this.pic18 = pic18;
 		gpMem = new Register[4096];
@@ -85,7 +92,25 @@ public class DataMemory {
 		prodL = gpMem[0x0f3];
 		prodh = gpMem[0x0f4];
 		
-		
+		//indfs is hashset of addresses that are INDFx registers: INDF, PLUSW,
+		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 
+		//disregard banked addressing. This causes a hole in all banks within
+		//the ranges below. See addwf.asm or addwf.lst for more complete explanation.
+		indfs = new HashSet<Integer>();
+		int i;
+		for(i = 0x0eb; i < 0x0f0; i++)	//add INDF0's to hashset
+			indfs.add((Integer)i);
+		for(i = 0x0e3; i < 0x0e8; i++)	//add INDF1's to hashset
+			indfs.add((Integer)i);
+		for(i = 0x0db; i < 0x0e0; i++)	//add INDF2's to hashset
+			indfs.add((Integer)i);
+		//Add FSR's as well
+		indfs.add((Integer)0x0e9);	//FSR0L
+		indfs.add((Integer)0x0ea);	//FSR0H
+		indfs.add((Integer)0x0e1);	//FSR1L
+		indfs.add((Integer)0x0e2);	//FSR1H
+		indfs.add((Integer)0x0d9);	//FSR2L
+		indfs.add((Integer)0x0da);	//FSR2H
 	}
 	
 	int read(int address){
@@ -247,5 +272,28 @@ public class DataMemory {
 			gpMem[i] = new Register(pic18, i, "gpr");
 			i++;
 		}
+	}
+	
+	//Checks to see if "a" bit, which is bit 8, of op code is set. If set, value in
+	//bank select register is prepended to lower eight bits. If not set, address is
+	//returned with zeros prepended, indicating access memory address.
+	int getRegAddress(int instruction){
+
+//		System.out.println("instruction is: " + Integer.toHexString(instruction) + 
+//				", bit 16 is: " + (instruction & 0x100));
+		
+		address = instruction & 0x00ff;	 //isolate address portion of instruction
+		if((instruction & 0x100) == 0x100){	//If "a" bit is set
+			if(indfs.contains(address)){	//If address is of an INDF register
+//				System.out.println("in alu.addwf.if.indfs.contains, address is: " + address);
+				freg = address;		//Set freg to lowest 8 bytes
+			}
+			else{
+				bsrVal = pic18.dataMem.bsr.read();
+				freg = (bsrVal << 8) | (instruction & 0xff);
+			}
+		}
+		else freg = address;
+		return freg;
 	}
 }

@@ -82,6 +82,7 @@ public class MainWindow extends JFrame{
 	private JMenu basic = new JMenu("Basic");
 	private JMenu inDepth = new JMenu("In-depth");
 	private JMenu a = new JMenu("A");
+	private JMenuItem addlw = new JMenuItem("addlw");
 	private JMenuItem addwf = new JMenuItem("addwf");
 	private JMenuItem addwfc = new JMenuItem("addwfc");
 	private JMenuItem andlw = new JMenuItem("andlw");
@@ -109,6 +110,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem movlw = new JMenuItem("movlw");
 	private JMenuItem movwf = new JMenuItem("movwf");
 	private JMenuItem mullw = new JMenuItem("mullw");
+	private JMenuItem mulwf = new JMenuItem("mulwf");
 	private JMenu n = new JMenu("N");
 	private JMenuItem nop = new JMenuItem("nop");
 	private JMenu r = new JMenu("R");
@@ -216,6 +218,8 @@ public class MainWindow extends JFrame{
 		basic.add(m);
 		basic.add(n);
 		basic.add(r);
+		a.add(addlw);
+		addlw.addActionListener(new ExampleAction("basic", "addlw"));
 		a.add(addwf);
 		addwf.addActionListener(new ExampleAction("basic", "addwf"));
 		a.add(addwfc);
@@ -254,12 +258,14 @@ public class MainWindow extends JFrame{
 		movlb.addActionListener(new ExampleAction("basic","movlb"));
 		m.add(movlw);
 		movlw.addActionListener(new ExampleAction("basic","movlw"));
-		n.add(nop);
-		nop.addActionListener(new ExampleAction("basic", "nop"));
 		m.add(movwf);
 		movwf.addActionListener(new ExampleAction("basic", "movwf"));
 		m.add(mullw);
 		mullw.addActionListener(new ExampleAction("basic", "mullw"));
+		m.add(mulwf);
+		mulwf.addActionListener(new ExampleAction("basic", "mulwf"));
+		n.add(nop);
+		nop.addActionListener(new ExampleAction("basic", "nop"));
 		r.add(rcall);
 		rcall.addActionListener(new ExampleAction("basic", "rcall"));
 		r.add(returnItem);

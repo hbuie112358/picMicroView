@@ -42,6 +42,15 @@ public class Alu {
 		return returnAddress;
 	}
 	
+	public void execute(Addlw instruction){
+		getRegAddress(instruction.instruction);
+		result = (instruction.instruction & 0xff) + pic18.dataMem.wreg.read();
+		pic18.dataMem.wreg.write(result);
+		adjustCbit();
+		adjustZbit();
+		adjustNbit();
+	}
+	
 	public void execute(Addwf instruction){	
 		
 		//get wreg value
