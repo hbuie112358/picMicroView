@@ -116,11 +116,16 @@ public class MainWindow extends JFrame{
 	private JMenu r = new JMenu("R");
 	private JMenuItem rcall = new JMenuItem("rcall");
 	private JMenuItem returnItem = new JMenuItem("return");
+	private JMenu s = new JMenu("S");
+	private JMenuItem sublw = new JMenuItem("sublw");
 
 	
 	private JMenu aID = new JMenu("A");
 	private JMenuItem addwfcIDItem = new JMenuItem("addwfc");
 	private JMenuItem addwfIDItem = new JMenuItem("addwf");
+	private JMenu bID = new JMenu("B");
+	private JMenuItem bcfIDItem = new JMenuItem("bcf");
+	private JMenuItem bsfIDItem = new JMenuItem("bsf");
 	private JMenu dID = new JMenu("D");
 	private JMenuItem decfIDItem = new JMenuItem("decf");
 	private JMenu iID = new JMenu("I");
@@ -129,6 +134,8 @@ public class MainWindow extends JFrame{
 	private JMenuItem movfIDItem = new JMenuItem("movf");
 	private JMenuItem movwfIDItem = new JMenuItem("movwf");
 	private JMenuItem mullwIDItem = new JMenuItem("mullw");
+	private JMenu sID = new JMenu("S");
+	private JMenuItem sublwIDItem = new JMenuItem("sublw");
 
 	private JMenu generalConcepts = new JMenu("General Concepts");
 	private JMenu indirectAddressing = new JMenu("Indirect Addressing");
@@ -218,6 +225,7 @@ public class MainWindow extends JFrame{
 		basic.add(m);
 		basic.add(n);
 		basic.add(r);
+		basic.add(s);
 		a.add(addlw);
 		addlw.addActionListener(new ExampleAction("basic", "addlw"));
 		a.add(addwf);
@@ -270,11 +278,19 @@ public class MainWindow extends JFrame{
 		rcall.addActionListener(new ExampleAction("basic", "rcall"));
 		r.add(returnItem);
 		returnItem.addActionListener(new ExampleAction("basic", "return"));
+		s.add(sublw);
+		sublw.addActionListener(new ExampleAction("basic", "sublw"));
 		
 		inDepth.add(aID);
+		inDepth.add(bID);
 		inDepth.add(dID);
 		inDepth.add(iID);
 		inDepth.add(mID);
+		inDepth.add(sID);
+		bID.add(bcfIDItem);
+		bcfIDItem.addActionListener(new ExampleAction("inDepth", "bcf"));
+		bID.add(bsfIDItem);
+		bsfIDItem.addActionListener(new ExampleAction("inDepth", "bsf"));
 		aID.add(addwfcIDItem);
 		addwfcIDItem.addActionListener(new ExampleAction("inDepth", "addwfc"));
 		aID.add(addwfIDItem);
@@ -289,6 +305,8 @@ public class MainWindow extends JFrame{
 		movwfIDItem.addActionListener(new ExampleAction("inDepth", "movwf"));
 		mID.add(mullwIDItem);
 		mullwIDItem.addActionListener(new ExampleAction("inDepth", "mullw"));
+		sID.add(sublwIDItem);
+		sublwIDItem.addActionListener(new ExampleAction("inDepth", "sublw"));
 		
 		examples.add(generalConcepts);
 		generalConcepts.add(indirectAddressing);
@@ -1017,6 +1035,7 @@ public class MainWindow extends JFrame{
 		HashSet<Integer> changes = (HashSet<Integer>)dm_changes[0];
 		ArrayList<Integer> dm = (ArrayList<Integer>) dm_changes[1];
 		for(Integer change : changes){
+//			System.out.println("change: " + Integer.toHexString(change));
 			//for every change, if it's in the ports/reg list, change the value
 			if(portRegList.containsKey(change)){
 				dtm_portReg.setValueAt((int)dm.get(change), (int)portRegList.get(change), 1);

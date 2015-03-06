@@ -8,12 +8,22 @@ interface RegisterState {
 
 	void clear();
 	
+	void clear(Register r);
+	
 	void setBit(int bit);
+	
+	void setBit(int bit, Register r);
 	
 	void clearBit(int bit);
 	
+	void clearBit(int bit, Register r);
+	
 	void decrement();
 	
+	void decrement(Register r);
+	
 	void increment();
+	
+	void increment(Register r);
 
 }

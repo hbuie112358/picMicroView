@@ -64,6 +64,7 @@ public class Pic18F452 implements SetState{
 	Nop nop;
 	Rcall rcall;
 	Return Return;
+	Sublw sublw;
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -107,6 +108,7 @@ public class Pic18F452 implements SetState{
 		nop = new Nop(0, this, "nop");
 		rcall = new Rcall(0, this, "rcall");
 		Return = new Return(0, this, "return");
+		sublw = new Sublw(0, this, "sublw");
 	}
 	
 	/*
@@ -316,8 +318,12 @@ public class Pic18F452 implements SetState{
 				mulwf.initialize(instruction);
 				mulwf.execute();
 			}
+			else if(hByteLnibble == 0x0800){
+				sublw.initialize(instruction);
+				sublw.execute();
+			}
 			else if((hByteLnibble == 0x0f00)){
-				addlw.initialize(instruction);
+				addlw.initialize(instruction);///////////////////
 				addlw.execute();
 			}
 			else{

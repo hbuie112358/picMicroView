@@ -1,13 +1,13 @@
-gpasm-0.13.7 beta               addlw.asm   3-6-2015  07:39:26           PAGE  1
+gpasm-0.13.7 beta               bcf.asm     3-5-2015  05:06:54           PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
  
-               00001 ;;;;;;; addlw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00001 ;;;;;;; bcf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00002 ;
-               00003 ;This program tests operation of addlw instruction. Addlw adds a literal
-               00004 ;k to the contents of the wreg and places result in wreg.
+               00003 ;This program tests operation of bcf according to examples in the PIC18 user
+               00004 ;manual. Bcf clears the specified bit in the specified register.
                00005 ;
                00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00007 ;
@@ -16,16 +16,16 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00010 ;
                00011 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00012 
-               00013         #include p18f452.inc
+               00013         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00014         #include p18f452.inc
                00001         LIST
                00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
                00983         LIST
-               00014         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
                00015 
                00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00017 
                00018         cblock  0x000           ;Beginning of Access RAM
-               00019         MYREG
+               00019         MYREG   
                00020         endc
                00021 
                00022 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,22 +46,22 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00037 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00038 
 001C 00039 Mainline
-               00040 
-001C 0E05      00041         movlw           5       ;Place 5 in wreg
-001E 0F0A      00042         addlw           10      ;Add 10, wreg, result in wreg (sum is 0x0f)
-               00043 
-               00044 ;Example 1:
-0020 0E18      00045         movlw           0x18    ;Place 0x18 in wreg
-0022 0F19      00046         addlw           0x19    ;Add 0x19 to contents in wreg (DC bit 1 in status
-               00047                                 ;register is set since carry from bit 3 to bit 4
-               00048 
-               00049 ;Example 2:
-0024 0E60      00050         movlw           0x60    ;Place 0x60 in wreg
-0026 0F37      00051         addlw           0x37    ;Add 0x37 to contents in wreg (OV bit 3 in status
-               00052                                 ;register is set since carry from bit 6 to bit 7
-               00053         
+               00040 ;Example 1:
+               00041 
+001C 0102      00042         movlb   2               ;Specify bank 2 (addresses starting at 0x200)
+001E 0EC7      00043         movlw   0xc7            ;Place 0xc7 in wreg
+0020 6F00      00044         movwf   MYREG, 1        ;Copy wreg value int MYREG at address 0x200
+0022 9F00      00045         bcf     MYREG, 7, 1     ;Clear bit 7 of MYREG
+               00046 
+               00047 ;Example 2:
+               00048         
+0024 EE13 F0C2 00049         lfsr    1, 0x3c2        ;Load FSR with 0x3c2
+0028 0E2F      00050         movlw   0x2f            ;Place 0x2f in wreg
+002A 6EE7      00051         movwf   INDF1           ;Copy wreg to register pointed to by FSR1
+002C 96E7      00052         bcf     INDF1, 3, 0     ;Clear bit 7 in register pointed to by FSR1
+               00053 
                00054 
-0028 EF14 F000 00055 stop    goto            stop
+002E EF17 F000 00055 stop            goto            stop
                00056 
 
 

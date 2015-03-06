@@ -1,7 +1,7 @@
-;;;;;;; addlw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; bcf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-;This program tests operation of addlw instruction. Addlw adds a literal
-;k to the contents of the wreg and places result in wreg.
+;This program tests operation of bcf according to examples in the PIC18 user
+;manual. Bcf clears the specified bit in the specified register.
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -10,13 +10,13 @@
 ;
 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-	#include p18f452.inc
         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+        #include p18f452.inc
 
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
-	MYREG
+	MYREG	
 	endc
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -37,22 +37,34 @@
 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Mainline
-
-	movlw		5	;Place 5 in wreg
-	addlw		10	;Add 10, wreg, result in wreg (sum is 0x0f)
-
 ;Example 1:
-	movlw		0x18	;Place 0x18 in wreg
-	addlw		0x19	;Add 0x19 to contents in wreg (DC bit 1 in status
-				;register is set since carry from bit 3 to bit 4
+
+	movlb	2		;Specify bank 2 (addresses starting at 0x200)
+	movlw	0xc7		;Place 0xc7 in wreg
+	movwf	MYREG, 1	;Copy wreg value int MYREG at address 0x200
+	bcf	MYREG, 7, 1	;Clear bit 7 of MYREG
 
 ;Example 2:
-	movlw		0x60	;Place 0x60 in wreg
-	addlw		0x37	;Add 0x37 to contents in wreg (OV bit 3 in status
-				;register is set since carry from bit 6 to bit 7
 	
+	lfsr	1, 0x3c2	;Load FSR with 0x3c2
+	movlw	0x2f		;Place 0x2f in wreg
+	movwf	INDF1		;Copy wreg to register pointed to by FSR1
+	bcf	INDF1, 3, 0	;Clear bit 3 in register pointed to by FSR1
 
-stop	goto		stop
 
-	end
+stop		goto		stop
+
+		end
+
+
+
+
+
+
+
+
+
+
+
+
 

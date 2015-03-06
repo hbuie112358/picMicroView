@@ -3,13 +3,16 @@ package net.sourceforge.picmicroview.model;
 
 public class Movwf extends Instruction{
 	
+	private int freg;
+	
 	public Movwf(int instruction, Pic18F452 pic18, String name){
 		super(instruction, pic18, name);
 	}
 	
 	protected void execute(){
 		
-		int address = pic18.alu.getRegisterAddress(instruction);
+//		int address = pic18.dataMem.getRegAddress(instruction);
+		freg = pic18.dataMem.getRegAddress(instruction);
 		//isolate a bit for bsr bank from op code
 //		int address = instruction & 0x00FF;
 //	//	System.out.println("in movwf, address is: " + Integer.toHexString(address));
@@ -29,7 +32,7 @@ public class Movwf extends Instruction{
 ////			pic18.dataMem.gpMem[address].write(pic18.dataMem.wreg.read());
 //		}
 		
-		pic18.dataMem.gpMem[address].write(pic18.dataMem.wreg.read());
+		pic18.dataMem.gpMem[freg].write(pic18.dataMem.wreg.read());
 		//System.out.println("command is " + name);
 		//System.out.println("in movwf, contents of register: " + pic18.dataMem.gpMem[address].read());
 	}

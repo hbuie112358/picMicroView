@@ -6,10 +6,12 @@ import java.util.HashSet;
 public class Alu {
 	private Pic18F452 pic18;
 	private int result;
-	private int address;
+//	private int address;
+	private int twosComp;
 	private int freg, wreg, carry;
+	private boolean dc, ov;
 //	private int highByte;
-	private int bsrVal = 0;
+//	private int bsrVal = 0;
 	HashSet<Integer> indfs;
 	
 	public Alu(Pic18F452 pic18){
@@ -36,30 +38,27 @@ public class Alu {
 		indfs.add((Integer)0x0da);	//FSR2H
 	}
 	
-	public int getRegisterAddress(int instruction){
-		getRegAddress(instruction);
-		int returnAddress = freg;
-		return returnAddress;
-	}
-	
 	public void execute(Addlw instruction){
-		getRegAddress(instruction.instruction);
 		result = (instruction.instruction & 0xff) + pic18.dataMem.wreg.read();
+		adjustDCbit(pic18.dataMem.wreg.read(), (instruction.instruction & 0xff));
+		adjustOVbit("add", pic18.dataMem.wreg.read(), (instruction.instruction & 0xff));
 		pic18.dataMem.wreg.write(result);
 		adjustCbit();
 		adjustZbit();
 		adjustNbit();
+//		System.out.println("in Alu.addlw, 2's complement of 0x37 is: " + 
+//				Integer.toBinaryString(getTwosComplement(0x37)));
 	}
 	
 	public void execute(Addwf instruction){	
 		
 		//get wreg value
-		wreg = pic18.dataMem.wreg.read();
-		getRegAddress(instruction.instruction);		
+		//wreg = pic18.dataMem.wreg.read();
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);		
 //		System.out.println("in alu.addwf, freg address is: " + Integer.toHexString(freg));
 		
 		//find sum of wreg, value in gpMem[freg]
-		result = wreg + pic18.dataMem.gpMem[freg].read();		
+		result = pic18.dataMem.wreg.read() + pic18.dataMem.gpMem[freg].read();		
 		adjustCbit();
 		adjustZbit();
 		adjustNbit();
@@ -92,7 +91,7 @@ public class Alu {
 		wreg = pic18.dataMem.wreg.read();
 		
 		//get register address
-		getRegAddress(instruction.instruction);
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
 //		System.out.println("in alu.addwfc, freg address is: " + Integer.toHexString(freg));
 		
 		//get value of carry bit
@@ -121,7 +120,7 @@ public class Alu {
 	}
 	
 	public void execute(Decf instruction){	
-		getRegAddress(instruction.instruction);
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
 		result = pic18.dataMem.gpMem[freg].read();
 		if(result == 0)
 			result = 0xff;
@@ -140,7 +139,7 @@ public class Alu {
 	public void execute(Iorwf instruction){
 		
 		//get register address
-		getRegAddress(instruction.instruction);
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
 //		System.out.println("in iorwf.movf, freg address is: " + Integer.toHexString(freg));
 		
 		//perform OR function with wreg value
@@ -158,7 +157,7 @@ public class Alu {
 	public void execute(Movf instruction){
 		
 		//get register address
-		getRegAddress(instruction.instruction);
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
 		System.out.println("in alu.movf, freg address is: " + Integer.toHexString(freg));
 		
 		//find register value
@@ -170,6 +169,22 @@ public class Alu {
 		else pic18.dataMem.wreg.write(result);
 		adjustZbit();
 		adjustNbit();
+	}
+	
+	public void execute(Sublw instruction){
+		//get two's complement of value in wreg
+		twosComp = getTwosComplement(pic18.dataMem.wreg.read() & 0xff);
+		
+		//mask "k" portion of instruction, add to two's complement of wreg value
+		result = (instruction.instruction & 0xff) + twosComp;
+		
+		
+		adjustDCbit(twosComp, (instruction.instruction & 0xff));
+		adjustOVbit("sub", twosComp, (instruction.instruction & 0xff));
+		pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
+		adjustCbit();
 	}
 	
 	private void adjustZbit(){
@@ -200,27 +215,30 @@ public class Alu {
 		}
 	}
 	
-	//Checks to see if "a" bit, which is bit 8, of op code is set. If set, value in
-	//bank select register is prepended to lower eight bits. If not set, address is
-	//returned with zeros prepended, indicating access memory address.
-	private void getRegAddress(int instruction){
-
-//		System.out.println("instruction is: " + Integer.toHexString(instruction) + 
-//				", bit 16 is: " + (instruction & 0x100));
+	private void adjustDCbit(int arg1, int arg2){
+		dc = (((arg1 & 0x0f) + (arg2 & 0x0f)) & 0x10) == 0x10;
+		if(dc == true)
+			pic18.dataMem.status.setBit(1);
+		else pic18.dataMem.status.clearBit(1);
 		
-		address = instruction & 0x00ff;	 //isolate address portion of instruction
-		if((instruction & 0x100) == 0x100){	//If "a" bit is set
-			if(indfs.contains(address)){	//If address is of an INDF register
-//				System.out.println("in alu.addwf.if.indfs.contains, address is: " + address);
-				freg = address;		//Set freg to lowest 8 bytes
-			}
-			else{
-				bsrVal = pic18.dataMem.bsr.read();
-				freg = (bsrVal << 8) | (instruction & 0xff);
-			}
+
+	}
+	
+	private void adjustOVbit(String operation, int arg1, int arg2){
+		ov = (((arg1 & 0x7f) + (arg2 & 0x7f)) & 0x80) == 0x80;
+		if(operation.equals("add")){
+			if(((((arg1 & 0x7f) + (arg2 & 0x7f)) & 0x80) & 0x80) == 0x80)
+				pic18.dataMem.status.setBit(3);
+			else pic18.dataMem.status.clearBit(3);
 		}
-		else freg = address;
-		//return freg;
+		//Clear ov bit in case of subtraction because manual is not clear
+		//about how ov bit is affected during subtraction
+		else pic18.dataMem.status.clearBit(3);
+	}
+	
+	private int getTwosComplement(int arg){
+//		System.out.println("in Alu.getTC, complement operator ~, ~0x6f:  "+ Integer.toBinaryString(0xff & (~arg)));
+		return (0xff & (~arg)) + 1;
 	}
 }
 

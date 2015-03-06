@@ -10,7 +10,7 @@ public class Register implements SetState{
 	protected int baseClear;
 	RegisterState registerState;
 	RegisterState regRunState;
-	protected RegisterState regStepState;
+	RegisterState regStepState;
 	
 	public Register(Pic18F452 pic18, int address,  String name){
 		this.name = name;
@@ -34,7 +34,7 @@ public class Register implements SetState{
 	}
 	
 	public void write(int value){
-//		System.out.println("in Register.write, calling registerState.write()");
+//		System.out.println("in Register.write(value), calling registerState.write(value)");
 		registerState.write(value);	
 	}
 	
@@ -44,6 +44,7 @@ public class Register implements SetState{
 	//allows indf to know who is calling for read/write. If not overridden, works same as 
 	//write(int value). See Indf for overriding implementation
 	public void write(int value, Register r){
+//		System.out.println("in Register.write(value, r), calling registerState.write(value, r)");
 		registerState.write(value, r);
 	}
 
@@ -65,20 +66,42 @@ public class Register implements SetState{
 		registerState.clear();
 	}
 	
+	public void clear(Register r){
+		registerState.clear(r);
+	}
+	
 	public void setBit(int bit){
+//		System.out.println("in Register.setBit(bit), calling registerState.setBit(bit) ");
 		registerState.setBit(bit);
+	}
+	
+	public void setBit(int bit, Register r){
+//		System.out.println("in Register.setBit(bit, r), calling registerState.setBit(bit, r)");
+		registerState.setBit(bit, r);
 	}
 	
 	public void clearBit(int bit){
 		registerState.clearBit(bit);
 	}
 	
+	public void clearBit(int bit, Register r){
+		registerState.clearBit(bit, r);
+	}
+	
 	public void decrement(){
 		registerState.decrement();
 	}
 	
+	public void decrement(Register r){
+		registerState.decrement(r);
+	}
+	
 	public void increment(){
 		registerState.increment();
+	}
+	
+	public void increment(Register r){
+		registerState.increment(r);
 	}
 	
 	//Returns the register contents via the read() method. Used by pic18.getDataMemory()

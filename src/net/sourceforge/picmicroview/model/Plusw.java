@@ -26,34 +26,6 @@ public class Plusw extends Register {
 		}
 
 		this.contents = 0;
-//		System.out.println("in preinc " + name + ", fsrl: " + Integer.toHexString(fsrl) + ", fsrh: " + 
-//				Integer.toHexString(fsrh));
-	}
-	
-	//This function overrides parent function.
-	//Writes value to memory location pointed to by fsrh:fsrL 
-	//Gets full address based on whether this in an instance of indf0, indf1, or indf2, 
-	//then writes value to that register using the write(int value, Register r) method so 
-	//that if the register being written to is another indf register, the write will have 
-	//no effect. After write operation, decrements FSR
-	public void write(int value){
-		registerState.write(value);
-		getFullAddress();
-		
-		//tells callee that caller is an indf register
-//		pic18.dataMem.gpMem[fullAddress].write(value, this);
-
-		//System.out.println("in " + name", written by register at address: " + Integer.toHexString(address));
-	}
-	
-	//This function overrides parent function.
-	//The only entity that calls this function is another indf register. Its purpose is to 
-	//cause an attempt by one indf to access another indf to have no effect by letting the function
-	//know that it is being called by another indf. It is inherited from Register.
-	public void write(int value, Register r){
-		registerState.write(value, r);
-	
-//		return;
 	}
 	
 	//Gets full address based on whether it is an instance of indf0, indf1, or indf2.
@@ -120,11 +92,12 @@ public class Plusw extends Register {
 		return contents;
 	}
 	
-	class PluswRunState implements RegisterState{
+	class PluswRunState extends RegRunState{
 		Register register;
 		
 		public PluswRunState(Register register){
-			this.register = register;
+//			this.register = register;
+			super(register);
 		}
 		
 		//This function overrides parent function.
@@ -152,41 +125,58 @@ public class Plusw extends Register {
 
 		@Override
 		public void clear() {
-			register.clear();
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].clear(register);
+		}
+		
+		public void clear(Register r){
+			return;
 		}
 
 		@Override
 		public void setBit(int bit) {
-			register.setBit(bit);
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].setBit(bit, register);
 		}
 
 		@Override
 		public void clearBit(int bit) {
-			register.clearBit(bit);
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].clearBit(bit, register);
+		}
+		
+		public void clearBit(int bit, Register r){
+			return;
 		}
 
 		@Override
 		public void decrement() {
-			register.decrement();
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].decrement(register);
+		}
+		
+		public void decrement(Register r){
+			return;
 		}
 
 		@Override
 		public void increment() {
-			register.increment();
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].increment(register);
+		}
+		
+		public void increment(Register r){
+			return;
 		}
 		
 	}
 	
-	class PluswStepState implements RegisterState{
+	class PluswStepState extends RegStepState{
 		Register register;
 		
 		public PluswStepState(Register register){
-			this.register = register;
+//			this.register = register;
+			super(register);
 		}
 		
 		//This function overrides parent function.
@@ -215,32 +205,57 @@ public class Plusw extends Register {
 
 		@Override
 		public void clear() {
-			register.clear();
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].clear(register);
+			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+		}
+		
+		public void clear(Register r){
+			return;
 		}
 
 		@Override
 		public void setBit(int bit) {
-			register.setBit(bit);
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].setBit(bit, register);
+			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+		}
+		
+		public void setBit(int bit, Register r){
+			return;
 		}
 
 		@Override
 		public void clearBit(int bit) {
-			register.clearBit(bit);
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].clear(register);
+			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+		}
+		
+		public void clearBit(int bit, Register r){
+			return;
 		}
 
 		@Override
 		public void decrement() {
-			register.decrement();
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].decrement(register);
+			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+		}
+		
+		public void decrement(Register r){
+			return;
 		}
 
 		@Override
 		public void increment() {
-			register.increment();
-			
+			getFullAddress();
+			pic18.dataMem.gpMem[fullAddress].increment(register);
+			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+		}
+		
+		public void increment(Register r){
+			return;
 		}
 	}
 }

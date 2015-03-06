@@ -1,7 +1,8 @@
-;;;;;;; addlw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; sublw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-;This program tests operation of addlw instruction. Addlw adds a literal
-;k to the contents of the wreg and places result in wreg.
+;This program tests operation of sublw instruction. Sublw subtracts the wreg
+;from the literal k (two's complement method). This instruction is tested 
+;according to the examples in the pic18 user manual.
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -16,7 +17,6 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
-	MYREG
 	endc
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -38,18 +38,28 @@
 
 Mainline
 
-	movlw		5	;Place 5 in wreg
-	addlw		10	;Add 10, wreg, result in wreg (sum is 0x0f)
-
 ;Example 1:
-	movlw		0x18	;Place 0x18 in wreg
-	addlw		0x19	;Add 0x19 to contents in wreg (DC bit 1 in status
-				;register is set since carry from bit 3 to bit 4
+
+OFFSET 	equ	0x10		;Declare constant OFFSET to have value 0x10
+	movlw		0x37	;Place 0x37 in wreg
+	sublw		OFFSET	;Subtract wreg value from constant OFFSET
+
 
 ;Example 2:
-	movlw		0x60	;Place 0x60 in wreg
-	addlw		0x37	;Add 0x37 to contents in wreg (OV bit 3 in status
-				;register is set since carry from bit 6 to bit 7
+;Case 1:
+
+	movlw		0x01	;Place 0x01 in wreg
+	sublw		0x02	;Subtract wreg value 1 from 2
+
+;Case 2:
+
+	movlw		0x02	;Place 0x02 in wreg
+	sublw		0x02	;Subtract wreg value 2 from 2
+
+;Case 3:
+
+	movlw		0x03	;Place 0x03 in wreg
+	sublw		0x02	;Subtract wreg value 3 from 2
 	
 
 stop	goto		stop
