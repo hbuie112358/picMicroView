@@ -136,6 +136,24 @@ public class Alu {
 		adjustNbit();
 	}
 	
+	public void execute(Clrf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		pic18.dataMem.gpMem[freg].clear();
+		adjustZbit();
+	}
+	
+	public void execute(Comf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		result = ~pic18.dataMem.gpMem[freg].getContents();
+		
+		//if bit 9 of instruction is high, write result to f register
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
+	}
+	
 	public void execute(Iorwf instruction){
 		
 		//get register address

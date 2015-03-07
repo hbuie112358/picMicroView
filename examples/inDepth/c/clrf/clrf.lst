@@ -1,0 +1,75 @@
+gpasm-0.13.7 beta               clrf.asm    3-6-2015  19:47:32           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; sublw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of sublw instruction. Sublw subtracts the wreg
+               00004 ;from the literal k (two's complement method).
+               00005 ;
+               00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00007 ;
+               00008 ; Mainline
+               00009 ;  
+               00010 ;
+               00011 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00012 
+               00013         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00014         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00015 
+               00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00017 
+               00018         cblock  0x000           ;Beginning of Access RAM
+               00019         FLAG_REG
+               00020         endc
+               00021 
+               00022 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00023 
+               00024 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00025 
+               00026 
+0000           00027         org  0x0000             ;Reset vector
+0000 0000      00028         nop
+0002 EF0E F000 00029         goto  Mainline
+               00030 
+0008           00031         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00032         goto  $                 ;Trap
+               00033 
+0018           00034         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00035         goto  $                 ;Trap
+               00036 
+               00037 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00038 
+001C 00039 Mainline
+               00040 
+               00041 ;Example 1:
+               00042 
+001C 0101      00043         movlb   1               ;Select bank 1 of data memory
+001E 0E5A      00044         movlw   0x5a            ;Place 0x5a in wreg
+0020 6F00      00045         movwf   FLAG_REG, 1     ;Copy wreg value to FLAG_REG
+0022 6B00      00046         clrf    FLAG_REG, 1     ;Using banked addressing, clear register FLAG_REG
+               00047 
+               00048 
+               00049 ;Example 2:
+               00050 
+0024 EE00 F0C2 00051         lfsr    0, 0x0c2                ;Place 0x0c2 in FSR
+0028 0EAA      00052         movlw   0xaa            ;Place 0xaa in wreg
+002A 6FEF      00053         movwf   INDF0, 1        ;Copy wreg value into address pointed to by FSR0,
+               00054                                 ;movwf ignores banked addressing portion of instruction 
+002C 6BEF      00055         clrf    INDF0, 1        ;Clear contents of register pointed to by FSR0,
+               00056                                 ;clrf again ignores banked addressing portion of instruction.
+               00057         
+               00058 
+002E EF17 F000 00059 stop    goto            stop
+               00060 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

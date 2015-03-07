@@ -94,6 +94,9 @@ public class MainWindow extends JFrame{
 	private JMenuItem bsf = new JMenuItem("bsf");
 	private JMenuItem btfss = new JMenuItem("btfss");
 	private JMenuItem btg = new JMenuItem("btg");
+	private JMenu c = new JMenu("C");
+	private JMenuItem clrf = new JMenuItem("clrf");
+	private JMenuItem comf = new JMenuItem("comf");
 	private JMenu d = new JMenu("D");
 	private JMenuItem decf = new JMenuItem("decf");
 	private JMenuItem decfsz = new JMenuItem("decfsz");
@@ -126,6 +129,9 @@ public class MainWindow extends JFrame{
 	private JMenu bID = new JMenu("B");
 	private JMenuItem bcfIDItem = new JMenuItem("bcf");
 	private JMenuItem bsfIDItem = new JMenuItem("bsf");
+	private JMenu cID = new JMenu("C");
+	private JMenuItem clrfIDItem = new JMenuItem("clrf");
+	private JMenuItem comfIDItem = new JMenuItem("comf");
 	private JMenu dID = new JMenu("D");
 	private JMenuItem decfIDItem = new JMenuItem("decf");
 	private JMenu iID = new JMenu("I");
@@ -218,6 +224,7 @@ public class MainWindow extends JFrame{
 		instructions.add(inDepth);
 		basic.add(a);
 		basic.add(b);
+		basic.add(c);
 		basic.add(d);
 		basic.add(g);
 		basic.add(i);
@@ -248,6 +255,10 @@ public class MainWindow extends JFrame{
 		btg.addActionListener(new ExampleAction("basic","btg"));
 		b.add(bz);
 		bz.addActionListener(new ExampleAction("basic","bz"));
+		c.add(clrf);
+		clrf.addActionListener(new ExampleAction("basic","clrf"));
+		c.add(comf);
+		comf.addActionListener(new ExampleAction("basic","comf"));
 		d.add(decf);
 		decf.addActionListener(new ExampleAction("basic","decf"));
 		d.add(decfsz);
@@ -283,18 +294,23 @@ public class MainWindow extends JFrame{
 		
 		inDepth.add(aID);
 		inDepth.add(bID);
+		inDepth.add(cID);
 		inDepth.add(dID);
 		inDepth.add(iID);
 		inDepth.add(mID);
 		inDepth.add(sID);
-		bID.add(bcfIDItem);
-		bcfIDItem.addActionListener(new ExampleAction("inDepth", "bcf"));
-		bID.add(bsfIDItem);
-		bsfIDItem.addActionListener(new ExampleAction("inDepth", "bsf"));
 		aID.add(addwfcIDItem);
 		addwfcIDItem.addActionListener(new ExampleAction("inDepth", "addwfc"));
 		aID.add(addwfIDItem);
 		addwfIDItem.addActionListener(new ExampleAction("inDepth", "addwf"));
+		bID.add(bcfIDItem);
+		bcfIDItem.addActionListener(new ExampleAction("inDepth", "bcf"));
+		bID.add(bsfIDItem);
+		bsfIDItem.addActionListener(new ExampleAction("inDepth", "bsf"));
+		cID.add(clrfIDItem);
+		clrfIDItem.addActionListener(new ExampleAction("inDepth", "clrf"));
+		cID.add(comfIDItem);
+		comfIDItem.addActionListener(new ExampleAction("inDepth", "comf"));
 		dID.add(decfIDItem);
 		decfIDItem.addActionListener(new ExampleAction("inDepth", "decf"));
 		iID.add(iorwfIDItem);
@@ -428,7 +444,7 @@ public class MainWindow extends JFrame{
 		whole.setResizeWeight(1);
 		
 		JTabbedPane mainTabs = new JTabbedPane();
-		mainTabs.add("Microprocessor", whole);
+		mainTabs.add("Pic18F452", whole);
 		
 		//adds tab showing pic usr manual, removed for license considerations
 //		mainTabs.add("Reference", viewerComponentPanel);

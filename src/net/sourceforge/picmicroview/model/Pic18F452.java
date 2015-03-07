@@ -49,6 +49,8 @@ public class Pic18F452 implements SetState{
 	Btfss btfss;
 	Btg btg;
 	Bz bz;
+	Clrf clrf;
+	Comf comf;
 	Decf decf;
 	Decfsz decfsz;
 	Goto GOTO;
@@ -93,6 +95,8 @@ public class Pic18F452 implements SetState{
 		btfss = new Btfss(0, this, "btfss");
 		btg = new Btg(0, this, "btg");
 		bz = new Bz(0, this, "bz");
+		clrf = new Clrf(0, this, "clrf");
+		comf = new Comf(0, this, "comf");
 		decf = new Decf(0, this, "decf");
 		decfsz = new Decfsz(0, this, "decfsz");
 		GOTO = new Goto(0, 0, this, "goto");
@@ -339,6 +343,11 @@ public class Pic18F452 implements SetState{
 				iorwf.initialize(instruction);
 				iorwf.execute();
 			}
+			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+					|| (hByteLnibble == 0x0f00)){
+				comf.initialize(instruction);
+				comf.execute();
+			}
 			else{
 				System.out.println("instruction not implemented");
 				System.exit(0);
@@ -387,6 +396,11 @@ public class Pic18F452 implements SetState{
 				//System.out.println("command low nibble has been decoded as 0X0E00");
 				movwf.initialize(instruction);
 				movwf.execute();
+			}
+			
+			else if((hByteLnibble == 0x0a00) || (hByteLnibble == 0x0b00)){
+				clrf.initialize(instruction);
+				clrf.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");
