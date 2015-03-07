@@ -14,7 +14,7 @@ public class Bcf extends Instruction {
 		//System.out.println("command is " + name);
 
 		freg = pic18.dataMem.getRegAddress(instruction);
-		System.out.println("in bcf, freg is: " + Integer.toHexString(freg));
+//		System.out.println("in bcf, freg is: " + Integer.toHexString(freg));
 		//int address = instruction & 0x00ff;
 		int bit = instruction & 0x0e00;
 		bit = (bit / 256) >> 1;

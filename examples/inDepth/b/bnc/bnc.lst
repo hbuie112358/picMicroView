@@ -1,0 +1,88 @@
+gpasm-0.13.7 beta               bnc.asm     3-7-2015  13:39:57           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; bnc.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of bnc according to examples in the PIC18 user
+               00004 ;manual. Bnc branches if status register N bit is 0.
+               00005 ;
+               00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00007 ;
+               00008 ; Mainline
+               00009 ;  
+               00010 ;
+               00011 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00012 
+               00013         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00014         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00015 
+               00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00017 
+               00018         cblock  0x000           ;Beginning of Access RAM
+               00019         MYREG   
+               00020         endc
+               00021 
+               00022 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00023 
+               00024 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00025 
+               00026 
+0000           00027         org  0x0000             ;Reset vector
+0000 0000      00028         nop
+0002 EF0E F000 00029         goto  Mainline
+               00030 
+0008           00031         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00032         goto  $                 ;Trap
+               00033 
+0018           00034         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00035         goto  $                 ;Trap
+               00036 
+               00037 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00038 
+001C 00039 Mainline
+               00040 ;Example 1:
+               00041 ;Case 1:
+               00042 
+001C 88D8      00043                 bsf     STATUS, 4       ;Set negative bit in status register
+001E E304      00044 HERE            bnc     NC_CODE         ;If negative bit is not set, branch to label N_CODE
+0020 0000      00045 NOT_N           nop                     ;
+0022 0000      00046                 nop                     ;
+0024 EF18 F000 00047                 goto    MORE_CODE       ;Since negative bit was set, execute this MORE_CODE
+0028 78D8      00048 NC_CODE         btg     STATUS, 4       ;Sets negative bit
+002A 0000      00049                 nop
+002C EF1B F000 00050                 goto    HERE2
+0030 98D8      00051 MORE_CODE       bcf     STATUS, 4       ;Clear negative bit in status register
+0032 EF0F F000 00052                 goto    HERE            ;Go back to label HERE, this time with negative bit clear
+               00053 
+               00054 ;Examples 2, 3:
+               00055 ;Cases 1, 2:
+               00056         
+  0000000A     00057 OFFSET  equ     10                      ;Set constant OFFSET to 10
+0036 E304      00058 HERE2           bnc     $ + OFFSET      ;If negative bit clear, branch to HERE2 + OFFSET
+0038 78D8      00059                 btg     STATUS, 4       ;Toggle negative bit in status register
+003A 0000      00060 NO_N            nop
+003C EF1B F000 00061                 goto    HERE2           ;Go to label HERE2
+0040 78D8      00062                 btg     STATUS, 4       ;Branches here after $ + OFFSET since OFFSET is 10
+               00063                                         ;and negative bit is clear.
+0042 0000      00064                 nop                     
+0044 0000      00065                 nop                     
+0046 0000      00066                 nop
+0048 0000      00067                 nop
+004A 78D8      00068                 btg     STATUS, 4
+004C E3FA      00069 HERE3           bnc     $ - OFFSET      ;If carry bit set, branch to HERE3 - OFFSET
+               00070 
+               00071 
+004E EF27 F000 00072 stop    goto    stop
+               00073 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

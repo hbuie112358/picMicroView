@@ -42,7 +42,10 @@ public class Pic18F452 implements SetState{
 	Addwf addwf;
 	Addwfc addwfc;
 	Andlw andlw;
+	Bc bc;
 	Bcf bcf;
+	Bn bn;
+	Bnc bnc;
 	Bnz bnz;
 	Bra bra;
 	Bsf bsf;
@@ -63,10 +66,11 @@ public class Pic18F452 implements SetState{
 	Movwf movwf;
 	Mullw mullw;
 	Mulwf mulwf;
+	Negf negf;
 	Nop nop;
 	Rcall rcall;
 	Return Return;
-	Sublw sublw;
+	Sublw sublw;	///////29
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -88,7 +92,10 @@ public class Pic18F452 implements SetState{
 		addwf = new Addwf(0, this, "addwf");
 		addwfc = new Addwfc(0, this, "addwfc");
 		andlw = new Andlw(0, this, "andlw");
+		bc = new Bc(0, this, "bc");
 		bcf = new Bcf(0, this, "bcf");
+		bn = new Bn(0, this, "bn");
+		bnc = new Bnc(0, this, "bnc");
 		bnz = new Bnz(0, this, "bnz");
 		bra = new Bra(0, this, "bra");
 		bsf = new Bsf(0, this, "bsf");
@@ -109,6 +116,7 @@ public class Pic18F452 implements SetState{
 		movwf = new Movwf(0, this, "movwf");
 		mullw = new Mullw(0, this, "mullw");
 		mulwf = new Mulwf(0, this, "mulwf");
+		negf = new Negf(0, this, "negf");
 		nop = new Nop(0, this, "nop");
 		rcall = new Rcall(0, this, "rcall");
 		Return = new Return(0, this, "return");
@@ -270,13 +278,25 @@ public class Pic18F452 implements SetState{
 				lfsr.initialize(instruction, nextWord);
 				lfsr.execute();
 			}
+			else if(hByteLnibble == 0x0600){
+				bn.initialize(instruction);
+				bn.execute();
+			}
 			else if(hByteLnibble == 0x0100){
 				bnz.initialize(instruction);
 				bnz.execute();
 			}
-			else if(hByteLnibble == 0x000){
+			else if(hByteLnibble == 0x0000){
 				bz.initialize(instruction);
 				bz.execute();
+			}
+			else if(hByteLnibble == 0x0200){
+				bc.initialize(instruction);
+				bc.execute();
+			}
+			else if(hByteLnibble == 0x0300){
+				bnc.initialize(instruction);
+				bnc.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");
@@ -401,6 +421,11 @@ public class Pic18F452 implements SetState{
 			else if((hByteLnibble == 0x0a00) || (hByteLnibble == 0x0b00)){
 				clrf.initialize(instruction);
 				clrf.execute();
+			}
+			
+			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00)){
+				negf.initialize(instruction);
+				negf.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");

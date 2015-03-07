@@ -18,7 +18,7 @@ public class Bsf extends Instruction {
 		//System.out.println("memory contents before toggle: " + Integer.toBinaryString(pic18.dataMem.gpMem[address].read()));
 		int bit = instruction & 0x0e00;
 		bit = (bit / 256) >> 1;
-		System.out.println("in bsf.execute(), calling register " + Integer.toHexString(freg) + ".setBit(bit)");
+//		System.out.println("in bsf.execute(), calling register " + Integer.toHexString(freg) + ".setBit(bit)");
 		//System.out.println("memory contents before set: " + Integer.toBinaryString(pic18.dataMem.gpMem[address].read()));
 		pic18.dataMem.gpMem[freg].setBit(bit);
 

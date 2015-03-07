@@ -87,7 +87,10 @@ public class MainWindow extends JFrame{
 	private JMenuItem addwfc = new JMenuItem("addwfc");
 	private JMenuItem andlw = new JMenuItem("andlw");
 	private JMenu b = new JMenu("B");
+	private JMenuItem bc = new JMenuItem("bc");
 	private JMenuItem bcf = new JMenuItem("bcf");
+	private JMenuItem bn = new JMenuItem("bn");
+	private JMenuItem bnc = new JMenuItem("bnc");
 	private JMenuItem bz = new JMenuItem("bz");
 	private JMenuItem bnz = new JMenuItem("bnz");
 	private JMenuItem bra = new JMenuItem("bra");
@@ -116,6 +119,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem mulwf = new JMenuItem("mulwf");
 	private JMenu n = new JMenu("N");
 	private JMenuItem nop = new JMenuItem("nop");
+	private JMenuItem negf = new JMenuItem("negf");
 	private JMenu r = new JMenu("R");
 	private JMenuItem rcall = new JMenuItem("rcall");
 	private JMenuItem returnItem = new JMenuItem("return");
@@ -127,7 +131,10 @@ public class MainWindow extends JFrame{
 	private JMenuItem addwfcIDItem = new JMenuItem("addwfc");
 	private JMenuItem addwfIDItem = new JMenuItem("addwf");
 	private JMenu bID = new JMenu("B");
+	private JMenuItem bcIDItem = new JMenuItem("bc");
 	private JMenuItem bcfIDItem = new JMenuItem("bcf");
+	private JMenuItem bnIDItem = new JMenuItem("bn");
+	private JMenuItem bncIDItem = new JMenuItem("bnc");
 	private JMenuItem bsfIDItem = new JMenuItem("bsf");
 	private JMenu cID = new JMenu("C");
 	private JMenuItem clrfIDItem = new JMenuItem("clrf");
@@ -138,6 +145,8 @@ public class MainWindow extends JFrame{
 	private JMenuItem iorwfIDItem = new JMenuItem("iorwf");
 	private JMenu mID = new JMenu("M");
 	private JMenuItem movfIDItem = new JMenuItem("movf");
+	private JMenu nID = new JMenu("N");
+	private JMenuItem negfIDItem = new JMenuItem("negf");
 	private JMenuItem movwfIDItem = new JMenuItem("movwf");
 	private JMenuItem mullwIDItem = new JMenuItem("mullw");
 	private JMenu sID = new JMenu("S");
@@ -241,8 +250,14 @@ public class MainWindow extends JFrame{
 		addwfc.addActionListener(new ExampleAction("basic", "addwfc"));
 		a.add(andlw);
 		andlw.addActionListener(new ExampleAction("basic","andlw"));
+		b.add(bc);
+		bc.addActionListener(new ExampleAction("basic","bc"));
 		b.add(bcf);
 		bcf.addActionListener(new ExampleAction("basic","bcf"));
+		b.add(bn);
+		bn.addActionListener(new ExampleAction("basic","bn"));
+		b.add(bnc);
+		bnc.addActionListener(new ExampleAction("basic","bnc"));
 		b.add(bnz);
 		bnz.addActionListener(new ExampleAction("basic","bnz"));
 		b.add(bra);
@@ -285,6 +300,8 @@ public class MainWindow extends JFrame{
 		mulwf.addActionListener(new ExampleAction("basic", "mulwf"));
 		n.add(nop);
 		nop.addActionListener(new ExampleAction("basic", "nop"));
+		n.add(negf);
+		negf.addActionListener(new ExampleAction("basic", "negf"));
 		r.add(rcall);
 		rcall.addActionListener(new ExampleAction("basic", "rcall"));
 		r.add(returnItem);
@@ -298,13 +315,20 @@ public class MainWindow extends JFrame{
 		inDepth.add(dID);
 		inDepth.add(iID);
 		inDepth.add(mID);
+		inDepth.add(nID);
 		inDepth.add(sID);
 		aID.add(addwfcIDItem);
 		addwfcIDItem.addActionListener(new ExampleAction("inDepth", "addwfc"));
 		aID.add(addwfIDItem);
 		addwfIDItem.addActionListener(new ExampleAction("inDepth", "addwf"));
+		bID.add(bnIDItem);
+		bnIDItem.addActionListener(new ExampleAction("inDepth", "bn"));
+		bID.add(bcIDItem);
+		bcIDItem.addActionListener(new ExampleAction("inDepth", "bc"));
 		bID.add(bcfIDItem);
 		bcfIDItem.addActionListener(new ExampleAction("inDepth", "bcf"));
+		bID.add(bncIDItem);
+		bncIDItem.addActionListener(new ExampleAction("inDepth", "bnc"));
 		bID.add(bsfIDItem);
 		bsfIDItem.addActionListener(new ExampleAction("inDepth", "bsf"));
 		cID.add(clrfIDItem);
@@ -321,6 +345,8 @@ public class MainWindow extends JFrame{
 		movwfIDItem.addActionListener(new ExampleAction("inDepth", "movwf"));
 		mID.add(mullwIDItem);
 		mullwIDItem.addActionListener(new ExampleAction("inDepth", "mullw"));
+		nID.add(negfIDItem);
+		negfIDItem.addActionListener(new ExampleAction("inDepth", "negf"));
 		sID.add(sublwIDItem);
 		sublwIDItem.addActionListener(new ExampleAction("inDepth", "sublw"));
 		

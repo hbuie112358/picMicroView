@@ -8,7 +8,7 @@ public class Alu {
 	private int result;
 //	private int address;
 	private int twosComp;
-	private int freg, wreg, carry;
+	private int freg, wreg, carry, regValue;
 	private boolean dc, ov;
 //	private int highByte;
 //	private int bsrVal = 0;
@@ -189,6 +189,17 @@ public class Alu {
 		adjustNbit();
 	}
 	
+	public void execute(Negf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		regValue = pic18.dataMem.gpMem[freg].read();
+		result = getTwosComplement(regValue & 0xff);
+		adjustDCbit(~regValue, (0x01));
+		pic18.dataMem.gpMem[freg].write(result);
+		adjustZbit();
+		adjustNbit();
+		adjustCbit();
+	}
+	
 	public void execute(Sublw instruction){
 		//get two's complement of value in wreg
 		twosComp = getTwosComplement(pic18.dataMem.wreg.read() & 0xff);
@@ -254,7 +265,7 @@ public class Alu {
 		else pic18.dataMem.status.clearBit(3);
 	}
 	
-	private int getTwosComplement(int arg){
+	public int getTwosComplement(int arg){
 //		System.out.println("in Alu.getTC, complement operator ~, ~0x6f:  "+ Integer.toBinaryString(0xff & (~arg)));
 		return (0xff & (~arg)) + 1;
 	}
