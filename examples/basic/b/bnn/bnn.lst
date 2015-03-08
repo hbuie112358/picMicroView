@@ -1,0 +1,70 @@
+gpasm-0.13.7 beta               bnn.asm     3-8-2015  09:45:11           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; bnn.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ; Bnn branches if status register N bit is 0.
+               00004 ;
+               00005 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00006 ;
+               00007 ; Mainline
+               00008 ;  
+               00009 ;
+               00010 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00011 
+               00012         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00013         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00014 
+               00015 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00016 
+               00017         cblock  0x000           ;Beginning of Access RAM
+               00018         MYREG   
+               00019         endc
+               00020 
+               00021 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00022 
+               00023 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
+               00025 
+0000           00026         org  0x0000             ;Reset vector
+0000 0000      00027         nop
+0002 EF0E F000 00028         goto  Mainline
+               00029 
+0008           00030         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00031         goto  $                 ;Trap
+               00032 
+0018           00033         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00034         goto  $                 ;Trap
+               00035 
+               00036 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00037 
+001C 00038 Mainline
+               00039 ;Example 1:
+               00040 ;Case 1:
+               00041 
+001C 88D8      00042                 bsf     STATUS, 4       ;Set negative bit in status register
+001E E704      00043 HERE            bnn     POS_CODE        ;If negative bit is not set, branch to label POS_CODE
+0020 0000      00044 NOT_N           nop                     ;
+0022 0000      00045                 nop                     ;
+0024 EF18 F000 00046                 goto    MORE_CODE       ;Since negative bit was set, execute this MORE_CODE
+0028 0000      00047 POS_CODE        nop
+002A 0000      00048                 nop
+002C EF1B F000 00049                 goto    stop
+0030 98D8      00050 MORE_CODE       bcf     STATUS, 4       ;Clear negative bit in status register
+0032 EF0F F000 00051                 goto    HERE            ;Go back to label HERE, this time with negative bit not set
+               00052 
+               00053 
+0036 EF1B F000 00054 stop    goto    stop
+               00055 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

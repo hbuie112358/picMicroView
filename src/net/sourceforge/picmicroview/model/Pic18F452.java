@@ -46,7 +46,10 @@ public class Pic18F452 implements SetState{
 	Bcf bcf;
 	Bn bn;
 	Bnc bnc;
+	Bnn bnn;
+	Bnov bnov;
 	Bnz bnz;
+	Bov bov;
 	Bra bra;
 	Bsf bsf;
 	Btfss btfss;
@@ -70,7 +73,7 @@ public class Pic18F452 implements SetState{
 	Nop nop;
 	Rcall rcall;
 	Return Return;
-	Sublw sublw;	///////29
+	Sublw sublw;	///////33
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -96,7 +99,10 @@ public class Pic18F452 implements SetState{
 		bcf = new Bcf(0, this, "bcf");
 		bn = new Bn(0, this, "bn");
 		bnc = new Bnc(0, this, "bnc");
+		bnn = new Bnn(0, this, "bnn");
+		bnov = new Bnov(0, this, "bnov");
 		bnz = new Bnz(0, this, "bnz");
+		bov = new Bov(0, this, "bnz");
 		bra = new Bra(0, this, "bra");
 		bsf = new Bsf(0, this, "bsf");
 		btfss = new Btfss(0, this, "btfss");
@@ -278,9 +284,21 @@ public class Pic18F452 implements SetState{
 				lfsr.initialize(instruction, nextWord);
 				lfsr.execute();
 			}
+			else if(hByteLnibble == 0x0400){
+				bov.initialize(instruction);
+				bov.execute();
+			}
+			else if(hByteLnibble == 0x0500){
+				bnov.initialize(instruction);
+				bnov.execute();
+			}
 			else if(hByteLnibble == 0x0600){
 				bn.initialize(instruction);
 				bn.execute();
+			}
+			else if(hByteLnibble == 0x0700){
+				bnn.initialize(instruction);
+				bnn.execute();
 			}
 			else if(hByteLnibble == 0x0100){
 				bnz.initialize(instruction);
