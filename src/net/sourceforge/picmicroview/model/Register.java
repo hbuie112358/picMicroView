@@ -116,7 +116,7 @@ public class Register implements SetState{
 	int getBit(int bit){
 		int andValue = baseSet << bit;
 		//System.out.println("getBit receives bit value of " + bit + ", decodes andValue as " + andValue);
-		if((contents & andValue) == 0 )
+		if((read() & andValue) == 0 )
 			return 0;
 		else return 1;
 	}

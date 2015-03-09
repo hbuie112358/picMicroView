@@ -1,4 +1,9 @@
-;;;;;;; bz.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; btg.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;This program tests operation of btg instruction according to the examples
+;in the pic18 user manual. Btg toggles the specified bit in register f.
+;
+;
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -34,34 +39,19 @@
 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Mainline
-		movlw	4	;Place 4 in wreg
-here		decf	WREG, w	;Decrement wreg, place result back in wreg
-		bz	there	;If wreg is 0 (if status Z bit is set), branch to label "there"
-		goto	here	;if wreg not 0, go to label "here"
 
-there		movlw	241	;Place 241 in wreg
+;Example 1:
+
+	movlw	0x0a		;Place 0x0a in wreg
+	movwf	LATC		;Copy wreg value into LATC
+	btg	LATC, 7, 1	;Toggle bit 7 of LATC
+
+;Example 2:
+
+	lfsr	0, 0xac2	;Place 0xac2 in FSR0	
+	movlw	0x28		;Place 0x28 in wreg
+	movwf	INDF0		;Copy wreg value into address pointed to by FSR0
+	btg	INDF0, 3, 1	;Toggle bit 3 in register pointed to by FSR0
 
 stop		goto		stop
-
-	end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		end

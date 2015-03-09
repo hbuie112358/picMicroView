@@ -1,0 +1,71 @@
+gpasm-0.13.7 beta               btg.asm     3-9-2015  07:59:33           PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; btg.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of btg instruction according to the examples
+               00004 ;in the pic18 user manual. Btg toggles the specified bit in register f.
+               00005 ;
+               00006 ;
+               00007 ;
+               00008 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 ;
+               00010 ; Mainline
+               00011 ;  
+               00012 ;
+               00013 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00016         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00017 
+               00018 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019 
+               00020         cblock  0x000           ;Beginning of Access RAM
+               00021 
+               00022         endc
+               00023 
+               00024 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00025 
+               00026 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00027 
+               00028 
+0000           00029         org  0x0000             ;Reset vector
+0000 0000      00030         nop
+0002 EF0E F000 00031         goto  Mainline
+               00032 
+0008           00033         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00034         goto  $                 ;Trap
+               00035 
+0018           00036         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00037         goto  $                 ;Trap
+               00038 
+               00039 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00040 
+001C 00041 Mainline
+               00042 
+               00043 ;Example 1:
+               00044 
+001C 0E0A      00045         movlw   0x0a            ;Place 0x0a in wreg
+001E 6E8B      00046         movwf   LATC            ;Copy wreg value into LATC
+0020 7F8B      00047         btg     LATC, 7, 1      ;Toggle bit 7 of LATC
+               00048 
+               00049 ;Example 2:
+               00050 
+0022 EE0A F0C2 00051         lfsr    0, 0xac2        ;Place 0xac2 in FSR0    
+0026 0E28      00052         movlw   0x28            ;Place 0x28 in wreg
+0028 6EEF      00053         movwf   INDF0           ;Copy wreg value into address pointed to by FSR0
+002A 77EF      00054         btg     INDF0, 3, 1     ;Toggle bit 3 in register pointed to by FSR0
+               00055 
+002C EF16 F000 00056 stop            goto            stop
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

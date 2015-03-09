@@ -1,4 +1,7 @@
-;;;;;;; bz.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; cpfseq.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;This program tests operation of cpfseq instruction. Cpfseq skips next instruction
+;if contents of register f equals contents of wreg.
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -13,7 +16,7 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
-
+	FLAG
 	endc
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -34,34 +37,23 @@
 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Mainline
-		movlw	4	;Place 4 in wreg
-here		decf	WREG, w	;Decrement wreg, place result back in wreg
-		bz	there	;If wreg is 0 (if status Z bit is set), branch to label "there"
-		goto	here	;if wreg not 0, go to label "here"
 
-there		movlw	241	;Place 241 in wreg
+;Example 1:
+;Case 1, 2:
 
-stop		goto		stop
+		movlb	0x01		;Set BSR to 0x01 for banked addressing
+		movlw	0x5a		;Place 0x5a in wreg
+		movwf	FLAG		;Copy wreg value into FLAG
+HERE		cpfseq	FLAG		;Compare values in f, wreg, skip next instruction if equal
+NEQUAL		goto	PROCESS_CODE
+EQUAL		movlw	0xa5		;Place 0xa5 in wreg
+		goto	HERE
+
+PROCESS_CODE	nop			;Came to PROCESS_CODE since wreg, f, were not equal
+		goto stop
+	
+
+stop	goto		stop
 
 	end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -52,11 +52,15 @@ public class Pic18F452 implements SetState{
 	Bov bov;
 	Bra bra;
 	Bsf bsf;
+	Btfsc btfsc;
 	Btfss btfss;
 	Btg btg;
 	Bz bz;
 	Clrf clrf;
 	Comf comf;
+	Cpfseq cpfseq;
+	Cpfsgt	cpfsgt;
+	Cpfslt	cpfslt;
 	Decf decf;
 	Decfsz decfsz;
 	Goto GOTO;
@@ -73,7 +77,7 @@ public class Pic18F452 implements SetState{
 	Nop nop;
 	Rcall rcall;
 	Return Return;
-	Sublw sublw;	///////33
+	Sublw sublw;	///////40
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -105,11 +109,15 @@ public class Pic18F452 implements SetState{
 		bov = new Bov(0, this, "bnz");
 		bra = new Bra(0, this, "bra");
 		bsf = new Bsf(0, this, "bsf");
+		btfsc = new Btfsc(0, this, "btfsc");
 		btfss = new Btfss(0, this, "btfss");
 		btg = new Btg(0, this, "btg");
 		bz = new Bz(0, this, "bz");
 		clrf = new Clrf(0, this, "clrf");
 		comf = new Comf(0, this, "comf");
+		cpfseq = new Cpfseq(0, this, "cpfseq");
+		cpfsgt = new Cpfsgt(0, this, "cpfsgt");
+		cpfslt = new Cpfslt(0, this, "cpfslt");
 		decf = new Decf(0, this, "decf");
 		decfsz = new Decfsz(0, this, "decfsz");
 		GOTO = new Goto(0, 0, this, "goto");
@@ -435,6 +443,18 @@ public class Pic18F452 implements SetState{
 				movwf.initialize(instruction);
 				movwf.execute();
 			}
+			else if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100)){
+				cpfslt.initialize(instruction);
+				cpfslt.execute();
+			}
+			else if((hByteLnibble == 0x0200) || (hByteLnibble == 0x0300)){
+				cpfseq.initialize(instruction);
+				cpfseq.execute();
+			}
+			else if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500)){
+				cpfsgt.initialize(instruction);
+				cpfsgt.execute();
+			}
 			
 			else if((hByteLnibble == 0x0a00) || (hByteLnibble == 0x0b00)){
 				clrf.initialize(instruction);
@@ -471,6 +491,10 @@ public class Pic18F452 implements SetState{
 				btfss.initialize(instruction);
 				btfss.execute();
 				
+		}
+		else if (hByteHnibble == 0xb000){
+			btfsc.initialize(instruction);
+			btfsc.execute();
 		}
 		else if(hByteHnibble ==	0xc000){
 			//System.out.println("command high nibble has been decoded as 0x2000");				

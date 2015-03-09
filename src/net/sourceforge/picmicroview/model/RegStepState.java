@@ -50,8 +50,8 @@ public class RegStepState implements RegisterState {
 	public void setBit(int bit, Register r){
 		int orValue = register.baseSet << bit;
 		register.contents = register.contents | orValue;
-//		System.out.println("in RegStepState.setBit(bit, r), setting bit " + bit + " in "
-//				+ register.name + " at " + Integer.toHexString(register.address));
+		System.out.println("in RegStepState.setBit(bit, r), setting bit " + bit + " in "
+				+ register.name + " at " + Integer.toHexString(register.address));
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
 	}
 

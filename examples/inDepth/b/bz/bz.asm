@@ -1,5 +1,9 @@
 ;;;;;;; bz.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
+;This program tests the bz instruction according to the examples in the
+;pic18 user manual. Bz branches to the specified label if the status register
+;Z bit is set.
+;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ; Mainline
@@ -34,12 +38,36 @@
 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Mainline
-		movlw	4	;Place 4 in wreg
-here		decf	WREG, w	;Decrement wreg, place result back in wreg
-		bz	there	;If wreg is 0 (if status Z bit is set), branch to label "there"
-		goto	here	;if wreg not 0, go to label "here"
+;Example 1:
+;Case 1:
 
-there		movlw	241	;Place 241 in wreg
+		bcf	STATUS, 2	;Clear zero bit in status register
+HERE		bz	Z_CODE		;If zero bit is set, branch to label Z_CODE
+NOT_Z		nop			;
+		nop			;
+		goto	MORE_CODE	;Since zero bit was not set, execute this MORE_CODE
+Z_CODE		btg	STATUS, 2
+		nop
+		goto 	HERE2
+MORE_CODE	bsf	STATUS, 2	;Set zero bit in status register
+		goto	HERE		;Go back to label HERE, this time with zero bit set
+
+;Examples 2, 3:
+;Cases 1, 2:
+	
+OFFSET 	equ	10			;Set constant OFFSET to 10
+HERE2		bz	$ + OFFSET	;If zero bit set, branch to HERE2 + OFFSET
+		btg	STATUS, 2	;Toggle zero bit in status register
+NO_Z		nop
+		goto	HERE2		;Go to label HERE2
+		btg	STATUS, 2	;Branches here after $ + OFFSET since OFFSET is 10
+					;and zero bit is set.
+		nop			
+		nop			
+		nop
+		nop
+		btg	STATUS, 2
+HERE3		bz	$ - OFFSET	;If zero bit set, branch to HERE3 - OFFSET
 
 stop		goto		stop
 
