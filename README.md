@@ -11,7 +11,7 @@ Thank you for looking, and please keep in touch!
 
 Currently implemented PIC18 instructions:
 
-addlw, addwf, addwfc, andlw, bcf, bnz, bra, bsf, btfss, btg, bz, decf, decfsz, goto, iorwf, lfsr, movf, movff, movlb, movlw, movwf, mullw, mulwf, nop, rcall, return, sublw
+addlw, addwf, addwfc, andlw, bc, bcf, bn, bnc, bnn, bnov, bnz, bov, bra, bsf, btfsc, btfss, btg, bz, clrf, comf, cpfseq, cpfsgt, cpfslt, dcfsnz, decf, decfsz, goto, incf, incfsz, infsnz, iorwf, lfsr, movf, movff, movlb, movlw, movwf, mullw, mulwf, nrgf, nop, rcall, return, rlcf, rlfnc, sublw
 
 <img src=http://i.imgur.com/thVfuFN.jpg>
 

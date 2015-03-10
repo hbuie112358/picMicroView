@@ -81,7 +81,9 @@ public class Pic18F452 implements SetState{
 	Nop nop;
 	Rcall rcall;
 	Return Return;
-	Sublw sublw;	///////44
+	Rlcf rlcf;
+	Rlfnc rlfnc;
+	Sublw sublw;	///////46
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -142,6 +144,8 @@ public class Pic18F452 implements SetState{
 		nop = new Nop(0, this, "nop");
 		rcall = new Rcall(0, this, "rcall");
 		Return = new Return(0, this, "return");
+		rlcf = new Rlcf(0, this, "rlcf");
+		rlfnc = new Rlfnc(0, this, "rlfnc");
 		sublw = new Sublw(0, this, "sublw");
 	}
 	
@@ -437,13 +441,23 @@ public class Pic18F452 implements SetState{
 			}
 		}
 		else if(hByteHnibble == 0x3000){
-			if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+			if((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
+					|| (hByteLnibble == 0x0400)){
+				rlcf.initialize(instruction);
+				rlcf.execute();
+			}
+			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
 					|| (hByteLnibble == 0x0f00)){
 				incfsz.initialize(instruction);
 				incfsz.execute();
 			}
 		}
 		else if(hByteHnibble == 0x4000){
+			if((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
+					|| (hByteLnibble == 0x0400)){
+				rlfnc.initialize(instruction);
+				rlfnc.execute();
+			}
 			if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
 					|| hByteLnibble == 0x0b00){
 				infsnz.initialize(instruction);

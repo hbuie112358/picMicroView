@@ -134,6 +134,8 @@ public class MainWindow extends JFrame{
 	private JMenu r = new JMenu("R");
 	private JMenuItem rcall = new JMenuItem("rcall");
 	private JMenuItem returnItem = new JMenuItem("return");
+	private JMenuItem rlcf = new JMenuItem("rlcf");
+	private JMenuItem rlfnc = new JMenuItem("rlfnc");
 	private JMenu s = new JMenu("S");
 	private JMenuItem sublw = new JMenuItem("sublw");
 
@@ -175,6 +177,9 @@ public class MainWindow extends JFrame{
 	private JMenuItem negfIDItem = new JMenuItem("negf");
 	private JMenuItem movwfIDItem = new JMenuItem("movwf");
 	private JMenuItem mullwIDItem = new JMenuItem("mullw");
+	private JMenu rID = new JMenu("R");
+	private JMenuItem rlcfIDItem = new JMenuItem("rlcf");
+	private JMenuItem rlfncIDItem = new JMenuItem("rlfnc");
 	private JMenu sID = new JMenu("S");
 	private JMenuItem sublwIDItem = new JMenuItem("sublw");
 
@@ -354,6 +359,10 @@ public class MainWindow extends JFrame{
 		rcall.addActionListener(new ExampleAction("basic", "rcall"));
 		r.add(returnItem);
 		returnItem.addActionListener(new ExampleAction("basic", "return"));
+		r.add(rlcf);
+		rlcf.addActionListener(new ExampleAction("basic", "rlcf"));
+		r.add(rlfnc);
+		rlfnc.addActionListener(new ExampleAction("basic", "rlfnc"));
 		s.add(sublw);
 		sublw.addActionListener(new ExampleAction("basic", "sublw"));
 		
@@ -364,6 +373,7 @@ public class MainWindow extends JFrame{
 		inDepth.add(iID);
 		inDepth.add(mID);
 		inDepth.add(nID);
+		inDepth.add(rID);
 		inDepth.add(sID);
 		aID.add(addwfcIDItem);
 		addwfcIDItem.addActionListener(new ExampleAction("inDepth", "addwfc"));
@@ -425,6 +435,10 @@ public class MainWindow extends JFrame{
 		mullwIDItem.addActionListener(new ExampleAction("inDepth", "mullw"));
 		nID.add(negfIDItem);
 		negfIDItem.addActionListener(new ExampleAction("inDepth", "negf"));
+		rID.add(rlcfIDItem);
+		rlcfIDItem.addActionListener(new ExampleAction("inDepth", "rlcf"));
+		rID.add(rlfncIDItem);
+		rlfncIDItem.addActionListener(new ExampleAction("inDepth", "rlfnc"));
 		sID.add(sublwIDItem);
 		sublwIDItem.addActionListener(new ExampleAction("inDepth", "sublw"));
 		
