@@ -8,7 +8,7 @@ public class Alu {
 	private int result;
 //	private int address;
 	private int twosComp;
-	private int freg, wreg, carry, regValue;
+	private int freg, wreg, carry, origValue;
 	private boolean dc, ov;
 //	private int highByte;
 //	private int bsrVal = 0;
@@ -119,6 +119,24 @@ public class Alu {
 		//System.out.println("status register is " + Integer.toBinaryString(pic18.dataMem.status.read()));
 	}
 	
+	public void execute(Clrf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		pic18.dataMem.gpMem[freg].clear();
+		adjustZbit();
+	}
+	
+	public void execute(Comf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		result = ~pic18.dataMem.gpMem[freg].getContents();
+		
+		//if bit 9 of instruction is high, write result to f register
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
+	}
+	
 	public void execute(Decf instruction){	
 		freg = pic18.dataMem.getRegAddress(instruction.instruction);
 		result = pic18.dataMem.gpMem[freg].read();
@@ -136,20 +154,21 @@ public class Alu {
 		adjustNbit();
 	}
 	
-	public void execute(Clrf instruction){
+	public void execute(Incf instruction){
 		freg = pic18.dataMem.getRegAddress(instruction.instruction);
-		pic18.dataMem.gpMem[freg].clear();
-		adjustZbit();
-	}
-	
-	public void execute(Comf instruction){
-		freg = pic18.dataMem.getRegAddress(instruction.instruction);
-		result = ~pic18.dataMem.gpMem[freg].getContents();
-		
+		origValue = result = pic18.dataMem.gpMem[freg].read();
+		result++;
+		adjustCbit();
+		if(result == 0x100)
+			result = 0x00;
+
 		//if bit 9 of instruction is high, write result to f register
+		//else write to wreg
 		if((instruction.instruction & 0x200) == 0x200) 
 			pic18.dataMem.gpMem[freg].write(result);
 		else pic18.dataMem.wreg.write(result);
+		adjustDCbit(origValue, 1);
+		adjustOVbit("", origValue, 1);
 		adjustZbit();
 		adjustNbit();
 	}
@@ -191,9 +210,9 @@ public class Alu {
 	
 	public void execute(Negf instruction){
 		freg = pic18.dataMem.getRegAddress(instruction.instruction);
-		regValue = pic18.dataMem.gpMem[freg].read();
-		result = getTwosComplement(regValue & 0xff);
-		adjustDCbit(~regValue, (0x01));
+		origValue = pic18.dataMem.gpMem[freg].read();
+		result = getTwosComplement(origValue & 0xff);
+		adjustDCbit(~origValue, (0x01));
 		pic18.dataMem.gpMem[freg].write(result);
 		adjustZbit();
 		adjustNbit();

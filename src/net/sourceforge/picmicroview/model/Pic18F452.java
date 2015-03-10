@@ -61,9 +61,13 @@ public class Pic18F452 implements SetState{
 	Cpfseq cpfseq;
 	Cpfsgt	cpfsgt;
 	Cpfslt	cpfslt;
+	Dcfsnz	dcfsnz;
 	Decf decf;
 	Decfsz decfsz;
 	Goto GOTO;
+	Incf incf;
+	Incfsz incfsz;
+	Infsnz infsnz;
 	Iorwf iorwf;
 	Lfsr lfsr;
 	Movf movf;
@@ -77,7 +81,7 @@ public class Pic18F452 implements SetState{
 	Nop nop;
 	Rcall rcall;
 	Return Return;
-	Sublw sublw;	///////40
+	Sublw sublw;	///////44
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -118,9 +122,13 @@ public class Pic18F452 implements SetState{
 		cpfseq = new Cpfseq(0, this, "cpfseq");
 		cpfsgt = new Cpfsgt(0, this, "cpfsgt");
 		cpfslt = new Cpfslt(0, this, "cpfslt");
+		dcfsnz = new Dcfsnz(0, this, "dcfsnz");
 		decf = new Decf(0, this, "decf");
 		decfsz = new Decfsz(0, this, "decfsz");
 		GOTO = new Goto(0, 0, this, "goto");
+		incf = new Incf(0, this, "incf");
+		incfsz = new Incfsz(0, this, "incfsz");
+		infsnz = new Infsnz(0, this, "infsnz");
 		iorwf = new Iorwf(0, this, "iorwf");
 		lfsr = new Lfsr(0, this, "lfsr");
 		movf = new Movf(0, this, "movf");
@@ -407,6 +415,11 @@ public class Pic18F452 implements SetState{
 				addwf.initialize(instruction);
 				addwf.execute();
 			}
+			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+					|| hByteLnibble == 0x0b00){
+				incf.initialize(instruction);
+				incf.execute();
+			}
 			else if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
 					|| (hByteLnibble == 0x0300)){
 //				System.out.println("in inner case addwfc " + Integer.toHexString(hByteLnibble));
@@ -421,6 +434,25 @@ public class Pic18F452 implements SetState{
 			else{
 				System.out.println("instruction not implemented");
 				System.exit(0);
+			}
+		}
+		else if(hByteHnibble == 0x3000){
+			if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+					|| (hByteLnibble == 0x0f00)){
+				incfsz.initialize(instruction);
+				incfsz.execute();
+			}
+		}
+		else if(hByteHnibble == 0x4000){
+			if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+					|| hByteLnibble == 0x0b00){
+				infsnz.initialize(instruction);
+				infsnz.execute();
+			}
+			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+					|| (hByteLnibble == 0x0f00)){
+				dcfsnz.initialize(instruction);
+				dcfsnz.execute();
 			}
 		}
 		else if(hByteHnibble ==	0x5000){

@@ -1,21 +1,22 @@
 package net.sourceforge.picmicroview.model;
 
-public class Decfsz extends Instruction {
+public class Infsnz extends Instruction {
 	
 	private int freg, result;
 
-	public Decfsz(int instruction, Pic18F452 pic18, String name) {
+	public Infsnz(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute(){
+	@Override
+	protected void execute() {
 		freg = pic18.dataMem.getRegAddress(instruction);
 		result = pic18.dataMem.gpMem[freg].read();
-		if(result == 0)
-			result = 0xff;
+		if(result == 0xff)
+			result = 0x00;
 		else
-			result--;
-		if(result == 0){
+			result++;
+		if(result != 0){
 			if(pic18.checkTwoCycle() == true){
 				pic18.pc.increment();
 				pic18.pc.increment();
@@ -29,6 +30,7 @@ public class Decfsz extends Instruction {
 		if((instruction & 0x200) == 0x200) 
 			pic18.dataMem.gpMem[freg].write(result);
 		else pic18.dataMem.wreg.write(result);
+
 	}
 
 	@Override
@@ -36,4 +38,5 @@ public class Decfsz extends Instruction {
 		this.instruction = instruction;
 
 	}
+
 }

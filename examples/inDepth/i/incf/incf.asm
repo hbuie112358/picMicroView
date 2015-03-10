@@ -1,7 +1,7 @@
-;;;;;;; iorwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; incf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-;This program tests the operation of the iorwf instruction. Iorwf performs
-;an inclusive OR of the contents of the wreg with the contents of register f.
+;This program tests the operation of the incf instruction. Incf increments
+;the contents of register f.
 ;
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17,7 +17,7 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 			cblock  0x000           ;Beginning of Access RAM
-			temp
+			CNT
 			endc
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -39,14 +39,26 @@
 
 Mainline
 
-		movlw		0x35
-		movwf		temp
-		movlw		0xca
-		iorwf		temp, w
-		movlw		0x2b
-		movwf		temp
-		movlw		0xd4
-		iorwf		temp, f
+;Example 1:
+
+	movlb	0x01		;Set banked addressing to use bank 1
+	movlw	0xff		;Place 0xff in wreg
+	movwf	CNT, 1		;Copy contents of wreg to CNT
+	incf	CNT, 1, 1	;Using banked addressing, increment register CNT
+
+;Example 2:
+
+	lfsr	0, 0x0c2	;Place 0x0c2 in FSR0
+	movlw	0xff		;Place 0xff in wreg
+	movwf	INDF0, 1	;Copy wreg to register pointed to by FSR0
+	incf	INDF0, 1, 1	;Increment register pointed to by FSR0
+
+;Example 3:
+
+	movlw	0x10		;Place 0x10 in wreg
+	movwf	CNT, 1		;Copy wreg to CNT
+	incf	CNT, 0, 1	;Increment contents of CNT, place result in wreg,
+				;value in CNT does not change
 		
 
 stop		goto		stop

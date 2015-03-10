@@ -1,13 +1,13 @@
-gpasm-0.13.7 beta               iorwf.asm   3-9-2015  20:59:25           PAGE  1
+gpasm-0.13.7 beta               incf.asm    3-9-2015  21:39:42           PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
  
-               00001 ;;;;;;; iorwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00001 ;;;;;;; incf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00002 ;
-               00003 ;This program tests the operation of the iorwf instruction. Iorwf performs
-               00004 ;an inclusive OR of the contents of the wreg with the contents of register f.
+               00003 ;This program tests the operation of the incf instruction. Incf increments
+               00004 ;the contents of register f.
                00005 ;
                00006 ;
                00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26,7 +26,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00018 
                00019                         cblock  0x000           ;Beginning of Access RAM
-               00020                         temp
+               00020                         CNT
                00021                         endc
                00022 
                00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -48,18 +48,30 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00039 
 001C 00040 Mainline
                00041 
-001C 0E35      00042                 movlw           0x35
-001E 6E00      00043                 movwf           temp
-0020 0ECA      00044                 movlw           0xca
-0022 1000      00045                 iorwf           temp, w
-0024 0E2B      00046                 movlw           0x2b
-0026 6E00      00047                 movwf           temp
-0028 0ED4      00048                 movlw           0xd4
-002A 1200      00049                 iorwf           temp, f
-               00050                 
-               00051 
-002C EF16 F000 00052 stop            goto            stop
-               00053 
+               00042 ;Example 1:
+               00043 
+001C 0101      00044         movlb   0x01            ;Set banked addressing to use bank 1
+001E 0EFF      00045         movlw   0xff            ;Place 0xff in wreg
+0020 6F00      00046         movwf   CNT, 1          ;Copy contents of wreg to CNT
+0022 2B00      00047         incf    CNT, 1, 1       ;Using banked addressing, increment register CNT
+               00048 
+               00049 ;Example 2:
+               00050 
+0024 EE00 F0C2 00051         lfsr    0, 0x0c2        ;Place 0x0c2 in FSR0
+0028 0EFF      00052         movlw   0xff            ;Place 0xff in wreg
+002A 6FEF      00053         movwf   INDF0, 1        ;Copy wreg to register pointed to by FSR0
+002C 2BEF      00054         incf    INDF0, 1, 1     ;Increment register pointed to by FSR0
+               00055 
+               00056 ;Example 3:
+               00057 
+002E 0E10      00058         movlw   0x10            ;Place 0x10 in wreg
+0030 6F00      00059         movwf   CNT, 1          ;Copy wreg to CNT
+0032 2900      00060         incf    CNT, 0, 1       ;Increment contents of CNT, place result in wreg,
+               00061                                 ;value in CNT does not change
+               00062                 
+               00063 
+0034 EF1A F000 00064 stop            goto            stop
+               00065 
 
 
 Errors   :       0

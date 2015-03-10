@@ -1,7 +1,7 @@
-;;;;;;; iorwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; infsnz.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-;This program tests the operation of the iorwf instruction. Iorwf performs
-;an inclusive OR of the contents of the wreg with the contents of register f.
+;This program tests the infsnz instruction. Infsnz increments the contents of 
+;register f. If the result is not equal to 0, the next instruction is skipped.
 ;
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -11,14 +11,14 @@
 ;
 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+	#include p18f452.inc
         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
-        #include p18f452.inc
 
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-			cblock  0x000           ;Beginning of Access RAM
-			temp
-			endc
+	cblock  0x000           ;Beginning of Access RAM
+	CNT
+	endc
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -38,17 +38,19 @@
 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Mainline
-
-		movlw		0x35
-		movwf		temp
-		movlw		0xca
-		iorwf		temp, w
-		movlw		0x2b
-		movwf		temp
-		movlw		0xd4
-		iorwf		temp, f
-		
+	
+		movlb	0x01		;Set banked addressing for bank 1
+		movlw	0xff		;Place 0xff in wreg
+		movwf	CNT, 1		;Copy wreg value to CNT
+HERE		infsnz	CNT, 1, 1	;Increment contents of f, skip next instruction if not zero
+		goto 	ZERO
+		goto 	stop
+ZERO		movlw	0x00		;Place 0 in wreg
+		movwf	CNT, 1		;Copy wreg value into CNT
+		goto	HERE
+	
 
 stop		goto		stop
 
-		end
+	end
+

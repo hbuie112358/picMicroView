@@ -136,9 +136,9 @@ public class Indf extends Register {
 		//no effect.
 		public void write(int value){
 			getFullAddress();
-			System.out.println("in IndfStepState.write(value), writing " + Integer.toHexString(value) + " to "
-					+ register.name + " at " + Integer.toHexString(register.address) + ", fullAddress is: " 
-					+ Integer.toHexString(fullAddress));
+//			System.out.println("in IndfStepState.write(value), writing " + Integer.toHexString(value) + " to "
+//					+ register.name + " at " + Integer.toHexString(register.address) + ", fullAddress is: " 
+//					+ Integer.toHexString(fullAddress));
 			//tells callee that caller is an indf register
 			pic18.dataMem.gpMem[fullAddress].write(value, register);
 			
@@ -168,15 +168,15 @@ public class Indf extends Register {
 		
 		public void setBit(int bit){
 			getFullAddress();
-			System.out.println("in IndfStepState.setBit(bit), calling " + Integer.toHexString(fullAddress)
-					+ ".setBit(bit, r)");
+//			System.out.println("in IndfStepState.setBit(bit), calling " + Integer.toHexString(fullAddress)
+//					+ ".setBit(bit, r)");
 			pic18.dataMem.gpMem[fullAddress].setBit(bit, register);
 
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
 		public void setBit(int bit, Register r){
-			System.out.println("in IndfStepState.setBit(bit, r), returning");
+//			System.out.println("in IndfStepState.setBit(bit, r), returning");
 			return;
 		}
 		

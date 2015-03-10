@@ -1,13 +1,13 @@
-gpasm-0.13.7 beta               decfsz.asm  3-9-2015  12:19:55           PAGE  1
+gpasm-0.13.7 beta               incfsz.asm  3-10-2015  07:47:30          PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
  
-               00001 ;;;;;;; decfsz.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00001 ;;;;;;; incfsz.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00002 ;
-               00003 ;This program tests the decfsz instruction. Decfsz decrements the contents of 
-               00004 ;register f. If the result is 0, the next instruction is skipped.
+               00003 ;This program tests the incfz instruction. Incfsz increments the contents of 
+               00004 ;register f. If the result equals 0, the next instruction is skipped.
                00005 ;
                00006 ;
                00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26,7 +26,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00018 
                00019         cblock  0x000           ;Beginning of Access RAM
-               00020         temp
+               00020         CNT
                00021         endc
                00022 
                00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -47,17 +47,20 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00038 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00039 
 001C 00040 Mainline
-001C 0E02      00041         movlw   2               ;Place 2 in wreg
-001E 2CE8      00042 here    decfsz  WREG, w         ;Decrement wreg, result in wreg, skip next inst. if 0
-0020 D7FE      00043         bra     here            ;Go to instruction at label "here"
-0022 0E02      00044         movlw   2               ;Place 2 in wreg
-0024 6E00      00045         movwf   temp            ;Place contents of wreg into register temp
-0026 2E00      00046 there   decfsz  temp, f         ;decrement temp, result in temp, skip next inst. if 0
-0028 D7FE      00047         bra     there           ;Go to instruction at label "there"
-002A 0EF1      00048         movlw   241             ;Place 241 into wreg
-               00049 
-002C EF16 F000 00050 stop    goto            stop
-               00051 
+               00041         
+001C 0101      00042                 movlb   0x01            ;Set banked addressing for bank 1
+001E 0EFF      00043                 movlw   0xff            ;Place 0xff in wreg
+0020 6F00      00044                 movwf   CNT, 1          ;Copy wreg value to CNT
+0022 3F00      00045 HERE            incfsz  CNT, 1, 1       ;Increment contents of f, skip next instruction if zero
+0024 EF1A F000 00046                 goto    stop
+0028 EF16 F000 00047                 goto    CONTINUE
+002C 0E00      00048 CONTINUE        movlw   0x00            ;Place 0 in wreg
+002E 6F00      00049                 movwf   CNT, 1          ;Copy wreg value into CNT
+0030 EF11 F000 00050                 goto    HERE
+               00051         
+               00052 
+0034 EF1A F000 00053 stop            goto            stop
+               00054 
 
 
 Errors   :       0
