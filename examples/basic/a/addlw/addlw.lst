@@ -1,4 +1,4 @@
-gpasm-0.13.7 beta               addlw.asm   3-6-2015  07:39:26           PAGE  1
+gpasm-0.13.7 beta               addlw.asm   3-11-2015  13:26:13          PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -24,7 +24,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00015 
                00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00017 
-               00018         cblock  0x000           ;Beginning of Access RAM
+               00018         cblock  0x037           ;Beginning of Access RAM
                00019         MYREG
                00020         endc
                00021 
@@ -47,25 +47,42 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00038 
 001C 00039 Mainline
                00040 
-001C 0E05      00041         movlw           5       ;Place 5 in wreg
-001E 0F0A      00042         addlw           10      ;Add 10, wreg, result in wreg (sum is 0x0f)
+001C 0E05      00041         movlw   5       ;Place 5 in wreg
+001E 0F0A      00042         addlw   10      ;Add 10, wreg, result in wreg (sum is 0x0f)
                00043 
                00044 ;Example 1:
-0020 0E18      00045         movlw           0x18    ;Place 0x18 in wreg
-0022 0F19      00046         addlw           0x19    ;Add 0x19 to contents in wreg (DC bit 1 in status
-               00047                                 ;register is set since carry from bit 3 to bit 4
+0020 0E18      00045         movlw   0x18    ;Place 0x18 in wreg
+0022 0F19      00046         addlw   0x19    ;Add 0x19 to contents in wreg (DC bit 1 in status
+               00047                                 ;register is set since carry from bit 3 to bit 4)
                00048 
                00049 ;Example 2:
-0024 0E60      00050         movlw           0x60    ;Place 0x60 in wreg
-0026 0F37      00051         addlw           0x37    ;Add 0x37 to contents in wreg (OV bit 3 in status
-               00052                                 ;register is set since carry from bit 6 to bit 7
-               00053         
-               00054 
-0028 EF14 F000 00055 stop    goto            stop
-               00056 
+0024 0E60      00050         movlw   0x60    ;Place 0x60 in wreg
+0026 0F37      00051         addlw   MYREG   ;Add address of MYREG (0x037) to contents in wreg (OV bit 3 
+               00052                         ;in status register is set since carry from bit 6 to bit 7)
+               00053 
+               00054 ;Example 3: (to be implemented)
+               00055 
+               00056 ;Example 4:
+               00057 
+0028 0E02      00058         movlw   0x02    ;Place 0x02 in wreg
+Warning [202] : Argument out of range. Least significant bits used.
+002A 0FF9      00059         addlw   PCL     ;Add value in PCL to wreg (*note* - example in user manual
+               00060                         ;says that PCL is at 0xff8 but that's a mistake. Other places
+               00061                         ;in same manual clearly states PCL at 0xff9, so result is 0xfb
+               00062                         ;not 0xfa as stated in example in manual)
+               00063 
+               00064 ;Example 5:
+               00065 
+  00000002     00066 Offset  equ     0x02
+002C 0E10      00067         movlw   0x10    ;Place 0x10 in wreg
+002E 0F02      00068         addlw   Offset  ;Add value of constant Offset to wreg
+               00069         
+               00070 
+0030 EF18 F000 00071 stop    goto    stop
+               00072 
 
 
 Errors   :       0
-Warnings :       0 reported,       0 suppressed
+Warnings :       1 reported,       0 suppressed
 Messages :       0 reported,       0 suppressed
 

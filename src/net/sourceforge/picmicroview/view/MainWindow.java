@@ -86,6 +86,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem addwf = new JMenuItem("addwf");
 	private JMenuItem addwfc = new JMenuItem("addwfc");
 	private JMenuItem andlw = new JMenuItem("andlw");
+	private JMenuItem andwf = new JMenuItem("andwf");
 	private JMenu b = new JMenu("B");
 	private JMenuItem bc = new JMenuItem("bc");
 	private JMenuItem bcf = new JMenuItem("bcf");
@@ -108,6 +109,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem cpfsgt = new JMenuItem("cpfsgt");
 	private JMenuItem cpfslt = new JMenuItem("cpfslt");
 	private JMenu d = new JMenu("D");
+	private JMenuItem daw = new JMenuItem("daw");
 	private JMenuItem dcfsnz = new JMenuItem("dcfsnz");
 	private JMenuItem decf = new JMenuItem("decf");
 	private JMenuItem decfsz = new JMenuItem("decfsz");
@@ -118,6 +120,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem incfsz = new JMenuItem("incfsz");
 	private JMenuItem infsnz = new JMenuItem("infsnz");
 	private JMenuItem iorwf = new JMenuItem("iorwf");
+	private JMenuItem iorlw = new JMenuItem("iorlw");
 	private JMenu l = new JMenu("L");
 	private JMenuItem lfsr = new JMenuItem("lfsr");
 	private JMenu m = new JMenu("M");
@@ -135,14 +138,24 @@ public class MainWindow extends JFrame{
 	private JMenuItem rcall = new JMenuItem("rcall");
 	private JMenuItem returnItem = new JMenuItem("return");
 	private JMenuItem rlcf = new JMenuItem("rlcf");
-	private JMenuItem rlfnc = new JMenuItem("rlfnc");
+	private JMenuItem rlncf = new JMenuItem("rlncf");
+	private JMenuItem rrcf = new JMenuItem("rrcf");
+	private JMenuItem rrncf = new JMenuItem("rrncf");
 	private JMenu s = new JMenu("S");
+	private JMenuItem setf = new JMenuItem("setf");
+	private JMenuItem swapf = new JMenuItem("swapf");
 	private JMenuItem sublw = new JMenuItem("sublw");
-
+	private JMenu t = new JMenu("T");
+	private JMenuItem tstfsz = new JMenuItem("tstfsz");
+	private JMenu x = new JMenu("X");
+	private JMenuItem xorlw = new JMenuItem("xorlw");
+	private JMenuItem xorwf = new JMenuItem("xorwf");
 	
 	private JMenu aID = new JMenu("A");
+	private JMenuItem addlwIDItem = new JMenuItem("addlw");
 	private JMenuItem addwfcIDItem = new JMenuItem("addwfc");
 	private JMenuItem addwfIDItem = new JMenuItem("addwf");
+	private JMenuItem andwfIDItem = new JMenuItem("andwf");
 	private JMenu bID = new JMenu("B");
 	private JMenuItem bcIDItem = new JMenuItem("bc");
 	private JMenuItem bcfIDItem = new JMenuItem("bcf");
@@ -163,6 +176,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem cpfsgtIDItem = new JMenuItem("cpfsgt");
 	private JMenuItem cpfsltIDItem = new JMenuItem("cpfslt");
 	private JMenu dID = new JMenu("D");
+	private JMenuItem dawIDItem = new JMenuItem("daw");
 	private JMenuItem dcfsnzIDItem	= new JMenuItem("dcfsnz");
 	private JMenuItem decfIDItem = new JMenuItem("decf");
 	private JMenuItem decfszIDItem	= new JMenuItem("decfsz");
@@ -170,6 +184,7 @@ public class MainWindow extends JFrame{
 	private JMenuItem incfIDItem = new JMenuItem("incf");
 	private JMenuItem incfszIDItem = new JMenuItem("incfsz");
 	private JMenuItem infsnzIDItem = new JMenuItem("infsnz");
+	private JMenuItem iorlwIDItem = new JMenuItem("iorlw");
 	private JMenuItem iorwfIDItem = new JMenuItem("iorwf");
 	private JMenu mID = new JMenu("M");
 	private JMenuItem movfIDItem = new JMenuItem("movf");
@@ -179,9 +194,18 @@ public class MainWindow extends JFrame{
 	private JMenuItem mullwIDItem = new JMenuItem("mullw");
 	private JMenu rID = new JMenu("R");
 	private JMenuItem rlcfIDItem = new JMenuItem("rlcf");
-	private JMenuItem rlfncIDItem = new JMenuItem("rlfnc");
+	private JMenuItem rlncfIDItem = new JMenuItem("rlncf");
+	private JMenuItem rrcfIDItem = new JMenuItem("rrcf");
+	private JMenuItem rrncfIDItem = new JMenuItem("rrncf");
 	private JMenu sID = new JMenu("S");
+	private JMenuItem setfIDItem = new JMenuItem("setf");
 	private JMenuItem sublwIDItem = new JMenuItem("sublw");
+	private JMenuItem swapfIDItem = new JMenuItem("swapf");
+	private JMenu tID = new JMenu("T");
+	private JMenuItem tstfszIDItem = new JMenuItem("tstfsz");
+	private JMenu xID = new JMenu("X");
+	private JMenuItem xorlwIDItem = new JMenuItem("xorlw");
+	private JMenuItem xorwfIDItem = new JMenuItem("xorwf");
 
 	private JMenu generalConcepts = new JMenu("General Concepts");
 	private JMenu indirectAddressing = new JMenu("Indirect Addressing");
@@ -273,6 +297,8 @@ public class MainWindow extends JFrame{
 		basic.add(n);
 		basic.add(r);
 		basic.add(s);
+		basic.add(t);
+		basic.add(x);
 		a.add(addlw);
 		addlw.addActionListener(new ExampleAction("basic", "addlw"));
 		a.add(addwf);
@@ -281,6 +307,8 @@ public class MainWindow extends JFrame{
 		addwfc.addActionListener(new ExampleAction("basic", "addwfc"));
 		a.add(andlw);
 		andlw.addActionListener(new ExampleAction("basic","andlw"));
+		a.add(andwf);
+		andwf.addActionListener(new ExampleAction("basic", "andwf"));
 		b.add(bc);
 		bc.addActionListener(new ExampleAction("basic","bc"));
 		b.add(bcf);
@@ -319,6 +347,8 @@ public class MainWindow extends JFrame{
 		cpfsgt.addActionListener(new ExampleAction("basic","cpfsgt"));
 		c.add(cpfslt);
 		cpfslt.addActionListener(new ExampleAction("basic","cpfslt"));
+		d.add(daw);
+		daw.addActionListener(new ExampleAction("basic","daw"));
 		d.add(dcfsnz);
 		dcfsnz.addActionListener(new ExampleAction("basic","dcfsnz"));
 		d.add(decf);
@@ -333,6 +363,8 @@ public class MainWindow extends JFrame{
 		incfsz.addActionListener(new ExampleAction("basic", "incfsz"));
 		i.add(infsnz);
 		infsnz.addActionListener(new ExampleAction("basic", "infsnz"));
+		i.add(iorlw);
+		iorlw.addActionListener(new ExampleAction("basic","iorlw"));
 		i.add(iorwf);
 		iorwf.addActionListener(new ExampleAction("basic","iorwf"));
 		l.add(lfsr);
@@ -361,10 +393,24 @@ public class MainWindow extends JFrame{
 		returnItem.addActionListener(new ExampleAction("basic", "return"));
 		r.add(rlcf);
 		rlcf.addActionListener(new ExampleAction("basic", "rlcf"));
-		r.add(rlfnc);
-		rlfnc.addActionListener(new ExampleAction("basic", "rlfnc"));
+		r.add(rlncf);
+		rlncf.addActionListener(new ExampleAction("basic", "rlfnc"));
+		r.add(rrcf);
+		rrcf.addActionListener(new ExampleAction("basic", "rrcf"));
+		r.add(rrncf);
+		rrncf.addActionListener(new ExampleAction("basic", "rrncf"));
+		s.add(setf);
+		setf.addActionListener(new ExampleAction("basic", "setf"));
 		s.add(sublw);
 		sublw.addActionListener(new ExampleAction("basic", "sublw"));
+		s.add(swapf);
+		swapf.addActionListener(new ExampleAction("basic", "swapf"));
+		t.add(tstfsz);
+		tstfsz.addActionListener(new ExampleAction("basic", "tstfsz"));
+		x.add(xorlw);
+		xorlw.addActionListener(new ExampleAction("basic","xorlw"));
+		x.add(xorwf);
+		xorwf.addActionListener(new ExampleAction("basic","xorwf"));
 		
 		inDepth.add(aID);
 		inDepth.add(bID);
@@ -375,10 +421,16 @@ public class MainWindow extends JFrame{
 		inDepth.add(nID);
 		inDepth.add(rID);
 		inDepth.add(sID);
+		inDepth.add(tID);
+		inDepth.add(xID);
+		aID.add(addlwIDItem);
+		addlwIDItem.addActionListener(new ExampleAction("inDepth", "addlw"));
 		aID.add(addwfcIDItem);
 		addwfcIDItem.addActionListener(new ExampleAction("inDepth", "addwfc"));
 		aID.add(addwfIDItem);
 		addwfIDItem.addActionListener(new ExampleAction("inDepth", "addwf"));
+		aID.add(andwfIDItem);
+		andwfIDItem.addActionListener(new ExampleAction("inDepth", "andwf"));
 		bID.add(bcIDItem);
 		bcIDItem.addActionListener(new ExampleAction("inDepth", "bc"));
 		bID.add(bcfIDItem);
@@ -413,6 +465,8 @@ public class MainWindow extends JFrame{
 		cpfsgtIDItem.addActionListener(new ExampleAction("inDepth", "cpfsgt"));
 		cID.add(cpfsltIDItem);
 		cpfsltIDItem.addActionListener(new ExampleAction("inDepth", "cpfslt"));
+		dID.add(dawIDItem);
+		dawIDItem.addActionListener(new ExampleAction("inDepth", "daw"));
 		dID.add(dcfsnzIDItem);
 		dcfsnzIDItem.addActionListener(new ExampleAction("inDepth", "dcfsnz"));
 		dID.add(decfIDItem);
@@ -425,6 +479,8 @@ public class MainWindow extends JFrame{
 		incfszIDItem.addActionListener(new ExampleAction("inDepth", "incfsz"));
 		iID.add(infsnzIDItem);
 		infsnzIDItem.addActionListener(new ExampleAction("inDepth", "infsnz"));
+		iID.add(iorlwIDItem);
+		iorlwIDItem.addActionListener(new ExampleAction("inDepth", "iorlw"));
 		iID.add(iorwfIDItem);
 		iorwfIDItem.addActionListener(new ExampleAction("inDepth", "iorwf"));
 		mID.add(movfIDItem);
@@ -437,10 +493,24 @@ public class MainWindow extends JFrame{
 		negfIDItem.addActionListener(new ExampleAction("inDepth", "negf"));
 		rID.add(rlcfIDItem);
 		rlcfIDItem.addActionListener(new ExampleAction("inDepth", "rlcf"));
-		rID.add(rlfncIDItem);
-		rlfncIDItem.addActionListener(new ExampleAction("inDepth", "rlfnc"));
+		rID.add(rlncfIDItem);
+		rlncfIDItem.addActionListener(new ExampleAction("inDepth", "rlncf"));
+		rID.add(rrcfIDItem);
+		rrcfIDItem.addActionListener(new ExampleAction("inDepth", "rrcf"));
+		rID.add(rrncfIDItem);
+		rrncfIDItem.addActionListener(new ExampleAction("inDepth", "rrncf"));
+		sID.add(setfIDItem);
+		setfIDItem.addActionListener(new ExampleAction("inDepth", "setf"));
 		sID.add(sublwIDItem);
 		sublwIDItem.addActionListener(new ExampleAction("inDepth", "sublw"));
+		sID.add(swapfIDItem);
+		swapfIDItem.addActionListener(new ExampleAction("inDepth", "swapf"));
+		tID.add(tstfszIDItem);
+		tstfszIDItem.addActionListener(new ExampleAction("inDepth", "tstfsz"));
+		xID.add(xorlwIDItem);
+		xorlwIDItem.addActionListener(new ExampleAction("inDepth", "xorlw"));
+		xID.add(xorwfIDItem);
+		xorwfIDItem.addActionListener(new ExampleAction("inDepth", "xorwf"));
 		
 		examples.add(generalConcepts);
 		generalConcepts.add(indirectAddressing);

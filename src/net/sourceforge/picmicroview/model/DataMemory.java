@@ -111,6 +111,10 @@ public class DataMemory {
 		indfs.add((Integer)0x0e2);	//FSR1H
 		indfs.add((Integer)0x0d9);	//FSR2L
 		indfs.add((Integer)0x0da);	//FSR2H
+		
+//		System.out.println("gmMem[0x09a] is object of type: " + gpMem[0x09a].getClass() + " " + gpMem[0x09a]);
+//		System.out.println("gmMem[0xf9a] is object of type: " + gpMem[0xf9a].getClass() + " " + gpMem[0xf9a]);
+//		System.out.println("gmMem[0xf8a] is object of type: " + gpMem[0xf8a].getClass() + " " + gpMem[0xf8a]);
 	}
 	
 	int read(int address){
@@ -137,7 +141,8 @@ public class DataMemory {
 		}
 		gpMem[0x080] = gpMem[0xf80] = new PortA(pic18, 0xf80, "portA");
 //		gpMem[0x080].printInfo();
-//		System.out.println("gmMem[0x080] is object of type: " + gpMem[0x080].getClass());
+//		System.out.println("gmMem[0x080] is object of type: " + gpMem[0x080].getClass() + " " + gpMem[0x080] + " " + porta);
+//		System.out.println("gmMem[0xf80] is object of type: " + gpMem[0xf80].getClass() + " " + gpMem[0xf80]);
 		gpMem[0x081] = gpMem[0xf81] = new PortB(pic18, 0xf81, "portB");
 		gpMem[0x082] = gpMem[0xf82] = new PortC(pic18, 0xf82, "portC");
 		gpMem[0x083] = gpMem[0xf83] = new PortD(pic18, 0xf83, "portD");

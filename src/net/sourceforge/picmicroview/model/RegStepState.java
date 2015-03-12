@@ -16,7 +16,12 @@ public class RegStepState implements RegisterState {
 //		System.out.println("in RegStepState.write(value), writing " + Integer.toHexString(value) + " to "
 //				+ register.name + " at " + Integer.toHexString(register.address));
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
-
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 
 	@Override
@@ -25,17 +30,35 @@ public class RegStepState implements RegisterState {
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
 //		System.out.println("in RegStepState.write(value, r), writing " + Integer.toHexString(value) + " to "
 //				+ register.name + " at " + Integer.toHexString(register.address));
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 
 	@Override
 	public void clear() {
 		register.contents = 0;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 	
 	public void clear(Register r){
 		register.contents = 0;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 
 	@Override
@@ -45,6 +68,12 @@ public class RegStepState implements RegisterState {
 //		System.out.println("in RegStepState.setBit(bit), setting bit " + bit + " in "
 //				+ register.name + " at " + Integer.toHexString(register.address));
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 	
 	public void setBit(int bit, Register r){
@@ -53,6 +82,12 @@ public class RegStepState implements RegisterState {
 		System.out.println("in RegStepState.setBit(bit, r), setting bit " + bit + " in "
 				+ register.name + " at " + Integer.toHexString(register.address));
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 
 	@Override
@@ -64,6 +99,12 @@ public class RegStepState implements RegisterState {
 //		System.out.println("in RegStepState, clearing bit " + bit + " of " + register.name + " " + Integer.toHexString(register.address));
 		register.contents = register.contents & andValue;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 
 	}
 	
@@ -75,6 +116,12 @@ public class RegStepState implements RegisterState {
 //		System.out.println("in RegStepState, clearing bit " + bit + " of " + register.name + " " + Integer.toHexString(register.address));
 		register.contents = register.contents & andValue;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 
 	@Override
@@ -82,12 +129,24 @@ public class RegStepState implements RegisterState {
 		register.contents--;
 		register.contents = register.contents & 0xff;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 	
 	public void decrement(Register r){
 		register.contents--;
 		register.contents = register.contents & 0xff;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 
 	@Override
@@ -95,12 +154,24 @@ public class RegStepState implements RegisterState {
 		register.contents++;
 		register.contents = register.contents & 0xff;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 	
 	public void increment(Register r){
 		register.contents++;
 		register.contents = register.contents & 0xff;
 		register.pic18.changes.add((Integer)register.address);	//tracks changes pic state during instruction
+		
+		//if register is also mapped to access memory, reports change for that address as well
+		//so that it will highlight in both places in data memory table
+		if((register.address >= 0xf80) && (register.address <= 0xfff)){
+			register.pic18.changes.add((Integer)register.address & 0x0ff);
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-gpasm-0.13.7 beta               bsf.asm     3-5-2015  10:54:26           PAGE  1
+gpasm-0.13.7 beta               bsf.asm     3-11-2015  13:44:32          PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -6,8 +6,8 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
  
                00001 ;;;;;;; bsf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00002 ;
-               00003 ;This program tests operation of bsf instruction. Tests instruction according
-               00004 ;to pic18 user manual examples.
+               00003 ;This program tests operation of bsf instruction according to pic18 user
+               00004 ;manual examples. Bsf sets bit b in register f.
                00005 ;
                00006 ;
                00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,174 +25,46 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00016 
                00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00018 
-               00019         cblock  0x100           ;Beginning of Access RAM
-               00020         temp0                   ;This many registers are necessary so that the 
-               00021         temp1                   ;test can satisfy the condition in the manual
-               00022         temp2                   ;that the assembler determine that FLAG_REG 
-               00023         temp3                   ;requires access bit to be set for the first 
-               00024         temp4                   ;example. Otherwise, the "a" flag could have 
-               00025         temp5                   ;been used in the instruction "bsf FLAG_REG, 7"
-               00026         temp6                   ;like so: "bsf FLAG_REG, 7, 1". Assigns FLAG_REG
-               00027         temp7                   ;address 0x180 instead of 0x080 so that SFR's 
-               00028         temp8                   ;which are mapped to 0x80 - 0xff are not overwritten.
-               00029         temp9
-               00030         temp10
-               00031         temp11
-               00032         temp12
-               00033         temp13
-               00034         temp14
-               00035         temp15
-               00036         temp16
-               00037         temp17
-               00038         temp18
-               00039         temp19
-               00040         temp20
-               00041         temp21
-               00042         temp22
-               00043         temp23
-               00044         temp24
-               00045         temp25
-               00046         temp26
-               00047         temp27
-               00048         temp28
-               00049         temp29
-               00050         temp30
-               00051         temp31
-               00052         temp32
-               00053         temp33
-               00054         temp34
-               00055         temp35
-               00056         temp36
-               00057         temp37
-               00058         temp38
-               00059         temp39
-               00060         temp40
-               00061         temp41
-               00062         temp42
-               00063         temp43
-               00064         temp44
-               00065         temp45
-               00066         temp46
-               00067         temp47
-               00068         temp48
-               00069         temp49
-               00070         temp50
-               00071         temp51
-               00072         temp52
-               00073         temp53
-               00074         temp54
-               00075         temp55
-               00076         temp56
-               00077         temp57
-               00078         temp58
-               00079         temp59
-               00080         temp60
-               00081         temp61
-               00082         temp62
-               00083         temp63
-               00084         temp64
-               00085         temp65
-               00086         temp66
-               00087         temp67
-               00088         temp68
-               00089         temp69
-               00090         temp70
-               00091         temp71
-               00092         temp72
-               00093         temp73
-               00094         temp74
-               00095         temp75
-               00096         temp76
-               00097         temp77
-               00098         temp78
-               00099         temp79
-               00100         temp80
-               00101         temp81
-               00102         temp82
-               00103         temp83
-               00104         temp84
-               00105         temp85
-               00106         temp86
-               00107         temp87
-               00108         temp88
-               00109         temp89
-               00110         temp90
-               00111         temp91
-               00112         temp92
-               00113         temp93
-               00114         temp94
-               00115         temp95
-               00116         temp96
-               00117         temp97
-               00118         temp98
-               00119         temp99
-               00120         temp100
-               00121         temp101
-               00122         temp102
-               00123         temp103
-               00124         temp104
-               00125         temp105
-               00126         temp106
-               00127         temp107
-               00128         temp108
-               00129         temp109
-               00130         temp110
-               00131         temp111
-               00132         temp112
-               00133         temp113
-               00134         temp114
-               00135         temp115
-               00136         temp116
-               00137         temp117
-               00138         temp118
-               00139         temp119
-               00140         temp120
-               00141         temp121
-               00142         temp122
-               00143         temp123
-               00144         temp124
-               00145         temp125
-               00146         temp126
-               00147         temp127
-               00148         FLAG_REG
-               00149         endc
-               00150 
-               00151 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00152 
-               00153 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00154 
-               00155 
-0000           00156         org  0x0000             ;Reset vector
-0000 0000      00157         nop
-0002 EF0E F000 00158         goto  Mainline
-               00159 
-0008           00160         org  0x0008             ;High priority interrupt vector
-0008 EF04 F000 00161         goto  $                 ;Trap
-               00162 
-0018           00163         org  0x0018             ;Low priority interrupt vector
-0018 EF0C F000 00164         goto  $                 ;Trap
-               00165 
-               00166 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00167 
-001C 00168 Mainline
-               00169 
-               00170 ;Example 1:
-001C 0101      00171                 movlb           1               ;Place 1 in BSR for bank 1
-001E 0E0A      00172                 movlw           10              ;Place 10 in wreg
-0020 6F80      00173                 movwf           FLAG_REG        ;Copy wreg value to FLAG_REG
-0022 8F80      00174                 bsf             FLAG_REG, 7     ;Set bit 7 of FLAG_REG
-               00175 
-               00176 ;Example 2:
-0024 0E20      00177                 movlw           0x20            ;Place 0x20 in wreg
-0026 EE00 F0C2 00178                 lfsr            0, 0x0c2        ;Place 0x0c2 in FSR0H:FSR0L
-002A 6EEF      00179                 movwf           INDF0           ;Copy wreg into register pointed to by FSR0
-002C 0E17      00180                 movlw           0x17            ;Place 0x17 in wreg
-002E 86EF      00181                 bsf             INDF0, 3        ;Set bit 3 in register pointed to 
-               00182                                                 ;by FSR0H:FSR0L
-               00183 
-               00184 
-0030 EF18 F000 00185 stop            goto            stop
-               00186 
+               00019         cblock  0x100           ;Bank 1 of Access RAM
+               00020         FLAG_REG
+               00021         endc
+               00022 
+               00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
+               00025 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
+               00027 
+0000           00028         org  0x0000             ;Reset vector
+0000 0000      00029         nop
+0002 EF0E F000 00030         goto  Mainline
+               00031 
+0008           00032         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00033         goto  $                 ;Trap
+               00034 
+0018           00035         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00036         goto  $                 ;Trap
+               00037 
+               00038 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00039 
+001C 00040 Mainline
+               00041 
+               00042 ;Example 1:
+001C 0101      00043                 movlb           1               ;Place 1 in BSR for bank 1
+001E 0E0A      00044                 movlw           10              ;Place 10 in wreg
+0020 6F00      00045                 movwf           FLAG_REG, 1     ;Copy wreg value to FLAG_REG
+0022 8F00      00046                 bsf             FLAG_REG, 7     ;Set bit 7 of FLAG_REG
+               00047 
+               00048 ;Example 2:
+0024 0E20      00049                 movlw           0x20            ;Place 0x20 in wreg
+0026 EE00 F0C2 00050                 lfsr            0, 0x0c2        ;Place 0x0c2 in FSR0H:FSR0L
+002A 6EEF      00051                 movwf           INDF0           ;Copy wreg into register pointed to by FSR0
+002C 0E17      00052                 movlw           0x17            ;Place 0x17 in wreg
+002E 86EF      00053                 bsf             INDF0, 3        ;Set bit 3 in register pointed to 
+               00054                                                 ;by FSR0H:FSR0L
+               00055 
+               00056 
+0030 EF18 F000 00057 stop            goto            stop
+               00058 
 
 
 Errors   :       0

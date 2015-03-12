@@ -1,4 +1,4 @@
-gpasm-0.13.7 beta               slowToggleAllPorts.asm3-4-2015  06:34:10           PAGE  1
+gpasm-0.13.7 beta               slowToggleAllPorts.asm3-10-2015  20:28:47          PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -18,76 +18,71 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00001         LIST
                00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
                00983         LIST
-300000 FAFF    00012         __CONFIG  _CONFIG1H, _HS_OSC_1H  ;HS oscillator
-               00013         __CONFIG  _CONFIG2L, _PWRT_ON_2L & _BOR_ON_2L & _BORV_42_2L  ;Reset
-300002 FEF6    00014         __CONFIG  _CONFIG2H, _WDT_OFF_2H  ;Watchdog timer disabled
-300004 FFFF    00015         __CONFIG  _CONFIG3H, _CCP2MX_ON_3H  ;CCP2 to RC1 (rather than to RB3)
-300006 FFFB    00016         __CONFIG  _CONFIG4L, _LVP_OFF_4L  ;RB5 enabled for I/O
-               00017 
-               00018 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00019 
-               00020                         cblock  0x000           ;Beginning of Access RAM
-               00021                         temp
-               00022                         temp1
-               00023                         temp2
-               00024                         endc
+               00012 
+               00013 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015                         cblock  0x000           ;Beginning of Access RAM
+               00016                         temp
+               00017                         temp1
+               00018                         temp2
+               00019                         endc
+               00020 
+               00021 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00022 
+               00023 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
                00025 
-               00026 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00027 
-               00028 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0000           00026         org  0x0000             ;Reset vector
+0000 0000      00027         nop
+0002 EF0E F000 00028         goto  Mainline
                00029 
-               00030 
-0000           00031         org  0x0000             ;Reset vector
-0000 0000      00032         nop
-0002 EF0E F000 00033         goto  Mainline
-               00034 
-0008           00035         org  0x0008             ;High priority interrupt vector
-0008 EF04 F000 00036         goto  $                 ;Trap
+0008           00030         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00031         goto  $                 ;Trap
+               00032 
+0018           00033         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00034         goto  $                 ;Trap
+               00035 
+               00036 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                00037 
-0018           00038         org  0x0018             ;Low priority interrupt vector
-0018 EF0C F000 00039         goto  $                 ;Trap
-               00040 
-               00041 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-               00042 
-001C 00043 Mainline
-001C 0E00      00044                 movlw           0
-001E 6E80      00045                 movwf           PORTA
-0020 6E81      00046                 movwf           PORTB
-0022 6E82      00047                 movwf           PORTC
-0024 6E83      00048                 movwf           PORTD
-0026 6E84      00049                 movwf           PORTE
-               00050 
-0028 0E27      00051 wrap            movlw           39
-002A 6E00      00052                 movwf           temp
-002C 0600      00053 decw            decf            temp, f
-002E E00E      00054                 bz              toggle
-0030 EF1A F000 00055                 goto            outer
-               00056                 
-0034 0EFF      00057 outer           movlw           255
-0036 6E01      00058                 movwf           temp1
-0038 0601      00059 dec1            decf            temp1, f
-003A E0F8      00060                 bz              decw
-003C D802      00061 rc              rcall           inner
-003E EF1C F000 00062                 goto            dec1
-0042 0EFF      00063 inner           movlw           255
-0044 6E02      00064                 movwf           temp2
-0046 0602      00065 dec             decf            temp2, f
-0048 E1FE      00066                 bnz             dec
-004A 0012      00067                 return
-               00068 
-004C 7480      00069 toggle          btg             PORTA, RA2
-004E 7681      00070                 btg             PORTB, RA3
-0050 7882      00071                 btg             PORTC, RA4
-0052 7A83      00072                 btg             PORTD, RA5
-0054 7284      00073                 btg             PORTE, RA1
-0056 7C80      00074                 btg             PORTA, RA6
-0058 7C81      00075                 btg             PORTB, RA6
-005A 7A82      00076                 btg             PORTC, RA5
-005C 7883      00077                 btg             PORTD, RA4
-005E 7C84      00078                 btg             PORTE, RA6
-0060 EF14 F000 00079                 goto            wrap
-0064 EF32 F000 00080 stop            goto            stop
-               00081 
+001C 00038 Mainline
+001C 0E00      00039                 movlw           0
+001E 6E80      00040                 movwf           PORTA
+0020 6E81      00041                 movwf           PORTB
+0022 6E82      00042                 movwf           PORTC
+0024 6E83      00043                 movwf           PORTD
+0026 6E84      00044                 movwf           PORTE
+               00045 
+0028 0E27      00046 wrap            movlw           39
+002A 6E00      00047                 movwf           temp
+002C 0600      00048 decw            decf            temp, f
+002E E00E      00049                 bz              toggle
+0030 EF1A F000 00050                 goto            outer
+               00051                 
+0034 0EFF      00052 outer           movlw           255
+0036 6E01      00053                 movwf           temp1
+0038 0601      00054 dec1            decf            temp1, f
+003A E0F8      00055                 bz              decw
+003C D802      00056 rc              rcall           inner
+003E EF1C F000 00057                 goto            dec1
+0042 0EFF      00058 inner           movlw           255
+0044 6E02      00059                 movwf           temp2
+0046 0602      00060 dec             decf            temp2, f
+0048 E1FE      00061                 bnz             dec
+004A 0012      00062                 return
+               00063 
+004C 7480      00064 toggle          btg             PORTA, RA2
+004E 7681      00065                 btg             PORTB, RA3
+0050 7882      00066                 btg             PORTC, RA4
+0052 7A83      00067                 btg             PORTD, RA5
+0054 7284      00068                 btg             PORTE, RA1
+0056 7C80      00069                 btg             PORTA, RA6
+0058 7C81      00070                 btg             PORTB, RA6
+005A 7A82      00071                 btg             PORTC, RA5
+005C 7883      00072                 btg             PORTD, RA4
+005E 7C84      00073                 btg             PORTE, RA6
+0060 EF14 F000 00074                 goto            wrap
+0064 EF32 F000 00075 stop            goto            stop
+               00076 
 
 
 Errors   :       0

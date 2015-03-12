@@ -1,0 +1,113 @@
+gpasm-0.13.7 beta               tstfsz.asm  3-11-2015  12:55:21          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; tstfsz.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of tstfsz according to the examples in the 
+               00004 ;pic18 user manual. Tstfsz tests the contents of register f and skips the 
+               00005 ;next instruction if contents = 0. 
+               00006 ;
+               00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00008 ;
+               00009 ; Mainline
+               00010 ;  
+               00011 ;
+               00012 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00013 
+               00014         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00015         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00016 
+               00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00018 
+               00019         cblock  0x000           ;Beginning of Access RAM
+               00020         REG1
+               00021         endc
+               00022 
+               00023         cblock  0x09a
+               00024         REG2
+               00025         endc
+               00026 
+               00027 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00028 
+               00029 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00030 
+               00031 
+0000           00032         org  0x0000             ;Reset vector
+0000 0000      00033         nop
+0002 EF0E F000 00034         goto  Mainline
+               00035 
+0008           00036         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00037         goto  $                 ;Trap
+               00038 
+0018           00039         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00040         goto  $                 ;Trap
+               00041 
+               00042 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00043 
+001C 00044 Mainline
+               00045 
+               00046 ;Example 1A, 2:
+               00047 
+001C 0101      00048                 movlb   0x01            ;Set BSR to 0x01 for banked addressing
+001E 0EAF      00049                 movlw   0xaf            ;Place 0xaf in wreg
+0020 6F00      00050                 movwf   REG1, 1         ;Copy wreg value into REG1
+0022 6700      00051 HERE            tstfsz  REG1, 1         ;Test register f, if zero skip next instruction
+0024 EF16 F000 00052 NZERO           goto    PROCESS_CODE
+0028 EF1B F000 00053 ZERO            goto    MORE_CODE
+               00054 
+               00055 
+002C 0000      00056 PROCESS_CODE    nop                     ;Came to PROCESS_CODE since value in f is not 0
+002E 0E00      00057                 movlw   0x00            ;Place 0x00 in wreg
+0030 6F00      00058                 movwf   REG1, 1         ;Copy wreg value into REG1
+0032 EF11 F000 00059                 goto    HERE
+               00060 
+               00061 ;Example 3:
+               00062 ;Cases 1, 2:
+               00063 
+0036 010F      00064 MORE_CODE       movlb   0x0f            ;Select bank 15 of data memory
+0038 0E00      00065                 movlw   0x00            ;Place 0x00 in wreg
+003A 6F9A      00066                 movwf   REG2, 1         ;Copy contents of wreg into 0xf9a and 0x09a
+003C 0103      00067                 movlb   0x03            ;Select bank 3 of data memory
+003E 0EAF      00068                 movlw   0xaf            ;Place 0xaf in wreg
+0040 6F9A      00069                 movwf   REG2, 1         ;Copy contents of wreg into 0x39a
+               00070 
+0042 669A      00071 HERE_3          tstfsz  REG2, 0         ;Test register f, if zero skip next instruction
+0044 EF2D F000 00072 NZERO_3         goto    EXAMPLE_4
+0048 EF26 F000 00073 ZERO_3          goto    AGAIN
+               00074 
+004C 0E00      00075 AGAIN           movlw   0x00            ;Place 0x00 in wreg
+004E 6F9A      00076                 movwf   REG2, 1         ;Copy contents of wreg to 0x39a
+0050 010F      00077                 movlb   0x0f            ;Select bank 15 of data memory
+0052 0EAF      00078                 movlw   0xaf            ;Place 0xaf in wreg
+0054 6F9A      00079                 movwf   REG2, 1         ;Copy wreg to 0xf9a
+0056 EF21 F000 00080                 goto    HERE_3
+               00081 
+               00082 ;Example 4:
+               00083 ;Cases 1, 2:
+               00084 
+005A EE06 F0C2 00085 EXAMPLE_4       lfsr    0, 0x6c2        ;Place 0x6c2 in FSR0
+005E 0EAF      00086                 movlw   0xaf            ;Place 0xaf in wreg
+0060 6EEF      00087                 movwf   INDF0           ;Copy wreg to register pointed to by FSR0
+0062 67EF      00088 HERE_4          tstfsz  INDF0, 1        ;If contents of register pointed to by FSR0 is 
+               00089                                         ;zero, skip next program memory address
+0064 EF36 F000 00090 NZERO_4         goto    CONTINUE
+0068 EF3A F000 00091 ZERO_4          goto    stop
+006C 0E00      00092 CONTINUE        movlw   0x00            ;Place 0x00 in wreg
+006E 6EEF      00093                 movwf   INDF0           ;Copy wreg to register pointed to by FSR0
+0070 EF31 F000 00094                 goto    HERE_4
+               00095 
+               00096 
+0074 EF3A F000 00097 stop    goto    stop
+               00098 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

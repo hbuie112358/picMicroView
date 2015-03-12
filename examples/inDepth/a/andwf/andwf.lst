@@ -1,0 +1,105 @@
+gpasm-0.13.7 beta               andwf.asm   3-11-2015  14:56:10          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;;andwf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of the andwf instruction using the examples starting
+               00004 ;on page 680 of the PIC 18 user manual. Andwf performs an AND operation of the contents
+               00005 ;of wreg and contents of register f.
+               00006 ;
+               00007 ;
+               00008 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00009 ;
+               00010 ; Mainline
+               00011 ;  
+               00012 ;
+               00013 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00014 
+               00015         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00016         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00017 
+               00018 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00019 
+               00020         cblock  0x000           ;Beginning of Access RAM
+               00021         REG1
+               00022         endc
+               00023 
+               00024 
+               00025 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
+               00027 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00028 
+               00029 
+0000           00030         org  0x0000             ;Reset vector
+0000 0000      00031         nop
+0002 EF0E F000 00032         goto  Mainline
+               00033 
+0008           00034         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00035         goto  $                 ;Trap
+               00036 
+0018           00037         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00038         goto  $                 ;Trap
+               00039 
+               00040 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00041 
+               00042 
+               00043 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00044 ;See manual chapter 31 for more detail on individual instructions
+               00045 ;Syntax:        andwf   f, d, a         (register, destination register, bank select)
+               00046                                         ;"d", "a" both default to 0. For d, can use "f" 
+               00047                                         ;instead of 1, can use "w" instead of 0.
+               00048 
+               00049 ;               movwf   f, a            (register, bank select)
+               00050 ;               movlw   k               (literal)
+               00051 ;               movlb   k               (literal)
+               00052 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+001C 00053 Mainline
+               00054 
+               00055 ;Example 1:
+               00056 
+001C 0101      00057         movlb   1               ;Set BSR to bank 1
+001E 0EC2      00058         movlw   0xc2            ;Place 0xc2 in wreg
+0020 6F00      00059         movwf   REG1, 1         ;Copy wreg to REG1
+0022 0E17      00060         movlw   0x17            ;Place 0x17 in wreg
+0024 1700      00061         andwf   REG1, 1, 1      ;And contents of REG1 with wreg, result in REG1
+               00062 
+               00063 ;Example 2:
+               00064         
+0026 0EC2      00065         movlw   0xc2            ;Place 0xc2 in wreg
+0028 6F00      00066         movwf   REG1, 1         ;Copy wreg to REG1
+002A 0E17      00067         movlw   0x17            ;Place 0x17 in wreg
+002C 1500      00068         andwf   REG1, 0, 1      ;And contents of REG1 with wreg, result in wreg
+               00069 
+               00070 ;Example 3:
+               00071 ;Case 1:
+               00072 
+002E EE0F F0C2 00073         lfsr    0, 0xfc2        ;Place 0xfc2 in FSR0
+0032 0E5A      00074         movlw   0x5a            ;Place 0x5a in wreg
+0034 6EEF      00075         movwf   INDF0           ;Copy wreg value into location pointed to by FSR0
+0036 0E17      00076         movlw   0x17            ;Place 0x17 in wreg
+0038 17EF      00077         andwf   INDF0, 1, 1     ;Using banked addressing, and contents of register 
+               00078                                 ;pointed to by FSR0 with wreg, result in INDF0
+               00079         
+               00080 ;Case 2:
+               00081 
+003A EE04 F0C2 00082         lfsr    0, 0x4c2        ;Place 0x4c2 in FSR0
+003E 0E5A      00083         movlw   0x5a            ;Place 0x5a in wreg
+0040 6EEF      00084         movwf   INDF0           ;Copy wreg value into location pointed to by FSR0
+0042 0E00      00085         movlw   0x00            ;Place 0x00 in wreg
+0044 17EF      00086         andwf   INDF0, 1, 1     ;Using banked addressing, and contents of register 
+               00087                                 ;pointed to by FSR0 with wreg, result in INDF0
+               00088 
+0046 EF23 F000 00089 stop    goto            stop
+               00090 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

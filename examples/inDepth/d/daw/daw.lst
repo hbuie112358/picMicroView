@@ -1,0 +1,103 @@
+gpasm-0.13.7 beta               daw.asm     3-11-2015  18:43:39          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;;daw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of the daw instruction. Daw adjusts the eight 
+               00004 ;bit value in wreg to produce a packed bcd result.
+               00005 ;
+               00006 ;
+               00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00008 ;
+               00009 ; Mainline
+               00010 ;  
+               00011 ;
+               00012 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00013 
+               00014         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00015         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00016 
+               00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00018 
+               00019         cblock  0x000           ;Beginning of Access RAM
+               00020         REG1
+               00021         endc
+               00022 
+               00023 
+               00024 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00025 
+               00026 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00027 
+               00028 
+0000           00029         org  0x0000             ;Reset vector
+0000 0000      00030         nop
+0002 EF0E F000 00031         goto  Mainline
+               00032 
+0008           00033         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00034         goto  $                 ;Trap
+               00035 
+0018           00036         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00037         goto  $                 ;Trap
+               00038 
+               00039 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00040 
+               00041 
+               00042 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00043 ;See manual chapter 31 for more detail on individual instructions
+               00044 ;Syntax:        daw
+               00045 
+               00046 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+001C 00047 Mainline
+               00048 
+               00049 ;Example 1:
+               00050 ;Case 1:
+               00051 
+001C 0E09      00052         movlw   0x09            ;Place 0x09 in wreg (as packed BCD number 09)
+001E 6E00      00053         movwf   REG1            ;Copy wreg to REG1
+0020 0E05      00054         movlw   0x05            ;Place 0x05 in wreg (as packed BCD number 05)
+0022 2400      00055         addwf   REG1, 0         ;Add wreg and REG1, result in wreg (result is 0x0d)
+0024 0007      00056         daw                     ;Decimal adjust wreg, result is packed BCD number 14
+               00057 
+               00058 ;Case 2:
+               00059         
+0026 0E48      00060         movlw   0x48            ;Place 0x48 in wreg (as packed BCD number 48)
+0028 6E00      00061         movwf   REG1            ;Copy wreg to REG1
+002A 0E47      00062         movlw   0x47            ;Place 0x47 in wreg (as packed BCD number 47)
+002C 2400      00063         addwf   REG1, 0         ;Add wreg and REG1, result in wreg (result is 0x8f)
+002E 0007      00064         daw                     ;Decimal adjust wreg, result is packed BCD number 95
+               00065 
+               00066 ;Case 3:
+               00067 
+0030 0E42      00068         movlw   0x42            ;Place 0x42 in wreg (as packed BCD number 42)
+0032 6E00      00069         movwf   REG1            ;Copy wreg to REG1
+0034 0E97      00070         movlw   0x97            ;Place 0x97 in wreg (as packed BCD number 97)
+0036 2400      00071         addwf   REG1, 0         ;Add wreg and REG1, result in wreg (result is 0xd9)
+0038 0007      00072         daw                     ;Decimal adjust wreg, result is 139, with packed BCD
+               00073                                 ;number 39 in wreg and the 1 represented in status 
+               00074                                 ;register carry bit.
+               00075 
+               00076 ;Case 4:
+               00077 
+003A 0E97      00078         movlw   0x97            ;Place 0x97 in wreg (as packed BCD number 97)
+003C 6E00      00079         movwf   REG1            ;Copy wreg to REG1
+003E 2400      00080         addwf   REG1, 0         ;Add wreg and REG1, result in wreg (result is 0x2e),
+               00081                                 ;with status register carry bit set
+0040 0007      00082         daw                     ;Decimal adjust wreg, result is 194, with packed BCD
+               00083                                 ;number 94 in wreg and the 1 represented in status 
+               00084                                 ;register carry bit.
+               00085 
+               00086 
+0042 EF21 F000 00087 stop    goto            stop
+               00088 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

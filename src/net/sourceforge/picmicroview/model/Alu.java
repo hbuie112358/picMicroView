@@ -8,7 +8,7 @@ public class Alu {
 	private int result;
 //	private int address;
 	private int twosComp;
-	private int freg, wreg, carry, origValue;
+	private int freg, wreg, carry, origValue, lowNibble, highNibble;
 	private boolean dc, ov;
 //	private int highByte;
 //	private int bsrVal = 0;
@@ -119,6 +119,17 @@ public class Alu {
 		//System.out.println("status register is " + Integer.toBinaryString(pic18.dataMem.status.read()));
 	}
 	
+	public void execute(Andwf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		result = (pic18.dataMem.gpMem[freg].read() & pic18.dataMem.wreg.read());
+		//if bit 9 of instruction is high, write result to f register
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
+	}
+	
 	public void execute(Clrf instruction){
 		freg = pic18.dataMem.getRegAddress(instruction.instruction);
 		pic18.dataMem.gpMem[freg].clear();
@@ -135,6 +146,25 @@ public class Alu {
 		else pic18.dataMem.wreg.write(result);
 		adjustZbit();
 		adjustNbit();
+	}
+	
+	public void execute(Daw instruction){
+		lowNibble = highNibble = 0;
+		wreg = pic18.dataMem.wreg.read();
+		if(((wreg & 0x0f) > 0x09) || pic18.dataMem.status.getBit(1) == 1){
+			lowNibble = (((wreg & 0x0f) + 0x06) & 0x0f);
+			highNibble = highNibble + 0x10;
+		}
+		else lowNibble = wreg & 0x0f;
+		if(((wreg & 0xf0) > 0x90) || pic18.dataMem.status.getBit(0) == 1){
+			highNibble = highNibble + (wreg & 0xf0) + 0x60;
+			pic18.dataMem.status.setBit(0);
+		}
+		else highNibble = highNibble + (wreg & 0xf0);
+		result = highNibble | lowNibble;
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
 	}
 	
 	public void execute(Decf instruction){	
@@ -169,6 +199,14 @@ public class Alu {
 		else pic18.dataMem.wreg.write(result);
 		adjustDCbit(origValue, 1);
 		adjustOVbit("", origValue, 1);
+		adjustZbit();
+		adjustNbit();
+	}
+	
+	public void execute(Iorlw instruction){
+		wreg = pic18.dataMem.wreg.read();
+		result = instruction.instruction | wreg;
+		pic18.dataMem.wreg.write(result);
 		adjustZbit();
 		adjustNbit();
 	}
@@ -238,7 +276,7 @@ public class Alu {
 		adjustNbit();
 	}
 	
-	public void execute(Rlfnc instruction){
+	public void execute(Rlncf instruction){
 		freg = pic18.dataMem.getRegAddress(instruction.instruction);
 		result = pic18.dataMem.gpMem[freg].read() << 1;
 		if((result & 0x100) == 0x100)
@@ -247,6 +285,35 @@ public class Alu {
 		
 		//if bit 9 of instruction is high, write result to f register
 		//else write to wreg
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
+	}
+	
+	public void execute(Rrcf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		carry = pic18.dataMem.status.getBit(0) << 8;
+		result = pic18.dataMem.gpMem[freg].read() | carry;
+		if((result & 0x01) == 0x01)
+			pic18.dataMem.status.setBit(0);
+		else pic18.dataMem.status.clearBit(0);
+		result = (result >> 1) & 0xff;
+		
+		//if bit 9 of instruction is high, write result to f register
+		//else write to wreg
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
+	}
+	
+	public void execute(Rrncf instruction){
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		result = pic18.dataMem.gpMem[freg].read();
+		result = (((result & 0x01) << 8) | result) >> 1;
 		if((instruction.instruction & 0x200) == 0x200) 
 			pic18.dataMem.gpMem[freg].write(result);
 		else pic18.dataMem.wreg.write(result);
@@ -268,6 +335,31 @@ public class Alu {
 		adjustZbit();
 		adjustNbit();
 		adjustCbit();
+	}
+	
+	public void execute(Xorlw instruction){
+		wreg = pic18.dataMem.wreg.read();
+		result = instruction.instruction ^ wreg;
+		pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
+	}
+	
+	public void execute(Xorwf instruction){
+		//get register address
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+//		System.out.println("in iorwf.movf, freg address is: " + Integer.toHexString(freg));
+		
+		//perform XOR function with wreg value
+		result = pic18.dataMem.wreg.read() ^ pic18.dataMem.gpMem[freg].read();
+		
+		//if bit 9 of instruction is high, write result to f register
+		//else write to wreg
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustZbit();
+		adjustNbit();
 	}
 	
 	private void adjustZbit(){

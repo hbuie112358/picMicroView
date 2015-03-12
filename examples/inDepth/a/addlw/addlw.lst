@@ -1,0 +1,89 @@
+gpasm-0.13.7 beta               addlw.asm   3-11-2015  13:30:52          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; addlw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of addlw instruction according to the examples in
+               00004 ;the pic18 user manual. Addlw adds a literal k to the contents of the wreg and 
+               00005 ;places result in wreg.
+               00006 ;
+               00007 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00008 ;
+               00009 ; Mainline
+               00010 ;  
+               00011 ;
+               00012 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00013 
+               00014         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00015         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00016 
+               00017 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00018 
+               00019         cblock  0x037           ;Beginning of Access RAM
+               00020         MYREG
+               00021         endc
+               00022 
+               00023 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00024 
+               00025 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00026 
+               00027 
+0000           00028         org  0x0000             ;Reset vector
+0000 0000      00029         nop
+0002 EF0E F000 00030         goto  Mainline
+               00031 
+0008           00032         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00033         goto  $                 ;Trap
+               00034 
+0018           00035         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00036         goto  $                 ;Trap
+               00037 
+               00038 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00039 
+001C 00040 Mainline
+               00041 
+001C 0E05      00042         movlw   5       ;Place 5 in wreg
+001E 0F0A      00043         addlw   10      ;Add 10, wreg, result in wreg (sum is 0x0f)
+               00044 
+               00045 ;Example 1:
+0020 0E18      00046         movlw   0x18    ;Place 0x18 in wreg
+0022 0F19      00047         addlw   0x19    ;Add 0x19 to contents in wreg (DC bit 1 in status
+               00048                                 ;register is set since carry from bit 3 to bit 4)
+               00049 
+               00050 ;Example 2:
+0024 0E60      00051         movlw   0x60    ;Place 0x60 in wreg
+0026 0F37      00052         addlw   MYREG   ;Add address of MYREG (0x037) to contents in wreg (OV bit 3 
+               00053                         ;in status register is set since carry from bit 6 to bit 7)
+               00054 
+               00055 ;Example 3: (to be implemented)
+               00056 
+               00057 ;Example 4:
+               00058 
+0028 0E02      00059         movlw   0x02    ;Place 0x02 in wreg
+Warning [202] : Argument out of range. Least significant bits used.
+002A 0FF9      00060         addlw   PCL     ;Add value in PCL to wreg (*note* - example in user manual
+               00061                         ;says that PCL is at 0xff8 but that's a mistake. Other places
+               00062                         ;in same manual clearly states PCL at 0xff9, so result is 0xfb
+               00063                         ;not 0xfa as stated in example in manual)
+               00064 
+               00065 ;Example 5:
+               00066 
+  00000002     00067 Offset  equ     0x02
+002C 0E10      00068         movlw   0x10    ;Place 0x10 in wreg
+002E 0F02      00069         addlw   Offset  ;Add value of constant Offset to wreg
+               00070         
+               00071 
+0030 EF18 F000 00072 stop    goto    stop
+               00073 
+
+
+Errors   :       0
+Warnings :       1 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

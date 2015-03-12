@@ -1,8 +1,8 @@
 package net.sourceforge.picmicroview.model;
 
-public class Rlfnc extends Instruction {
+public class Andwf extends Instruction {
 
-	public Rlfnc(int instruction, Pic18F452 pic18, String name) {
+	public Andwf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 

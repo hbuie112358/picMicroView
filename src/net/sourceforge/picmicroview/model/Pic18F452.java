@@ -37,11 +37,11 @@ public class Pic18F452 implements SetState{
 	ReplyController repCont;
 	
 	//instructions:
-	
 	Addlw addlw;
 	Addwf addwf;
 	Addwfc addwfc;
 	Andlw andlw;
+	Andwf andwf;
 	Bc bc;
 	Bcf bcf;
 	Bn bn;
@@ -61,6 +61,7 @@ public class Pic18F452 implements SetState{
 	Cpfseq cpfseq;
 	Cpfsgt	cpfsgt;
 	Cpfslt	cpfslt;
+	Daw daw;
 	Dcfsnz	dcfsnz;
 	Decf decf;
 	Decfsz decfsz;
@@ -68,6 +69,7 @@ public class Pic18F452 implements SetState{
 	Incf incf;
 	Incfsz incfsz;
 	Infsnz infsnz;
+	Iorlw iorlw;
 	Iorwf iorwf;
 	Lfsr lfsr;
 	Movf movf;
@@ -82,8 +84,15 @@ public class Pic18F452 implements SetState{
 	Rcall rcall;
 	Return Return;
 	Rlcf rlcf;
-	Rlfnc rlfnc;
-	Sublw sublw;	///////46
+	Rlncf rlncf;
+	Rrcf rrcf;
+	Rrncf rrncf;
+	Setf setf;
+	Sublw sublw;	
+	Swapf swapf;	
+	Tstfsz tstfsz;
+	Xorlw xorlw;	
+	Xorwf xorwf;	///////56
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -105,6 +114,7 @@ public class Pic18F452 implements SetState{
 		addwf = new Addwf(0, this, "addwf");
 		addwfc = new Addwfc(0, this, "addwfc");
 		andlw = new Andlw(0, this, "andlw");
+		andwf = new Andwf(0, this, "andwf");
 		bc = new Bc(0, this, "bc");
 		bcf = new Bcf(0, this, "bcf");
 		bn = new Bn(0, this, "bn");
@@ -124,6 +134,7 @@ public class Pic18F452 implements SetState{
 		cpfseq = new Cpfseq(0, this, "cpfseq");
 		cpfsgt = new Cpfsgt(0, this, "cpfsgt");
 		cpfslt = new Cpfslt(0, this, "cpfslt");
+		daw = new Daw(0, this, "daw");
 		dcfsnz = new Dcfsnz(0, this, "dcfsnz");
 		decf = new Decf(0, this, "decf");
 		decfsz = new Decfsz(0, this, "decfsz");
@@ -131,6 +142,7 @@ public class Pic18F452 implements SetState{
 		incf = new Incf(0, this, "incf");
 		incfsz = new Incfsz(0, this, "incfsz");
 		infsnz = new Infsnz(0, this, "infsnz");
+		iorlw = new Iorlw(0, this, "iorlw");
 		iorwf = new Iorwf(0, this, "iorwf");
 		lfsr = new Lfsr(0, this, "lfsr");
 		movf = new Movf(0, this, "movf");
@@ -145,8 +157,15 @@ public class Pic18F452 implements SetState{
 		rcall = new Rcall(0, this, "rcall");
 		Return = new Return(0, this, "return");
 		rlcf = new Rlcf(0, this, "rlcf");
-		rlfnc = new Rlfnc(0, this, "rlfnc");
+		rlncf = new Rlncf(0, this, "rlncf");
+		rrcf = new Rrcf(0, this, "rrcf");
+		rrncf = new Rrncf(0, this, "rrncf");
+		setf = new Setf(0, this, "setf");
 		sublw = new Sublw(0, this, "sublw");
+		swapf = new Swapf(0, this, "swapf");
+		tstfsz = new Tstfsz(0, this, "tstfsz");
+		xorlw = new Xorlw(0, this, "xorlw");
+		xorwf = new Xorwf(0, this, "xorwf");
 	}
 	
 	/*
@@ -288,60 +307,8 @@ public class Pic18F452 implements SetState{
 
 		//decode
 //		System.out.println("instruction is: " + Integer.toHexString(instruction));
-		if (hByteHnibble == 0xe000){
-			//System.out.println("command high nibble has been decoded as 0xE000");
-			if(hByteLnibble == 0x0f00){
-				//System.out.println("command low nibble has been decoded as 0X0F00");
-				//pc.increment();
-				nextWord = pc.getWord();
-//				System.out.println("in Pic18, nextWord is: " + Integer.toHexString(nextWord));
-				//Goto GOTO = new Goto(instruction, nextWord, this, "goto");
-				GOTO.initialize(instruction, nextWord);
-				GOTO.execute();
-			}
-			else if(hByteLnibble == 0x0e00){
-				nextWord = pc.getWord();
-				lfsr.initialize(instruction, nextWord);
-				lfsr.execute();
-			}
-			else if(hByteLnibble == 0x0400){
-				bov.initialize(instruction);
-				bov.execute();
-			}
-			else if(hByteLnibble == 0x0500){
-				bnov.initialize(instruction);
-				bnov.execute();
-			}
-			else if(hByteLnibble == 0x0600){
-				bn.initialize(instruction);
-				bn.execute();
-			}
-			else if(hByteLnibble == 0x0700){
-				bnn.initialize(instruction);
-				bnn.execute();
-			}
-			else if(hByteLnibble == 0x0100){
-				bnz.initialize(instruction);
-				bnz.execute();
-			}
-			else if(hByteLnibble == 0x0000){
-				bz.initialize(instruction);
-				bz.execute();
-			}
-			else if(hByteLnibble == 0x0200){
-				bc.initialize(instruction);
-				bc.execute();
-			}
-			else if(hByteLnibble == 0x0300){
-				bnc.initialize(instruction);
-				bnc.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-				System.exit(0);
-			}
-		}
-		else if(hByteHnibble == 0x0000){
+
+		if(hByteHnibble == 0x0000){
 			//System.out.println("command high nibble has been decoded as 0x0000");
 			if(instruction == 0){
 				//System.out.println("command low nibble has been decoded as 0X0000");
@@ -352,20 +319,6 @@ public class Pic18F452 implements SetState{
 				Return.initialize(instruction);
 				Return.execute();
 			}
-			else if(hByteLnibble == 0x0b00){
-				//System.out.println("command low nibble has been decoded as 0X0E00");
-				andlw.initialize(instruction);
-				andlw.execute();
-			}	
-			else if (hByteLnibble == 0x0d00){
-				mullw.initialize(instruction);
-				mullw.execute();
-			}
-			else if(hByteLnibble == 0x0e00){
-				//System.out.println("command low nibble has been decoded as 0X0E00");
-				movlw.initialize(instruction);
-				movlw.execute();
-			}	
 			else if ((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
 					|| (hByteLnibble == 0x0400)){
 				decf.initialize(instruction);
@@ -384,9 +337,36 @@ public class Pic18F452 implements SetState{
 				sublw.initialize(instruction);
 				sublw.execute();
 			}
+			else if(hByteLnibble == 0x0900){
+				iorlw.initialize(instruction);
+				iorlw.execute();
+			}
+			else if(hByteLnibble == 0x0a00){
+				//System.out.println("command low nibble has been decoded as 0X0E00");
+				xorlw.initialize(instruction);
+				xorlw.execute();
+			}
+			else if(hByteLnibble == 0x0b00){
+				//System.out.println("command low nibble has been decoded as 0X0E00");
+				andlw.initialize(instruction);
+				andlw.execute();
+			}	
+			else if (hByteLnibble == 0x0d00){
+				mullw.initialize(instruction);
+				mullw.execute();
+			}
+			else if(hByteLnibble == 0x0e00){
+				//System.out.println("command low nibble has been decoded as 0X0E00");
+				movlw.initialize(instruction);
+				movlw.execute();
+			}	
 			else if((hByteLnibble == 0x0f00)){
 				addlw.initialize(instruction);///////////////////
 				addlw.execute();
+			}
+			else if((hByteLnibble == 0x0000) && lByte == 0x07){
+				daw.initialize(instruction);
+				daw.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");
@@ -401,6 +381,16 @@ public class Pic18F452 implements SetState{
 				iorwf.initialize(instruction);
 				iorwf.execute();
 			}
+			else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
+					|| (hByteLnibble == 0x0700)){
+				andwf.initialize(instruction);
+				andwf.execute();
+			}
+			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+					|| hByteLnibble == 0x0b00){
+				xorwf.initialize(instruction);
+				xorwf.execute();
+			}
 			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
 					|| (hByteLnibble == 0x0f00)){
 				comf.initialize(instruction);
@@ -413,8 +403,8 @@ public class Pic18F452 implements SetState{
 		}
 		else if(hByteHnibble ==	0x2000){
 //			System.out.println("command high nibble has been decoded as 0x2000");				
-			if((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
-					|| (hByteLnibble == 0x0400)){
+			if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
+					|| (hByteLnibble == 0x0700)){
 //				System.out.println("in inner case addwf " + Integer.toHexString(hByteLnibble));
 				addwf.initialize(instruction);
 				addwf.execute();
@@ -441,10 +431,21 @@ public class Pic18F452 implements SetState{
 			}
 		}
 		else if(hByteHnibble == 0x3000){
-			if((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
-					|| (hByteLnibble == 0x0400)){
+			if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
+					|| (hByteLnibble == 0x0300)){
+				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+				rrcf.initialize(instruction);
+				rrcf.execute();
+			}
+			if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
+					|| (hByteLnibble == 0x0700)){
 				rlcf.initialize(instruction);
 				rlcf.execute();
+			}
+			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+					|| hByteLnibble == 0x0b00){
+				swapf.initialize(instruction);
+				swapf.execute();
 			}
 			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
 					|| (hByteLnibble == 0x0f00)){
@@ -453,10 +454,16 @@ public class Pic18F452 implements SetState{
 			}
 		}
 		else if(hByteHnibble == 0x4000){
-			if((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
-					|| (hByteLnibble == 0x0400)){
-				rlfnc.initialize(instruction);
-				rlfnc.execute();
+			if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
+					|| (hByteLnibble == 0x0300)){
+				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+				rrncf.initialize(instruction);
+				rrncf.execute();
+			}
+			if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
+					|| (hByteLnibble == 0x0700)){
+				rlncf.initialize(instruction);
+				rlncf.execute();
 			}
 			if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
 					|| hByteLnibble == 0x0b00){
@@ -501,7 +508,14 @@ public class Pic18F452 implements SetState{
 				cpfsgt.initialize(instruction);
 				cpfsgt.execute();
 			}
-			
+			else if((hByteLnibble == 0x0600) || (hByteLnibble == 0x0700)){
+				tstfsz.initialize(instruction);
+				tstfsz.execute();
+			}
+			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900)){
+				setf.initialize(instruction);
+				setf.execute();
+			}
 			else if((hByteLnibble == 0x0a00) || (hByteLnibble == 0x0b00)){
 				clrf.initialize(instruction);
 				clrf.execute();
@@ -564,6 +578,65 @@ public class Pic18F452 implements SetState{
 				System.exit(0);
 			}
 		}	
+		
+		else if (hByteHnibble == 0xe000){
+			//System.out.println("command high nibble has been decoded as 0xE000");
+			if(hByteLnibble == 0x0f00){
+				//System.out.println("command low nibble has been decoded as 0X0F00");
+				//pc.increment();
+				nextWord = pc.getWord();
+//				System.out.println("in Pic18, nextWord is: " + Integer.toHexString(nextWord));
+				//Goto GOTO = new Goto(instruction, nextWord, this, "goto");
+				GOTO.initialize(instruction, nextWord);
+				GOTO.execute();
+			}
+			else if(hByteLnibble == 0x0e00){
+				nextWord = pc.getWord();
+				lfsr.initialize(instruction, nextWord);
+				lfsr.execute();
+			}
+			else if(hByteLnibble == 0x0400){
+				bov.initialize(instruction);
+				bov.execute();
+			}
+			else if(hByteLnibble == 0x0500){
+				bnov.initialize(instruction);
+				bnov.execute();
+			}
+			else if(hByteLnibble == 0x0600){
+				bn.initialize(instruction);
+				bn.execute();
+			}
+			else if(hByteLnibble == 0x0700){
+				bnn.initialize(instruction);
+				bnn.execute();
+			}
+			else if(hByteLnibble == 0x0100){
+				bnz.initialize(instruction);
+				bnz.execute();
+			}
+			else if(hByteLnibble == 0x0000){
+				bz.initialize(instruction);
+				bz.execute();
+			}
+			else if(hByteLnibble == 0x0200){
+				bc.initialize(instruction);
+				bc.execute();
+			}
+			else if(hByteLnibble == 0x0300){
+				bnc.initialize(instruction);
+				bnc.execute();
+			}
+			else{
+				System.out.println("instruction not implemented");
+				System.exit(0);
+			}
+		}
+		else if(hByteHnibble == 0xf000){
+				//System.out.println("command low nibble has been decoded as 0X0000");
+				nop.initialize(instruction);
+				nop.execute();
+		}
 		else{
 			System.out.println("instruction not implemented " + Integer.toHexString(instruction));
 			System.exit(0);

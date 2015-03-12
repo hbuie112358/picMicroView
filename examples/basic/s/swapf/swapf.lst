@@ -1,0 +1,68 @@
+gpasm-0.13.7 beta               swapf.asm   3-11-2015  07:25:01          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;;;;;;; swapf.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00002 ;
+               00003 ;This program tests operation of swapf.Swapf swaps the upper and lower 
+               00004 ;nibbles of register f.
+               00005 ;
+               00006 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00007 ;
+               00008 ; Mainline
+               00009 ;  
+               00010 ;
+               00011 ;;;;;;; Assembler directives ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00012 
+               00013         list  P=PIC18F452, F=INHX32, C=160, N=0, ST=OFF, MM=OFF, R=DEC, X=ON
+               00014         #include p18f452.inc
+               00001         LIST
+               00002 ; P18F452.INC  Standard Header File, Version 1.4   Microchip Technology, Inc.
+               00983         LIST
+               00015 
+               00016 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00017 
+               00018         cblock  0x000           ;Beginning of Access RAM
+               00019         REG1
+               00020         endc
+               00021 
+               00022 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00023 
+               00024 ;;;;;;; Vectors ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00025 
+               00026 
+0000           00027         org  0x0000             ;Reset vector
+0000 0000      00028         nop
+0002 EF0E F000 00029         goto  Mainline
+               00030 
+0008           00031         org  0x0008             ;High priority interrupt vector
+0008 EF04 F000 00032         goto  $                 ;Trap
+               00033 
+0018           00034         org  0x0018             ;Low priority interrupt vector
+0018 EF0C F000 00035         goto  $                 ;Trap
+               00036 
+               00037 ;;;;;;; Mainline program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               00038 
+001C 00039 Mainline
+               00040 ;Example 1:
+               00041         
+001C 0EA5      00042         movlw   0xa5            ;Place 0xa5 in wreg
+001E 6E00      00043         movwf   REG1            ;Copy wreg to REG1
+0020 3800      00044         swapf   REG1, 0         ;Swap high and low nibble of REG1, result in wreg
+               00045 
+               00046 ;Example 2:
+               00047         
+0022 0E20      00048         movlw   0x20            ;Place 0x20 in wreg
+0024 6E00      00049         movwf   REG1            ;Copy wreg to register REG1
+0026 3A00      00050         swapf   REG1, 1         ;Swap high and low nibble REG1, result to REG1 
+               00051 
+0028 EF14 F000 00052 stop    goto    stop
+               00053 
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+
