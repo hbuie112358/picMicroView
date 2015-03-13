@@ -43,6 +43,7 @@ Mainline
 OFFSET 	equ	0x10		;Declare constant OFFSET to have value 0x10
 	movlw		0x37	;Place 0x37 in wreg
 	sublw		OFFSET	;Subtract wreg value from constant OFFSET
+				;0x10 - 0x37 = 0xd9, status register N bit is set
 
 
 ;Example 2:
@@ -50,18 +51,20 @@ OFFSET 	equ	0x10		;Declare constant OFFSET to have value 0x10
 
 	movlw		0x01	;Place 0x01 in wreg
 	sublw		0x02	;Subtract wreg value 1 from 2
+				;0x02 - 0x01 = 0x01, status register C, DC bits are set
 
 ;Case 2:
 
 	movlw		0x02	;Place 0x02 in wreg
 	sublw		0x02	;Subtract wreg value 2 from 2
+				;0x02 - 0x02 = 0x00, status register C, DC, Z bits are set
 
 ;Case 3:
 
 	movlw		0x03	;Place 0x03 in wreg
 	sublw		0x02	;Subtract wreg value 3 from 2
+				;0x02 - 0x03 = 0xff, status register N bit is set
 	
-
 stop	goto		stop
 
 	end

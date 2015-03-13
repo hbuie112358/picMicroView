@@ -44,22 +44,24 @@ Mainline
 ;Example 1:
 	movlw	0x18	;Place 0x18 in wreg
 	addlw	0x19	;Add 0x19 to contents in wreg (DC bit 1 in status
-				;register is set since carry from bit 3 to bit 4)
+			;register is set since carry from bit 3 to bit 4)
 
 ;Example 2:
 	movlw	0x60	;Place 0x60 in wreg
-	addlw	MYREG	;Add address of MYREG (0x037) to contents in wreg (OV bit 3 
-			;in status register is set since carry from bit 6 to bit 7)
+	addlw	MYREG	;Add address of MYREG (0x037) to contents in wreg 
+			;(OV bit 3 in status register is set since carry 
+			;from bit 6 to bit 7)
 
 ;Example 3: (to be implemented)
 
 ;Example 4:
 
 	movlw	0x02	;Place 0x02 in wreg
-	addlw	PCL	;Add value in PCL to wreg (*note* - example in user manual
-			;says that PCL is at 0xff8 but that's a mistake. Other places
-			;in same manual clearly states PCL at 0xff9, so result is 0xfb
-			;not 0xfa as stated in example in manual)
+	addlw	PCL	;Add value in PCL to wreg (*note* - example in user 
+			;manual says that PCL is at 0xff8 but that's a mistake. 
+			;Other places in same manual clearly states PCL at 
+			;0xff9, so result is 0xfbnot 0xfa as stated in example 
+			;in manual)
 
 ;Example 5:
 

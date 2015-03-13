@@ -1,8 +1,7 @@
-;;;;;;; sublw.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; subwfb.asm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-;This program tests operation of sublw instruction. Sublw subtracts the wreg
-;from the literal k (two's complement method). This instruction is tested 
-;according to the examples in the pic18 user manual.
+;This program tests operation of subwfb instruction. Subwfb subtracts wreg and borrow
+;flag (carry) from f (two's complement method).
 ;
 ;;;;;;; Program hierarchy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -17,6 +16,7 @@
 ;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	cblock  0x000           ;Beginning of Access RAM
+	REG1
 	endc
 
 ;;;;;;; Macro definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -39,32 +39,34 @@
 Mainline
 
 ;Example 1:
-
-OFFSET 	equ	0x10		;Declare constant OFFSET to have value 0x10
-	movlw		0x37	;Place 0x37 in wreg
-	sublw		OFFSET	;Subtract wreg value from constant OFFSET
-				;0x10 - 0x37 = 0xd9, status register N bit is set
-
-
-;Example 2:
 ;Case 1:
 
-	movlw		0x01	;Place 0x01 in wreg
-	sublw		0x02	;Subtract wreg value 1 from 2
-				;0x02 - 0x01 = 0x01, status register C, DC bits are set
+	bsf	STATUS, 0	;Set status register carry (borrow) bit 
+	movlw	0x03		;Place 0x03 in wreg
+	movwf	REG1		;Copy wreg to REG1
+	movlw	0x02		;Place 0x02 in wreg
+	subwfb	REG1, 1		;Subtract wreg and borrow bit from REG1,
+				;REG1: 0x01, status register C, DC bits are set
 
 ;Case 2:
 
-	movlw		0x02	;Place 0x02 in wreg
-	sublw		0x02	;Subtract wreg value 2 from 2
-				;0x02 - 0x02 = 0x00, status register C, DC, Z bits are set
+	bsf	STATUS, 0	;Set status register carry (borrow) bit 
+	movlw	0x02		;Place 0x02 in wreg
+	movwf	REG1		;Copy wreg to REG1
+	movlw	0x02		;Place 0x02 in wreg
+	subwfb	REG1, 1		;Subtract wreg and borrow bit from REG1,
+				;REG1: 0x00, status register C, DC, Z bits are set
 
 ;Case 3:
 
-	movlw		0x03	;Place 0x03 in wreg
-	sublw		0x02	;Subtract wreg value 3 from 2
-				;0x02 - 0x03 = 0xff, status register N bit is set
+	bsf	STATUS, 0	;Set status register carry (borrow) bit 
+	movlw	0x01		;Place 0x01 in wreg
+	movwf	REG1		;Copy wreg to REG1
+	movlw	0x02		;Place 0x02 in wreg
+	subwfb	REG1, 1		;Subtract wreg and borrow bit from REG1,
+				;REG1: 0xff, status register N bit is set
 	
+
 stop	goto		stop
 
 	end

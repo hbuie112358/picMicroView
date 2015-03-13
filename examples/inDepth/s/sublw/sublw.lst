@@ -1,4 +1,4 @@
-gpasm-0.13.7 beta               sublw.asm   3-6-2015  10:35:07           PAGE  1
+gpasm-0.13.7 beta               sublw.asm   3-12-2015  12:14:13          PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -52,27 +52,30 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
   00000010     00043 OFFSET  equ     0x10            ;Declare constant OFFSET to have value 0x10
 001C 0E37      00044         movlw           0x37    ;Place 0x37 in wreg
 001E 0810      00045         sublw           OFFSET  ;Subtract wreg value from constant OFFSET
-               00046 
+               00046                                 ;0x10 - 0x37 = 0xd9, status register N bit is set
                00047 
-               00048 ;Example 2:
-               00049 ;Case 1:
-               00050 
-0020 0E01      00051         movlw           0x01    ;Place 0x01 in wreg
-0022 0802      00052         sublw           0x02    ;Subtract wreg value 1 from 2
-               00053 
-               00054 ;Case 2:
+               00048 
+               00049 ;Example 2:
+               00050 ;Case 1:
+               00051 
+0020 0E01      00052         movlw           0x01    ;Place 0x01 in wreg
+0022 0802      00053         sublw           0x02    ;Subtract wreg value 1 from 2
+               00054                                 ;0x02 - 0x01 = 0x01, status register C, DC bits are set
                00055 
-0024 0E02      00056         movlw           0x02    ;Place 0x02 in wreg
-0026 0802      00057         sublw           0x02    ;Subtract wreg value 2 from 2
-               00058 
-               00059 ;Case 3:
-               00060 
-0028 0E03      00061         movlw           0x03    ;Place 0x03 in wreg
-002A 0802      00062         sublw           0x02    ;Subtract wreg value 3 from 2
-               00063         
-               00064 
-002C EF16 F000 00065 stop    goto            stop
-               00066 
+               00056 ;Case 2:
+               00057 
+0024 0E02      00058         movlw           0x02    ;Place 0x02 in wreg
+0026 0802      00059         sublw           0x02    ;Subtract wreg value 2 from 2
+               00060                                 ;0x02 - 0x02 = 0x00, status register C, DC, Z bits are set
+               00061 
+               00062 ;Case 3:
+               00063 
+0028 0E03      00064         movlw           0x03    ;Place 0x03 in wreg
+002A 0802      00065         sublw           0x02    ;Subtract wreg value 3 from 2
+               00066                                 ;0x02 - 0x03 = 0xff, status register N bit is set
+               00067         
+002C EF16 F000 00068 stop    goto            stop
+               00069 
 
 
 Errors   :       0

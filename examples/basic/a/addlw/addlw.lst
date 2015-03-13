@@ -1,4 +1,4 @@
-gpasm-0.13.7 beta               addlw.asm   3-11-2015  13:26:13          PAGE  1
+gpasm-0.13.7 beta               addlw.asm   3-12-2015  18:48:58          PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -53,33 +53,35 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                00044 ;Example 1:
 0020 0E18      00045         movlw   0x18    ;Place 0x18 in wreg
 0022 0F19      00046         addlw   0x19    ;Add 0x19 to contents in wreg (DC bit 1 in status
-               00047                                 ;register is set since carry from bit 3 to bit 4)
+               00047                         ;register is set since carry from bit 3 to bit 4)
                00048 
                00049 ;Example 2:
 0024 0E60      00050         movlw   0x60    ;Place 0x60 in wreg
-0026 0F37      00051         addlw   MYREG   ;Add address of MYREG (0x037) to contents in wreg (OV bit 3 
-               00052                         ;in status register is set since carry from bit 6 to bit 7)
-               00053 
-               00054 ;Example 3: (to be implemented)
-               00055 
-               00056 ;Example 4:
-               00057 
-0028 0E02      00058         movlw   0x02    ;Place 0x02 in wreg
+0026 0F37      00051         addlw   MYREG   ;Add address of MYREG (0x037) to contents in wreg 
+               00052                         ;(OV bit 3 in status register is set since carry 
+               00053                         ;from bit 6 to bit 7)
+               00054 
+               00055 ;Example 3: (to be implemented)
+               00056 
+               00057 ;Example 4:
+               00058 
+0028 0E02      00059         movlw   0x02    ;Place 0x02 in wreg
 Warning [202] : Argument out of range. Least significant bits used.
-002A 0FF9      00059         addlw   PCL     ;Add value in PCL to wreg (*note* - example in user manual
-               00060                         ;says that PCL is at 0xff8 but that's a mistake. Other places
-               00061                         ;in same manual clearly states PCL at 0xff9, so result is 0xfb
-               00062                         ;not 0xfa as stated in example in manual)
-               00063 
-               00064 ;Example 5:
+002A 0FF9      00060         addlw   PCL     ;Add value in PCL to wreg (*note* - example in user 
+               00061                         ;manual says that PCL is at 0xff8 but that's a mistake. 
+               00062                         ;Other places in same manual clearly states PCL at 
+               00063                         ;0xff9, so result is 0xfbnot 0xfa as stated in example 
+               00064                         ;in manual)
                00065 
-  00000002     00066 Offset  equ     0x02
-002C 0E10      00067         movlw   0x10    ;Place 0x10 in wreg
-002E 0F02      00068         addlw   Offset  ;Add value of constant Offset to wreg
-               00069         
-               00070 
-0030 EF18 F000 00071 stop    goto    stop
+               00066 ;Example 5:
+               00067 
+  00000002     00068 Offset  equ     0x02
+002C 0E10      00069         movlw   0x10    ;Place 0x10 in wreg
+002E 0F02      00070         addlw   Offset  ;Add value of constant Offset to wreg
+               00071         
                00072 
+0030 EF18 F000 00073 stop    goto    stop
+               00074 
 
 
 Errors   :       0

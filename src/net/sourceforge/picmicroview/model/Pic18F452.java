@@ -46,7 +46,7 @@ public class Pic18F452 implements SetState{
 	Bcf bcf;
 	Bn bn;
 	Bnc bnc;
-	Bnn bnn;
+	Bnn bnn;	///10
 	Bnov bnov;
 	Bnz bnz;
 	Bov bov;
@@ -56,7 +56,7 @@ public class Pic18F452 implements SetState{
 	Btfss btfss;
 	Btg btg;
 	Bz bz;
-	Clrf clrf;
+	Clrf clrf;	///20
 	Comf comf;
 	Cpfseq cpfseq;
 	Cpfsgt	cpfsgt;
@@ -66,7 +66,7 @@ public class Pic18F452 implements SetState{
 	Decf decf;
 	Decfsz decfsz;
 	Goto GOTO;
-	Incf incf;
+	Incf incf;	///30
 	Incfsz incfsz;
 	Infsnz infsnz;
 	Iorlw iorlw;
@@ -76,7 +76,7 @@ public class Pic18F452 implements SetState{
 	Movff movff;
 	Movlb movlb;
 	Movlw movlw;
-	Movwf movwf;
+	Movwf movwf;	///40
 	Mullw mullw;
 	Mulwf mulwf;
 	Negf negf;
@@ -86,13 +86,16 @@ public class Pic18F452 implements SetState{
 	Rlcf rlcf;
 	Rlncf rlncf;
 	Rrcf rrcf;
-	Rrncf rrncf;
+	Rrncf rrncf;	///50
 	Setf setf;
+	Subfwb subfwb;
 	Sublw sublw;	
+	Subwf subwf;
+	Subwfb subwfb;
 	Swapf swapf;	
 	Tstfsz tstfsz;
 	Xorlw xorlw;	
-	Xorwf xorwf;	///////56
+	Xorwf xorwf;	///////59
 	
 	public Pic18F452(ReplyController repCont){
 		
@@ -161,7 +164,10 @@ public class Pic18F452 implements SetState{
 		rrcf = new Rrcf(0, this, "rrcf");
 		rrncf = new Rrncf(0, this, "rrncf");
 		setf = new Setf(0, this, "setf");
+		subfwb = new Subfwb(0, this, "subfwb");
 		sublw = new Sublw(0, this, "sublw");
+		subwf = new Subwf(0, this, "subwf");
+		subwfb = new Subwfb(0, this, "subwfb");
 		swapf = new Swapf(0, this, "swapf");
 		tstfsz = new Tstfsz(0, this, "tstfsz");
 		xorlw = new Xorlw(0, this, "xorlw");
@@ -319,12 +325,11 @@ public class Pic18F452 implements SetState{
 				Return.initialize(instruction);
 				Return.execute();
 			}
-			else if ((hByteLnibble == 0x0700) || (hByteLnibble == 0x0600) || (hByteLnibble == 0x0500) 
-					|| (hByteLnibble == 0x0400)){
+			else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
+					|| (hByteLnibble == 0x0700)){
 				decf.initialize(instruction);
 				decf.execute();
 			}
-			
 			else if (hByteLnibble == 0x0100){
 				movlb.initialize(instruction);
 				movlb.execute();
@@ -483,6 +488,21 @@ public class Pic18F452 implements SetState{
 				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
 				movf.initialize(instruction);
 				movf.execute();
+			}
+			else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
+					|| (hByteLnibble == 0x0700)){
+				subfwb.initialize(instruction);
+				subfwb.execute();
+			}
+			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+					|| hByteLnibble == 0x0b00){
+				subwfb.initialize(instruction);
+				subwfb.execute();
+			}
+			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+					|| (hByteLnibble == 0x0f00)){
+				subwf.initialize(instruction);
+				subwf.execute();
 			}
 			else{
 				System.out.println("instruction not implemented");

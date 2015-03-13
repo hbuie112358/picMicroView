@@ -145,6 +145,9 @@ public class MainWindow extends JFrame{
 	private JMenuItem setf = new JMenuItem("setf");
 	private JMenuItem swapf = new JMenuItem("swapf");
 	private JMenuItem sublw = new JMenuItem("sublw");
+	private JMenuItem subfwb = new JMenuItem("subfwb");
+	private JMenuItem subwf = new JMenuItem("subwf");
+	private JMenuItem subwfb = new JMenuItem("subwfb");
 	private JMenu t = new JMenu("T");
 	private JMenuItem tstfsz = new JMenuItem("tstfsz");
 	private JMenu x = new JMenu("X");
@@ -200,6 +203,9 @@ public class MainWindow extends JFrame{
 	private JMenu sID = new JMenu("S");
 	private JMenuItem setfIDItem = new JMenuItem("setf");
 	private JMenuItem sublwIDItem = new JMenuItem("sublw");
+	private JMenuItem subfwbIDItem = new JMenuItem("subfwb");
+	private JMenuItem subwfIDItem = new JMenuItem("subwf");
+	private JMenuItem subwfbIDItem = new JMenuItem("subwfb");
 	private JMenuItem swapfIDItem = new JMenuItem("swapf");
 	private JMenu tID = new JMenu("T");
 	private JMenuItem tstfszIDItem = new JMenuItem("tstfsz");
@@ -239,6 +245,11 @@ public class MainWindow extends JFrame{
 	private TableCellRenderer colRenderer;
 	
 	private PortRegTableModel dtm_portReg;
+	
+	JTabbedPane mainTabs;
+	JScrollPane pgmMemTabPane;
+	JScrollPane accessMemTabPane;
+	JScrollPane portRegTabPane;
 	
 	private HashMap<Integer, Integer> portRegList;
 
@@ -403,6 +414,12 @@ public class MainWindow extends JFrame{
 		setf.addActionListener(new ExampleAction("basic", "setf"));
 		s.add(sublw);
 		sublw.addActionListener(new ExampleAction("basic", "sublw"));
+		s.add(subfwb);
+		subfwb.addActionListener(new ExampleAction("basic", "subfwb"));
+		s.add(subwf);
+		subwf.addActionListener(new ExampleAction("basic", "subwf"));
+		s.add(subwfb);
+		subwfb.addActionListener(new ExampleAction("basic", "subwfb"));
 		s.add(swapf);
 		swapf.addActionListener(new ExampleAction("basic", "swapf"));
 		t.add(tstfsz);
@@ -503,6 +520,12 @@ public class MainWindow extends JFrame{
 		setfIDItem.addActionListener(new ExampleAction("inDepth", "setf"));
 		sID.add(sublwIDItem);
 		sublwIDItem.addActionListener(new ExampleAction("inDepth", "sublw"));
+		sID.add(subfwbIDItem);
+		subfwbIDItem.addActionListener(new ExampleAction("inDepth", "subfwb"));
+		sID.add(subwfIDItem);
+		subwfIDItem.addActionListener(new ExampleAction("inDepth", "subwf"));
+		sID.add(subwfbIDItem);
+		subwfbIDItem.addActionListener(new ExampleAction("inDepth", "subwfb"));
 		sID.add(swapfIDItem);
 		swapfIDItem.addActionListener(new ExampleAction("inDepth", "swapf"));
 		tID.add(tstfszIDItem);
@@ -595,18 +618,30 @@ public class MainWindow extends JFrame{
 		portRegTab.setToolTipText("Register | Contents");
 		
 		//make access memory / special function vertical split pane and load components
+		portRegTabPane = new JScrollPane(portRegTab);
+		portRegTabPane.getVerticalScrollBar().setUnitIncrement(16);
 		JSplitPane splitPaneAccSpFunction = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-		splitPaneAccSpFunction.setTopComponent(new JScrollPane(portRegTab));
-		splitPaneAccSpFunction.setBottomComponent(new JScrollPane(accessMemTab)); 
+//		splitPaneAccSpFunction.setTopComponent(new JScrollPane(portRegTab));
+		splitPaneAccSpFunction.setTopComponent(portRegTabPane);
+		accessMemTabPane = new JScrollPane(accessMemTab);
+		accessMemTabPane.getVerticalScrollBar().setUnitIncrement(48);
+//		splitPaneAccSpFunction.setTopComponent(accessMemTabPane);
+//		splitPaneAccSpFunction.setBottomComponent(new JScrollPane(accessMemTab)); 
+		splitPaneAccSpFunction.setBottomComponent(accessMemTabPane); 
 		splitPaneAccSpFunction.setDividerLocation(350);
 		
 		
 		JTabbedPane pgmMemTab = new JTabbedPane();
 		pgmMemTab.add("Program Memory", pgmMemTable);
 		pgmMemTab.setToolTipText("Address | Contents");
+		pgmMemTabPane = new JScrollPane(pgmMemTab);
+		pgmMemTabPane.getVerticalScrollBar().setUnitIncrement(96);
 		
 		JSplitPane rightHalf = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-		rightHalf.setLeftComponent(new JScrollPane(pgmMemTab));
+		
+//		rightHalf.setLeftComponent(new JScrollPane(pgmMemTab));
+		rightHalf.setLeftComponent(pgmMemTabPane);
+		
 		rightHalf.setRightComponent(splitPaneAccSpFunction);
 		rightHalf.getLeftComponent().setMinimumSize(new Dimension(200, 300));
 		rightHalf.getRightComponent().setMinimumSize(new Dimension(200, 300));
@@ -624,6 +659,7 @@ public class MainWindow extends JFrame{
 		
 		lstPanel = new LstFileWindow();
 		JScrollPane lstPanelScroll = new JScrollPane(lstPanel);
+		lstPanelScroll.getVerticalScrollBar().setUnitIncrement(32);
 		
 	
 		JSplitPane whole = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
@@ -631,7 +667,7 @@ public class MainWindow extends JFrame{
 		whole.setRightComponent(rightHalf);
 		whole.setResizeWeight(1);
 		
-		JTabbedPane mainTabs = new JTabbedPane();
+		mainTabs = new JTabbedPane();
 		mainTabs.add("Pic18F452", whole);
 		
 		//adds tab showing pic usr manual, removed for license considerations
@@ -983,9 +1019,10 @@ public class MainWindow extends JFrame{
 			if(reqCont.loadAction(fileName)){
 //				System.out.println(fileName);
 				lstFileName = fileName.substring(0, fileName.length() - 3) + "lst";
-//				System.out.println("lstFileName is: " + lstFileName);
+//				System.out.println("in loadListFile, lstFileName is: " + lstFileName);
 				lstPanel.loadLstFile();
 				lstPanel.highlight("0000");
+
 			}
 			else 			
 				JOptionPane.showMessageDialog(null, "Stop current program before loading a new program");
@@ -1115,7 +1152,9 @@ public class MainWindow extends JFrame{
 		
 		public void initUI(){
 			highlighter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
-			textArea.setText("No program currently loaded");
+			textArea.setText("No program currently loaded\n\nTo load an example"
+					+ ", go to the \"Examples\" menu\n\nTo load one of your own programs, choose"
+					+ " \"File\", \"Load\"");
 			font = new Font(Font.SANS_SERIF, 3, 20);
 			textArea.setForeground(Color.BLUE);
 			textArea.setFont(font);
@@ -1186,14 +1225,18 @@ public class MainWindow extends JFrame{
 					e.printStackTrace();
 				}
 				textArea.setText(fileContents.toString());
-				font = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
+//				font = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
+//				font = new Font("monospaced", Font.PLAIN, 10);
+				font = new Font(Font.MONOSPACED, Font.PLAIN, 14);
 				textArea.setForeground(Color.BLACK);
 				textArea.setFont(font);
+				textArea.setCaretPosition(0);
 				try {
 					reader.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				mainTabs.setTitleAt(mainTabs.getSelectedIndex(), lstFileName);
 		}
 		
 		public void highlight(String key){

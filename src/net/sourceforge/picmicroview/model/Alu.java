@@ -321,6 +321,35 @@ public class Alu {
 		adjustNbit();
 	}
 	
+	public void execute(Subfwb instruction){		
+		//get wreg value
+		wreg = pic18.dataMem.wreg.read();
+		
+		//get register address
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		origValue = pic18.dataMem.gpMem[freg].read();
+		
+		//borrow bit = not carry, so if carry bit is not set, add borrow to original register value
+		if(pic18.dataMem.status.getBit(0) == 0)
+			origValue = origValue + 1;
+		
+		//get two's complement
+		twosComp = getTwosComplement(origValue & 0xff);
+		
+//		System.out.println("twos comp after adding borrow is: " + Integer.toHexString(twosComp));
+		//find sum of wreg and two's complement of f 
+		result = wreg + twosComp;
+		adjustDCbit(twosComp, wreg);
+		adjustOVbit("sub", twosComp, wreg);
+		//if bit 9 of instruction is high, write result to f register
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustCbit();
+		adjustZbit();
+		adjustNbit();
+	}
+	
 	public void execute(Sublw instruction){
 		//get two's complement of value in wreg
 		twosComp = getTwosComplement(pic18.dataMem.wreg.read() & 0xff);
@@ -335,6 +364,60 @@ public class Alu {
 		adjustZbit();
 		adjustNbit();
 		adjustCbit();
+	}
+	
+	public void execute(Subwf instruction){
+		//get wreg value
+		wreg = pic18.dataMem.wreg.read();
+		
+		//get register address
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		
+		//get two's complement
+		twosComp = getTwosComplement(wreg & 0xff);
+		
+//		System.out.println("twos comp is: " + Integer.toHexString(twosComp));
+		//find sum of register f and two's complement of wreg
+		result = pic18.dataMem.gpMem[freg].read() + twosComp;
+		System.out.println("result is: " + Integer.toHexString(result));
+		adjustDCbit(twosComp, pic18.dataMem.gpMem[freg].read());
+		adjustOVbit("sub", twosComp, pic18.dataMem.gpMem[freg].read());
+		//if bit 9 of instruction is high, write result to f register
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustCbit();
+		adjustZbit();
+		adjustNbit();
+	}
+	
+	//f - wreg - borrow
+	public void execute(Subwfb instruction){		
+		//get wreg value
+		wreg = pic18.dataMem.wreg.read();
+		
+		//get register address
+		freg = pic18.dataMem.getRegAddress(instruction.instruction);
+		
+		//borrow bit = not carry, so if carry bit is not set, add borrow to original register value
+		if(pic18.dataMem.status.getBit(0) == 0)
+			wreg = wreg + 1;
+		
+		//get two's complement
+		twosComp = getTwosComplement(wreg & 0xff);
+		
+//		System.out.println("twos comp after adding borrow is: " + Integer.toHexString(twosComp));
+		//find sum of wreg and two's complement of f 
+		result = pic18.dataMem.gpMem[freg].read() + twosComp;
+		adjustDCbit(twosComp, pic18.dataMem.gpMem[freg].read());
+		adjustOVbit("sub", twosComp, pic18.dataMem.gpMem[freg].read());
+		//if bit 9 of instruction is high, write result to f register
+		if((instruction.instruction & 0x200) == 0x200) 
+			pic18.dataMem.gpMem[freg].write(result);
+		else pic18.dataMem.wreg.write(result);
+		adjustCbit();
+		adjustZbit();
+		adjustNbit();
 	}
 	
 	public void execute(Xorlw instruction){
@@ -392,6 +475,8 @@ public class Alu {
 	
 	private void adjustDCbit(int arg1, int arg2){
 		dc = (((arg1 & 0x0f) + (arg2 & 0x0f)) & 0x10) == 0x10;
+//		System.out.println("arg1 & 0x0f: " + Integer.toBinaryString((arg1 & 0x0f)));
+//		System.out.println("arg2 & 0x0f: " + Integer.toBinaryString((arg2 & 0x0f)));
 		if(dc == true)
 			pic18.dataMem.status.setBit(1);
 		else pic18.dataMem.status.clearBit(1);
@@ -400,9 +485,11 @@ public class Alu {
 	}
 	
 	private void adjustOVbit(String operation, int arg1, int arg2){
+//		System.out.println("arg1 & 0x7f: " + Integer.toBinaryString((arg1 & 0x7f)));
+//		System.out.println("arg2 & 0x7f: " + Integer.toBinaryString((arg2 & 0x7f)));
 		ov = (((arg1 & 0x7f) + (arg2 & 0x7f)) & 0x80) == 0x80;
-		if(operation.equals("add")){
-			if(((((arg1 & 0x7f) + (arg2 & 0x7f)) & 0x80) & 0x80) == 0x80)
+		if(operation.equals("add") || operation.equals("sub")){
+			if(ov)
 				pic18.dataMem.status.setBit(3);
 			else pic18.dataMem.status.clearBit(3);
 		}
@@ -412,7 +499,9 @@ public class Alu {
 	}
 	
 	public int getTwosComplement(int arg){
-//		System.out.println("in Alu.getTC, complement operator ~, ~0x6f:  "+ Integer.toBinaryString(0xff & (~arg)));
+//		System.out.println("in Alu.getTC arg is: " + Integer.toHexString(arg) + 
+//				"~arg is: " + Integer.toHexString(~arg) + 
+//				", two's complement is: " + Integer.toHexString((0xff & (~arg)) + 1));
 		return (0xff & (~arg)) + 1;
 	}
 }
