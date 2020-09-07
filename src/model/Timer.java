@@ -19,7 +19,7 @@ public class Timer {
 		//if((count & 0x10000) == 0x10000){
 		if(count > 0x10000){
 			clear();
-			pic18.dataMem.intcon.setBit(2);
+			pic18.getDataMem().intcon.setBit(2);
 			//System.out.println("intcon is " + Integer.toBinaryString(pic18.dataMem.intcon.read()));
 			//System.out.println("timer0 has been reset");
 		}

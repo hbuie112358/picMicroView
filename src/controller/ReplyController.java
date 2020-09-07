@@ -19,14 +19,11 @@ public class ReplyController {
 	 * this implementation of Model-View-Controller design pattern
 	 */
 	private MainWindow mw;
-	private RequestController reqCont;
 //	private long now; //testing, remove when no longer needed
 	
 	/**
 	 * Causes mw data member to point to MainWindow instance, which completes
-	 * return path for MVC design pattern. Also causes reqCont data member to
-	 * point to RequestController. This is so that RequestController and 
-	 * ReplyController can communicate. The design of this program tries to 
+	 * return path for MVC design pattern. The design of this program tries to
 	 * enforce separation of Model and View. There are times, however when they
 	 * need to know something of how the other works in order to perform operations.
 	 * Stepping is an example. In stepping, the Model has to "run" a single instruction, 
@@ -43,55 +40,33 @@ public class ReplyController {
 	 * to take place (The Controller module being the RequestController and the ReplyController
 	 * as a group).
 	 * @param mw reference to MainWindow object created in PicMain
-	 * @param reqCont 
 	 */
-	public void registerMembers(MainWindow mw, RequestController reqCont){
+	public void registerMembers(MainWindow mw){
 		this.mw = mw;
-		this.reqCont = reqCont;
 	}
 	
 	public void setTitle(final String fileName){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.setTitle("picMicroView: " + fileName);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.setTitle("picMicroView: " + fileName));
 	}
 	
 	//Called by RequestController.updateDataMemory()
 	public void updateMemTables(Object[] dm_changes){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updateDataMemTable(dm_changes);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updateDataMemTable(dm_changes));
 	}
 	
 	//Called by RequestController.stopAction
 	public void updateMemTables(ArrayList<Integer> dm){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updateDataMemTable(dm);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updateDataMemTable(dm));
 	}
 
 	public void initDataMemTable(final ArrayList<Integer> dm){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.initDataMemTable(dm);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.initDataMemTable(dm));
 	}
 	
 	//Sends MainWindow value of program counter, called by 
 	//RequestController.loadAction();
 	public void updatePc(int pc){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updatePc(pc);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updatePc(pc));
 	}
 
 	/**
@@ -102,66 +77,34 @@ public class ReplyController {
 	 * @param pm - program memory values from pic18
 	 */
 	public void updatePgmMemTable(final ArrayList<Integer> pm) {
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updatePgmMemTable(pm);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updatePgmMemTable(pm));
 	}
-	
+
 	public void initPgmMemTable(final ArrayList<Integer> pm){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.initPgmMemTable(pm);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.initPgmMemTable(pm));
 	}
-	
+
 	public void initPortRegMemTable(final ArrayList<Integer> dm){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.initPortRegMemTable(dm);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.initPortRegMemTable(dm));
 	}
 	
 	public void updatePortA(final int value){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updatePortA(value);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updatePortA(value));
 	}
 	
 	public void updatePortB(final int value){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updatePortB(value);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updatePortB(value));
 	}
 	
 	public void updatePortC(final int value){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updatePortC(value);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updatePortC(value));
 	}
 	
 	public void updatePortD(final int value){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updatePortD(value);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updatePortD(value));
 	}
 	
 	public void updatePortE(final int value){
-		EventQueue.invokeLater(new Runnable(){
-			public void run(){
-				mw.updatePortE(value);
-			}
-		});
+		EventQueue.invokeLater(() -> mw.updatePortE(value));
 	}
 }

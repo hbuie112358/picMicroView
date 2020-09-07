@@ -8,13 +8,27 @@ public class Xorwf extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		//get register address
+		int freg = dataMem.getRegAddress(getInstruction());
+//		System.out.println("in iorwf.movf, freg address is: " + Integer.toHexString(freg));
+
+		//perform XOR function with wreg value
+		int result = dataMem.wreg.read() ^ dataMem.gpMem[freg].read();
+
+		//if bit 9 of instruction is high, write result to f register
+		//else write to wreg
+		if((getInstruction() & 0x200) == 0x200)
+			dataMem.gpMem[freg].write(result);
+		else dataMem.wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

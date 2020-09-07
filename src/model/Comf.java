@@ -9,13 +9,22 @@ public class Comf extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		int freg = dataMem.getRegAddress(getInstruction());
+		int result = dataMem.gpMem[freg].getContents();
+
+		//if bit 9 of instruction is high, write result to f register
+		if((getInstruction() & 0x200) == 0x200)
+			dataMem.gpMem[freg].write(result);
+		else dataMem.wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

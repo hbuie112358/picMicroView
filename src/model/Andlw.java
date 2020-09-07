@@ -8,13 +8,20 @@ public class Andlw extends Instruction {
 
 	protected void execute() {
 		//System.out.println("command is " + name);
-		pic18.alu.execute(this);
+		Pic18F452 pic18 = getPic18();
+		int value = getInstruction() & 0x00ff;
+		int result = value & pic18.getDataMem().wreg.read();
+		pic18.getDataMem().wreg.write(result);
+		//System.out.println("result of andlw is " + Integer.toBinaryString(result));
+		adjustZbit(result);
+		adjustNbit(result);
+		//System.out.println("status register is " + Integer.toBinaryString(pic18.getDataMem().status.read()));
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;	
+		setInstruction(instruction);
 	}
 
 }

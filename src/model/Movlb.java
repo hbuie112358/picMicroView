@@ -12,14 +12,14 @@ public class Movlb extends Instruction {
 	@Override
 	protected void execute() {
 		//Make sure only low nibble is written to bsr, then write value
-		value = instruction & 0x000f;
-		pic18.dataMem.bsr.write(value);
+		value = getInstruction() & 0x000f;
+		getPic18().getDataMem().bsr.write(value);
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

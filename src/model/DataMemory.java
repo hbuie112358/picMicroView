@@ -294,7 +294,7 @@ public class DataMemory {
 				freg = address;		//Set freg to lowest 8 bytes
 			}
 			else{
-				bsrVal = pic18.dataMem.bsr.read();
+				bsrVal = pic18.getDataMem().bsr.read();
 				freg = (bsrVal << 8) | (instruction & 0xff);
 			}
 		}

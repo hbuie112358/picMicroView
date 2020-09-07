@@ -9,13 +9,16 @@ public class Clrf extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		int freg = dataMem.getRegAddress(getInstruction());
+		dataMem.gpMem[freg].clear();
+		adjustZbit(0); //this may not have worked before
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

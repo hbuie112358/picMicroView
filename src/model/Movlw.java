@@ -11,8 +11,8 @@ public class Movlw extends Instruction{
 	
 	protected void execute(){
 		//System.out.println("command is " + name );
-		value = instruction & 0x00FF;
-		pic18.dataMem.wreg.write(value);
+		value = getInstruction() & 0x00FF;
+		getPic18().getDataMem().wreg.write(value);
 		//System.out.println("wreg is " + Integer.toBinaryString(pic18.dataMem.wreg.read()));
 		//System.out.println("status register is " + Integer.toBinaryString(pic18.dataMem.status.read()));
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
@@ -20,7 +20,7 @@ public class Movlw extends Instruction{
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;	
+		setInstruction(instruction);
 	}
 }
 

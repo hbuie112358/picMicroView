@@ -9,13 +9,26 @@ public class Sublw extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		//get two's complement of value in wreg
+		int twosComp = Alu.getTwosComplement(dataMem.wreg.read() & 0xff);
+
+		//mask "k" portion of instruction, add to two's complement of wreg value
+		int result = (getInstruction() & 0xff) + twosComp;
+
+
+		adjustDCbit(twosComp, (getInstruction() & 0xff));
+		adjustOVbit("sub", twosComp, (getInstruction() & 0xff));
+		dataMem.wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
+		adjustCbit(result);
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

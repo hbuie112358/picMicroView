@@ -12,6 +12,6 @@ public class CycleTime extends Output {
 	public void run() {
 		//System.out.println("cycle time is " + ((System.nanoTime() - pic18.clock.time2) /1000.0));
 		//System.out.println("now is " + pic18.clock.now + " and last is " + pic18.clock.last);
-		System.out.println("now - last is " + (pic18.clock.now - pic18.clock.last));
+		System.out.println("now - last is " + (pic18.getClock().now - pic18.getClock().last));
 	}
 }

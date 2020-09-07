@@ -9,27 +9,29 @@ public class Lfsr extends Instruction{
 
 	@Override
 	protected void execute() {
-		fsrhVal = instruction & 0x0f;
-		fsrNum = (instruction & 0x30) >> 4;
+		Pic18F452 pic18 = getPic18();
+		DataMemory dataMem = pic18.getDataMem();
+		fsrhVal = getInstruction() & 0x0f;
+		fsrNum = (getInstruction() & 0x30) >> 4;
 		fsrlVal = nextWord & 0xff;
 //		System.out.println("in lfsr, fsrlVal is: " + Integer.toHexString(fsrlVal));
 		if(fsrNum == 0){
-			pic18.dataMem.fsr0L.write(fsrlVal);
-			pic18.dataMem.fsr0h.write(fsrhVal);
+			dataMem.fsr0L.write(fsrlVal);
+			dataMem.fsr0h.write(fsrhVal);
 		}
 		else if(fsrNum == 1){
-			pic18.dataMem.fsr1L.write(fsrlVal);
-			pic18.dataMem.fsr1h.write(fsrhVal);
+			dataMem.fsr1L.write(fsrlVal);
+			dataMem.fsr1h.write(fsrhVal);
 		}
 		else{
-			pic18.dataMem.fsr2L.write(fsrlVal);
-			pic18.dataMem.fsr2h.write(fsrhVal);
+			dataMem.fsr2L.write(fsrlVal);
+			dataMem.fsr2h.write(fsrhVal);
 		}
 		
 	}
 
 	protected void initialize(int instruction, int nextWord) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 		this.nextWord = nextWord;
 		
 	}

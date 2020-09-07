@@ -15,7 +15,7 @@ public class Output implements Runnable {
 //				((System.nanoTime() - pic18.clock.time) / 1000000000.0) + " s");
 //		System.out.println("porta is " + pic18.dataMem.porta.read() + " time is " + 
 //			((System.nanoTime() - pic18.clock.time) / 1000000000.0) + " s");
-		pic18.clock.time1 = System.nanoTime();
+		pic18.getClock().time1 = System.nanoTime();
 	}
 
 }

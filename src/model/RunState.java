@@ -17,7 +17,7 @@ public class RunState implements Pic18F452State {
 	}
 	
 	public void stop(){
-		pic18.clock.stop();
+		pic18.getClock().stop();
 		pic18.setStepState();
 		pic18.run();
 	}

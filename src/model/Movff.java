@@ -10,13 +10,16 @@ public class Movff extends Instruction {
 
 	protected void execute(){
 		//System.out.println("command is " + name);
+		int instruction = getInstruction();
+		Pic18F452 pic18 = getPic18();
+		DataMemory dataMem = pic18.getDataMem();
 		int source = instruction & 0x00ff;
 		//System.out.println("source address is " + Integer.toHexString(source) +
 		//		"and contents is " + pic18.dataMem.gpMem[source].read());
-		instruction = pic18.pc.getWord();
+		instruction = pic18.getProgramCounter().getWord();
 		int destination = instruction & 0x00ff;
 		//System.out.println("destination address is " + Integer.toHexString(destination));
-		pic18.dataMem.gpMem[destination].write(pic18.dataMem.gpMem[source].read());
+		dataMem.gpMem[destination].write(dataMem.gpMem[source].read());
 		//System.out.println("data at destination is " + 
 		//		Integer.toHexString(pic18.dataMem.gpMem[destination].read()));
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
@@ -24,7 +27,7 @@ public class Movff extends Instruction {
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;	
+		setInstruction(instruction);
 	}
 
 }

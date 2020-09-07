@@ -51,7 +51,7 @@ public class Clock{
 				for(i = 0; i < a.length; i++){
 					a[i] = i;
 				}
-				pic18.timer0.increment();
+				pic18.getTimer0().increment();
 				pic18.run();
 				//printOutput();
 				//i++;

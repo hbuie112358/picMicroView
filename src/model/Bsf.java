@@ -13,14 +13,14 @@ public class Bsf extends Instruction {
 	protected void execute() {
 		//System.out.println("command is " + name);
 
-		freg = pic18.dataMem.getRegAddress(instruction);
+		freg = getPic18().getDataMem().getRegAddress(getInstruction());
 //		int address = instruction & 0x00ff;
 		//System.out.println("memory contents before toggle: " + Integer.toBinaryString(pic18.dataMem.gpMem[address].read()));
-		int bit = instruction & 0x0e00;
+		int bit = getInstruction() & 0x0e00;
 		bit = (bit / 256) >> 1;
 //		System.out.println("in bsf.execute(), calling register " + Integer.toHexString(freg) + ".setBit(bit)");
 		//System.out.println("memory contents before set: " + Integer.toBinaryString(pic18.dataMem.gpMem[address].read()));
-		pic18.dataMem.gpMem[freg].setBit(bit);
+		getPic18().getDataMem().gpMem[freg].setBit(bit);
 
 		//System.out.println("memory contents after set: " + Integer.toBinaryString(pic18.dataMem.gpMem[address].read()));
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
@@ -30,7 +30,7 @@ public class Bsf extends Instruction {
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;	
+		setInstruction(instruction);
 	}
 
 }

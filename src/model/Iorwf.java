@@ -9,14 +9,28 @@ public class Iorwf extends Instruction {
 
 	@Override
 	protected void execute() {
+		DataMemory dataMem = getPic18().getDataMem();
 		//System.out.println("command is " + name);
-		pic18.alu.execute(this);
+		//get register address
+		int freg = dataMem.getRegAddress(getInstruction());
+//		System.out.println("in iorwf.movf, freg address is: " + Integer.toHexString(freg));
+
+		//perform OR function with wreg value
+		int result = dataMem.wreg.read() | dataMem.gpMem[freg].read();
+
+		//if bit 9 of instruction is high, write result to f register
+		//else write to wreg
+		if((getInstruction() & 0x200) == 0x200)
+			dataMem.gpMem[freg].write(result);
+		else dataMem.wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;	
+		setInstruction(instruction);
 	}
 
 }

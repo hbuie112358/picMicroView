@@ -27,10 +27,10 @@ public class TestMain {
 			pic18.run();	
 			for(Integer iter : pic18.changes){
 				address = (int)iter;
-				value = pic18.dataMem.gpMem[address].getContents();
+				value = pic18.getDataMem().gpMem[address].getContents();
 			}
-			testInstructions.add(new TestInstruction(pic18.instruction, address, value));
-			if(pic18.instruction == 0)
+			testInstructions.add(new TestInstruction(pic18.getInstruction(), address, value));
+			if(pic18.getInstruction() == 0)
 				nopCount++;
 			else nopCount = 0;
 		}

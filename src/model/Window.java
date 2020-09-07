@@ -78,7 +78,7 @@ public class Window extends JFrame implements MouseListener, PicListener{
 		
 		pic18.loadHexFile(filename);
 	
-		pic18.clock.start();
+		pic18.getClock().start();
 	}
 	
 	public void update(String message){

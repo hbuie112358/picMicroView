@@ -9,12 +9,26 @@ public class Decf extends Instruction {
 
 	protected void execute() {
 		//System.out.println("command is " + name);
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		int freg = dataMem.getRegAddress(getInstruction());
+		int result = dataMem.gpMem[freg].read();
+		if(result == 0)
+			result = 0xff;
+		else
+			result--;
+
+		//if bit 9 of instruction is high, write result to f register
+		//else write to wreg
+		if((getInstruction() & 0x200) == 0x200)
+			dataMem.gpMem[freg].write(result);
+		else dataMem.wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
 		//pic18.incrementPc();
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;	
+		setInstruction(instruction);
 	}
 }

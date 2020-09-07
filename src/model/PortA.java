@@ -41,7 +41,7 @@ public class PortA extends Register {
 	void setContents(int value){
 		contents = value;
 		contents = contents & 0xff;
-		pic18.repCont.updatePortA(contents);
+		pic18.getReplyController().updatePortA(contents);
 //		pic18.changes.add((Integer)address);	//track writes to registers
 	}
 	
@@ -54,32 +54,32 @@ public class PortA extends Register {
 		public void write(int value){
 			contents = value;
 			contents = contents & 0xff;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 		}
 		
 		public void setBit(int bit){
 			int orValue = baseSet << bit;
 			contents = contents | orValue;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 		}
 		
 		public void clearBit(int bit){
 			//shifts a zero left and adds ones back in to the right
 			int andValue = (baseClear << bit) + ((int)(Math.pow(2, bit) - 1));
 			contents = contents & andValue;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 		}
 		
 		public void decrement(){
 			contents--;
 			contents = contents & 0xff;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 		}
 		
 		public void increment(){
 			contents++;
 			contents = contents & 0xff;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 		}
 	}
 	
@@ -92,14 +92,14 @@ public class PortA extends Register {
 		public void write(int value){
 			contents = value;
 			contents = contents & 0xff;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 			pic18.changes.add((Integer)address);	//track writes to registers
 		}
 		
 		public void setBit(int bit){
 			int orValue = baseSet << bit;
 			contents = contents | orValue;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 			pic18.changes.add((Integer)address);	//track writes to registers
 		}
 		
@@ -107,21 +107,21 @@ public class PortA extends Register {
 			//shifts a zero left and adds ones back in to the right
 			int andValue = (baseClear << bit) + ((int)(Math.pow(2, bit) - 1));
 			contents = contents & andValue;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 			pic18.changes.add((Integer)address);	//track writes to registers
 		}
 		
 		public void decrement(){
 			contents--;
 			contents = contents & 0xff;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 			pic18.changes.add((Integer)address);	//track writes to registers
 		}
 		
 		public void increment(){
 			contents++;
 			contents = contents & 0xff;
-			pic18.repCont.updatePortA(contents);
+			pic18.getReplyController().updatePortA(contents);
 			pic18.changes.add((Integer)address);	//track writes to registers
 		}
 	}

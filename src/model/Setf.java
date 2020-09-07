@@ -10,14 +10,15 @@ public class Setf extends Instruction {
 
 	@Override
 	protected void execute() {
-		freg = pic18.dataMem.getRegAddress(instruction);
-		pic18.dataMem.gpMem[freg].write(0xff);
+		DataMemory dataMem = getPic18().getDataMem();
+		freg = dataMem.getRegAddress(getInstruction());
+		dataMem.gpMem[freg].write(0xff);
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

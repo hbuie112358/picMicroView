@@ -4,26 +4,26 @@ package model;
 public class ProgramCounter {
 
 	private Pic18F452 pic18;
-	private int pc;
+	private int pcValue;
 	
 	public ProgramCounter(Pic18F452 pic18) {
 		this.pic18 = pic18;
-		pc = 0;
+		pcValue = 0;
 	}
 	
 	public void increment(){
-		if(pc == pic18.getDataMemorySize() - 2)
-			pc = 0;
+		if(pcValue == pic18.getDataMemorySize() - 2)
+			pcValue = 0;
 		else
-			pc = pc + 2;
+			pcValue = pcValue + 2;
 	}
 	
-	public void setPc(int value){
-		pc = value;
+	public void setpcValue(int value){
+		pcValue = value;
 	}
 	
-	public int getPc(){
-		return pc;
+	public int getpcValue(){
+		return pcValue;
 	}
 	
 	/**
@@ -34,14 +34,14 @@ public class ProgramCounter {
 	 * @return
 	 */
 	public int getWord(){
-//		int highByte = pic18.programMem[pc] * 256;
-		int highByte = pic18.programMem[pc] << 8;
-		int lowByte = pic18.programMem[pc + 1];
+//		int highByte = pic18.programMem[pcValue] * 256;
+		int highByte = pic18.getProgramMemory(pcValue) << 8;
+		int lowByte = pic18.getProgramMemory(pcValue + 1);
 		increment();
 		return highByte + lowByte;
 	}
 	
-	public int calcOffset256(int value){
+	protected int calcOffset256(int value){
 		if(value > 127)
 			return 2 * (value - 256);
 		else return 2 * value;
@@ -55,11 +55,11 @@ public class ProgramCounter {
 	
 	//not like book, but temporary 
 	public int getReturnAddress(){
-		return pc + 2;
+		return pcValue + 2;
 	}
 	
 	public int getNextAddress(){
-		return pc + 2;
+		return pcValue + 2;
 	}
 	
 }

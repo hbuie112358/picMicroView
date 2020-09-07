@@ -21,6 +21,6 @@ public class Nop extends Instruction{
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;	
+		setInstruction(instruction);
 	}
 }

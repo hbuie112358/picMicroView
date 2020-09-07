@@ -12,12 +12,15 @@ public class Rcall extends Instruction {
 		
 		//subtract 2 since pc was incremented when rcall instruction was retrieved
 		//pushes address of next instruction onto the stack
-		pic18.stack.push(pic18.pc.getReturnAddress() -2);
-		int offset = instruction & 0x07ff;
+		Pic18F452 pic18 = getPic18();
+		Stack stack = pic18.getStack();
+		ProgramCounter pc = pic18.getProgramCounter();
+		stack.push(pc.getReturnAddress() -2);
+		int offset = getInstruction() & 0x07ff;
 		//System.out.println("calculated offset in rcall execute is " + 
 		//		Integer.toHexString(pic18.pc.calcOffset2048(offset)) + " hex");
 
-		pic18.pc.setPc(pic18.pc.getPc() + pic18.pc.calcOffset2048(offset));
+		pic18.setPcValue(pic18.getPcValue() + pc.calcOffset2048(offset));
 		//System.out.println("program counter is " + Integer.toHexString(pic18.pc.getPc())
 		//		+ " hex");
 		//System.out.println("pcL is " + Integer.toHexString(pic18.dataMem.pcL.read()));
@@ -30,7 +33,7 @@ public class Rcall extends Instruction {
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 	}
 
 }

@@ -8,11 +8,16 @@ public class Iorlw extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		int wreg = dataMem.wreg.read();
+		int result = getInstruction() | wreg;
+		dataMem.wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 	}
 }

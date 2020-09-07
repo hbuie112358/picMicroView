@@ -16,24 +16,24 @@ public class Goto extends Instruction{
 //				Integer.toHexString(pic18.pc.getPc()) + ", nextWord is: " + Integer.toHexString(nextWord));
 		//lowByte: low 2 nibbles of instruction are k7 through k0 of pc, the "&" masks off 
 		//"EF" portion of goto instruction
-		int lowByte = instruction & 0x00FF;
+		int lowByte = getInstruction() & 0x00FF;
 		
 		//nextWord is the value in the next location of the program counter. The upper 
 		//byte is masked off, leaving only the lower byte
 		nextWord = nextWord & 0x00FF;
 		int gotoAdress = nextWord * 256 + lowByte;
-		pic18.pc.setPc(gotoAdress * 2);
+		getPic18().setPcValue(gotoAdress * 2);
 //		System.out.println("command is " + name + " and pc is now " + Integer.toHexString(pic18.pc.getPc())
 //				+ " hex");
 //		System.out.println("pcL is " + Integer.toHexString(pic18.dataMem.pcL.read()));
 		nextWord = 0;
-		super.instruction = 0;
+		setInstruction(0);
 	}
 	
 	protected void initialize(int instruction, int nextWord){
 		this.nextWord = nextWord;
 //		System.out.println("in goto.initialize, setting nextWord to: " + Integer.toHexString(nextWord));
-		this.instruction = instruction;
+		setInstruction(instruction);
 	}
 
 	@Override

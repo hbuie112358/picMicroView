@@ -10,17 +10,19 @@ public class Swapf extends Instruction {
 
 	@Override
 	protected void execute() {
-		freg = pic18.dataMem.getRegAddress(instruction);
-		result = pic18.dataMem.gpMem[freg].read();
+		DataMemory dataMem = getPic18().getDataMem();
+		int instruction = getInstruction();
+		freg = dataMem.getRegAddress(instruction);
+		result = dataMem.gpMem[freg].read();
 		result = (((result & 0x0f) << 4) | ((result & 0xf0) >> 4));
 		if((instruction & 0x200) == 0x200) 
-			pic18.dataMem.gpMem[freg].write(result);
-		else pic18.dataMem.wreg.write(result);
+			dataMem.gpMem[freg].write(result);
+		else dataMem.wreg.write(result);
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 	}
 
 }

@@ -28,10 +28,10 @@ public class Plusw extends Register {
 	//Gets full address based on whether it is an instance of indf0, indf1, or indf2.
 	//It needs to know whether to get address from fsr0, fsr1, or fsr2.
 	private void getFullAddress(){
-		
-		wregVal = pic18.dataMem.wreg.read();
-		lowAddress = pic18.dataMem.gpMem[fsrl].read();
-		highAddress = pic18.dataMem.gpMem[fsrh].read();
+		DataMemory dataMem = pic18.getDataMem();
+		wregVal = dataMem.wreg.read();
+		lowAddress = dataMem.gpMem[fsrl].read();
+		highAddress = dataMem.gpMem[fsrh].read();
 //		System.out.println("in plusw just after read, lowAddress is: " + Integer.toHexString(lowAddress));
 //		System.out.println("in plusw just after read, wregVal is: " + Integer.toHexString(wregVal));
 		//if wregVal bit 7 is 1, then wreg is negative number 
@@ -78,7 +78,7 @@ public class Plusw extends Register {
 		getFullAddress();
 		
 		//tells callee that caller is an indf register
-		return pic18.dataMem.gpMem[fullAddress].read(this);
+		return pic18.getDataMem().gpMem[fullAddress].read(this);
 	}
 	
 	//Returns the register contents via the read() method. Used by pic18.getDataMemory()
@@ -107,7 +107,7 @@ public class Plusw extends Register {
 			getFullAddress();
 			
 			//tells callee that caller is an indf register
-			pic18.dataMem.gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().gpMem[fullAddress].write(value, register);
 
 			//System.out.println("in " + name", written by register at address: " + Integer.toHexString(address));
 		}
@@ -123,7 +123,7 @@ public class Plusw extends Register {
 		@Override
 		public void clear() {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clear(register);
+			pic18.getDataMem().gpMem[fullAddress].clear(register);
 		}
 		
 		public void clear(Register r){
@@ -133,13 +133,13 @@ public class Plusw extends Register {
 		@Override
 		public void setBit(int bit) {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].setBit(bit, register);
+			pic18.getDataMem().gpMem[fullAddress].setBit(bit, register);
 		}
 
 		@Override
 		public void clearBit(int bit) {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clearBit(bit, register);
+			pic18.getDataMem().gpMem[fullAddress].clearBit(bit, register);
 		}
 		
 		public void clearBit(int bit, Register r){
@@ -149,7 +149,7 @@ public class Plusw extends Register {
 		@Override
 		public void decrement() {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].decrement(register);
+			pic18.getDataMem().gpMem[fullAddress].decrement(register);
 		}
 		
 		public void decrement(Register r){
@@ -159,7 +159,7 @@ public class Plusw extends Register {
 		@Override
 		public void increment() {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].increment(register);
+			pic18.getDataMem().gpMem[fullAddress].increment(register);
 		}
 		
 		public void increment(Register r){
@@ -186,7 +186,7 @@ public class Plusw extends Register {
 			getFullAddress();
 			
 			//tells callee that caller is an indf register
-			pic18.dataMem.gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().gpMem[fullAddress].write(value, register);
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 
 			//System.out.println("in " + name", written by register at address: " + Integer.toHexString(address));
@@ -203,7 +203,7 @@ public class Plusw extends Register {
 		@Override
 		public void clear() {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clear(register);
+			pic18.getDataMem().gpMem[fullAddress].clear(register);
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -214,7 +214,7 @@ public class Plusw extends Register {
 		@Override
 		public void setBit(int bit) {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].setBit(bit, register);
+			pic18.getDataMem().gpMem[fullAddress].setBit(bit, register);
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -225,7 +225,7 @@ public class Plusw extends Register {
 		@Override
 		public void clearBit(int bit) {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clear(register);
+			pic18.getDataMem().gpMem[fullAddress].clear(register);
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -236,7 +236,7 @@ public class Plusw extends Register {
 		@Override
 		public void decrement() {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].decrement(register);
+			pic18.getDataMem().gpMem[fullAddress].decrement(register);
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -247,7 +247,7 @@ public class Plusw extends Register {
 		@Override
 		public void increment() {
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].increment(register);
+			pic18.getDataMem().gpMem[fullAddress].increment(register);
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		

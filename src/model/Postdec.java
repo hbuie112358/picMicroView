@@ -28,8 +28,8 @@ public class Postdec extends Register {
 	//Gets full address based on whether it is an instance of indf0, indf1, or indf2.
 	//It needs to know whether to get address from fsr0, fsr1, or fsr2.
 	private void getFullAddress(){
-		highAddress = pic18.dataMem.gpMem[fsrh].read();
-		lowAddress = pic18.dataMem.gpMem[fsrl].read();
+		highAddress = pic18.getDataMem().gpMem[fsrh].read();
+		lowAddress = pic18.getDataMem().gpMem[fsrl].read();
 		highAddress = highAddress << 8;
 		fullAddress = highAddress | lowAddress;
 	}
@@ -43,8 +43,8 @@ public class Postdec extends Register {
 		getFullAddress();
 		
 		//tells callee that caller is an indf register
-		readReturn = pic18.dataMem.gpMem[fullAddress].read(this);
-		pic18.dataMem.gpMem[fsrl].decrement();
+		readReturn = pic18.getDataMem().gpMem[fullAddress].read(this);
+		pic18.getDataMem().gpMem[fsrl].decrement();
 		return readReturn;
 	}
 	
@@ -72,8 +72,8 @@ public class Postdec extends Register {
 			getFullAddress();
 			
 			//tells callee that caller is an indf register
-			pic18.dataMem.gpMem[fullAddress].write(value, register);
-			pic18.dataMem.gpMem[fsrl].decrement();	
+			pic18.getDataMem().gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 		}
 		
 		//This function overrides parent function.
@@ -86,8 +86,8 @@ public class Postdec extends Register {
 		
 		public void clear(){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clear(register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].clear(register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 		}
 		
 		public void clear(Register r){
@@ -96,8 +96,8 @@ public class Postdec extends Register {
 		
 		public void setBit(int bit){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].setBit(bit, register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].setBit(bit, register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 		}
 		
 		public void setBit(int bit, Register r){
@@ -106,8 +106,8 @@ public class Postdec extends Register {
 		
 		public void clearBit(int bit){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clearBit(bit, register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].clearBit(bit, register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 		}
 		
 		public void clearBit(int bit, Register r){
@@ -116,8 +116,8 @@ public class Postdec extends Register {
 		
 		public void decrement(){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].decrement(register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].decrement(register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 		}
 		
 		public void decrement(Register r){
@@ -126,8 +126,8 @@ public class Postdec extends Register {
 		
 		public void increment(){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].increment(register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].increment(register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 		}
 		
 		public void increment(Register r){
@@ -152,8 +152,8 @@ public class Postdec extends Register {
 			getFullAddress();
 			
 			//tells callee that caller is an indf register
-			pic18.dataMem.gpMem[fullAddress].write(value, register);
-			pic18.dataMem.gpMem[fsrl].decrement();	
+			pic18.getDataMem().gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -167,8 +167,8 @@ public class Postdec extends Register {
 		
 		public void clear(){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clear(register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].clear(register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -178,8 +178,8 @@ public class Postdec extends Register {
 		
 		public void setBit(int bit){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].setBit(bit, register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].setBit(bit, register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -189,8 +189,8 @@ public class Postdec extends Register {
 		
 		public void clearBit(int bit){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].clearBit(bit, register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].clearBit(bit, register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -200,8 +200,8 @@ public class Postdec extends Register {
 		
 		public void decrement(){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].decrement(register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].decrement(register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		
@@ -211,8 +211,8 @@ public class Postdec extends Register {
 		
 		public void increment(){
 			getFullAddress();
-			pic18.dataMem.gpMem[fullAddress].increment(register);
-			pic18.dataMem.gpMem[fsrl].decrement();
+			pic18.getDataMem().gpMem[fullAddress].increment(register);
+			pic18.getDataMem().gpMem[fsrl].decrement();
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		

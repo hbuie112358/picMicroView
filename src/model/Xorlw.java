@@ -8,12 +8,16 @@ public class Xorlw extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		int wreg = getPic18().getDataMem().wreg.read();
+		int result = getInstruction() ^ wreg;
+		getPic18().getDataMem().wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

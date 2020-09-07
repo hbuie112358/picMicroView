@@ -12,16 +12,17 @@ public class Mullw extends Instruction {
 
 	@Override
 	protected void execute() {
-		result = (instruction & 0xff) * pic18.dataMem.wreg.read();
+		DataMemory dataMem = getPic18().getDataMem();
+		result = (getInstruction() & 0xff) * dataMem.wreg.read();
 		highByte = (result & 0xff00) >> 8;
 		lowByte = result & 0xff;
-		pic18.dataMem.prodh.write(highByte);
-		pic18.dataMem.prodL.write(lowByte);
+		dataMem.prodh.write(highByte);
+		dataMem.prodL.write(lowByte);
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

@@ -36,7 +36,7 @@ public class PicMain {
 		EventQueue.invokeLater(new Runnable(){
 			public void run(){
 				MainWindow mw = new MainWindow(requestController);
-				replyController.registerMembers(mw, requestController);
+				replyController.registerMembers(mw);
 			}
 		});
 	}

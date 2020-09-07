@@ -33,7 +33,7 @@ public class RequestController{
 					pic18.loadHexFile(fileName);
 					ArrayList<Integer> pm = pic18.getPgmMemory();
 					repCont.updatePgmMemTable(pm);
-					repCont.updatePc(pic18.getPc());
+					repCont.updatePc(pic18.getPcValue());
 
 				}		
 			});	
@@ -47,7 +47,7 @@ public class RequestController{
 				pic18.setStepState();
 				pic18.run();
 				updateDataMemory();
-				repCont.updatePc(pic18.getPc());				
+				repCont.updatePc(pic18.getPcValue());
 			}		
 		});	
 	}
@@ -71,7 +71,7 @@ public class RequestController{
 //				pic18.run();
 //				updateDataMemory();
 				updateDataMemoryOnStop();
-				repCont.updatePc(pic18.getPc());
+				repCont.updatePc(pic18.getPcValue());
 				//pic18.initPic();
 			}		
 		});		

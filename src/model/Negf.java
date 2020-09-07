@@ -9,13 +9,21 @@ public class Negf extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		int freg = dataMem.getRegAddress(getInstruction());
+		int origValue = dataMem.gpMem[freg].read();
+		int result = Alu.getTwosComplement(origValue & 0xff);
+		adjustDCbit(~origValue, (0x01));
+		dataMem.gpMem[freg].write(result);
+		adjustZbit(result);
+		adjustNbit(result);
+		adjustCbit(result);
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

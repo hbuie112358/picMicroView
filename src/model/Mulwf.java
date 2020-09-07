@@ -14,18 +14,19 @@ public class Mulwf extends Instruction {
 
 	@Override
 	protected void execute() {
-		address = pic18.dataMem.getRegAddress(instruction);
-		result = pic18.dataMem.gpMem[address].read() * pic18.dataMem.wreg.read();
+		DataMemory dataMem = getPic18().getDataMem();
+		address = dataMem.getRegAddress(getInstruction());
+		result = dataMem.gpMem[address].read() * dataMem.wreg.read();
 		highByte = (result & 0xff00) >> 8;
 		lowByte = result & 0xff;
-		pic18.dataMem.prodh.write(highByte);
-		pic18.dataMem.prodL.write(lowByte);
+		dataMem.prodh.write(highByte);
+		dataMem.prodL.write(lowByte);
 
 	}
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 

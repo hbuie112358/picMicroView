@@ -23,7 +23,7 @@ public class Stack {
 			stack[ptr] = address;
 		}
 		else{ //set stack overflow bit and overwrite top of stack
-			pic18.dataMem.stkptr.setBit(1);
+			pic18.getDataMem().stkptr.setBit(1);
 			stack[stack.length -1] = address;
 		}
 	}

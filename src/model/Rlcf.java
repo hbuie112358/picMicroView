@@ -10,7 +10,26 @@ public class Rlcf extends Instruction {
 
 	@Override
 	protected void execute() {
-		pic18.alu.execute(this);
+		DataMemory dataMem = getPic18().getDataMem();
+		freg = dataMem.getRegAddress(getInstruction());
+		result = dataMem.gpMem[freg].read() << 1;
+		carry = dataMem.status.getBit(0);
+		result = result + carry;
+		if((result & 0x100) == 0x100) {
+			dataMem.status.setBit(0);
+		}
+		else {
+			dataMem.status.clearBit(0);
+		}
+		result = result & 0xff;
+
+		//if bit 9 of instruction is high, write result to f register
+		//else write to wreg
+		if((getInstruction() & 0x200) == 0x200)
+			dataMem.gpMem[freg].write(result);
+		else dataMem.wreg.write(result);
+		adjustZbit(result);
+		adjustNbit(result);
 //		freg = pic18.dataMem.getRegAddress(instruction);
 //		result = pic18.dataMem.gpMem[freg].read() << 1;
 //		carry = pic18.dataMem.status.getBit(0);
@@ -29,7 +48,7 @@ public class Rlcf extends Instruction {
 
 	@Override
 	protected void initialize(int instruction) {
-		this.instruction = instruction;
+		setInstruction(instruction);
 
 	}
 
