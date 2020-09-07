@@ -5,7 +5,7 @@ public class RunState implements Pic18F452State {
 	Pic18F452 pic18;
 	State state;
 	
-	public RunState(Pic18F452 pic18) {
+	RunState(Pic18F452 pic18) {
 		this.pic18 = pic18;
 		state = State.RUN;
 	}

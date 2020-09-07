@@ -3,7 +3,7 @@ package model;
 
 public class Rcall extends Instruction {
 
-	public Rcall(int instruction, Pic18F452 pic18, String name) {
+	Rcall(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -29,11 +29,6 @@ public class Rcall extends Instruction {
 		//pic18.pc.increment();
 //		System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
 //		System.out.println("");
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 	}
 
 }

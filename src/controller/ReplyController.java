@@ -50,22 +50,22 @@ public class ReplyController {
 	}
 	
 	//Called by RequestController.updateDataMemory()
-	public void updateMemTables(Object[] dm_changes){
+	void updateMemTables(Object[] dm_changes){
 		EventQueue.invokeLater(() -> mw.updateDataMemTable(dm_changes));
 	}
 	
 	//Called by RequestController.stopAction
-	public void updateMemTables(ArrayList<Integer> dm){
+	void updateMemTables(ArrayList<Integer> dm){
 		EventQueue.invokeLater(() -> mw.updateDataMemTable(dm));
 	}
 
-	public void initDataMemTable(final ArrayList<Integer> dm){
+	void initDataMemTable(final ArrayList<Integer> dm){
 		EventQueue.invokeLater(() -> mw.initDataMemTable(dm));
 	}
 	
 	//Sends MainWindow value of program counter, called by 
 	//RequestController.loadAction();
-	public void updatePc(int pc){
+	void updatePc(int pc){
 		EventQueue.invokeLater(() -> mw.updatePc(pc));
 	}
 
@@ -76,15 +76,15 @@ public class ReplyController {
 	 * is loaded, and each time step button is pressed
 	 * @param pm - program memory values from pic18
 	 */
-	public void updatePgmMemTable(final ArrayList<Integer> pm) {
+	void updatePgmMemTable(final ArrayList<Integer> pm) {
 		EventQueue.invokeLater(() -> mw.updatePgmMemTable(pm));
 	}
 
-	public void initPgmMemTable(final ArrayList<Integer> pm){
+	void initPgmMemTable(final ArrayList<Integer> pm){
 		EventQueue.invokeLater(() -> mw.initPgmMemTable(pm));
 	}
 
-	public void initPortRegMemTable(final ArrayList<Integer> dm){
+	void initPortRegMemTable(final ArrayList<Integer> dm){
 		EventQueue.invokeLater(() -> mw.initPortRegMemTable(dm));
 	}
 	

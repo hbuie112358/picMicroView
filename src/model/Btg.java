@@ -27,9 +27,4 @@ public class Btg extends Instruction {
 //		System.out.println("memory contents after toggle: " + Integer.toBinaryString(pic18.dataMem.gpMem[freg].read()));
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
-
 }

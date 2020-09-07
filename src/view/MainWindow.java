@@ -59,197 +59,196 @@ public class MainWindow extends JFrame{
 	private String fileName = "";
 	private String lstFileName = "";
 	private RequestController reqCont;
-	private JMenuBar menuBar = new JMenuBar();
-	private JMenu fileMenu = new JMenu("File");
-	private JMenuItem loadItem = new JMenuItem("Load");
-	private JMenuItem newFileItem = new JMenuItem("New");
-	private JMenuItem quitItem = new JMenuItem("Quit");
-	private JFileChooser fc = new JFileChooser();
+	private final JMenuBar menuBar = new JMenuBar();
+	private final JMenu fileMenu = new JMenu("File");
+	private final JMenuItem loadItem = new JMenuItem("Load");
+	private final JMenuItem newFileItem = new JMenuItem("New");
+	private final JMenuItem quitItem = new JMenuItem("Quit");
+	private final JFileChooser fc = new JFileChooser();
 	
-	private JMenu programMenu = new JMenu("Program");
-	private JMenuItem runItem = new JMenuItem("Run");
-	private JMenuItem stepItem = new JMenuItem("Step");
-	private JMenuItem assembleItem = new JMenuItem("Assemble");
-	private JMenuItem stopItem = new JMenuItem("Stop");
+	private final JMenu programMenu = new JMenu("Program");
+	private final JMenuItem runItem = new JMenuItem("Run");
+	private final JMenuItem stepItem = new JMenuItem("Step");
+	private final JMenuItem assembleItem = new JMenuItem("Assemble");
+	private final JMenuItem stopItem = new JMenuItem("Stop");
 	
-	private LoadAction loadAction = new LoadAction();
-	private RunAction runAction = new RunAction();
-	private StepAction stepAction = new StepAction();
-	private StopAction stopAction = new StopAction();
+	private final LoadAction loadAction = new LoadAction();
+	private final RunAction runAction = new RunAction();
+	private final StepAction stepAction = new StepAction();
+	private final StopAction stopAction = new StopAction();
 	
-	private JMenu examples = new JMenu("Examples");
-	private JMenu instructions = new JMenu("Instructions");
-	private JMenu basic = new JMenu("Basic");
-	private JMenu inDepth = new JMenu("In-depth");
-	private JMenu a = new JMenu("A");
-	private JMenuItem addlw = new JMenuItem("addlw");
-	private JMenuItem addwf = new JMenuItem("addwf");
-	private JMenuItem addwfc = new JMenuItem("addwfc");
-	private JMenuItem andlw = new JMenuItem("andlw");
-	private JMenuItem andwf = new JMenuItem("andwf");
-	private JMenu b = new JMenu("B");
-	private JMenuItem bc = new JMenuItem("bc");
-	private JMenuItem bcf = new JMenuItem("bcf");
-	private JMenuItem bn = new JMenuItem("bn");
-	private JMenuItem bnc = new JMenuItem("bnc");
-	private JMenuItem bnn = new JMenuItem("bnn");
-	private JMenuItem bnov = new JMenuItem("bnov");
-	private JMenuItem bnz = new JMenuItem("bnz");
-	private JMenuItem bov = new JMenuItem("bov");
-	private JMenuItem bra = new JMenuItem("bra");
-	private JMenuItem bsf = new JMenuItem("bsf");
-	private JMenuItem btfsc = new JMenuItem("btfsc");
-	private JMenuItem btfss = new JMenuItem("btfss");
-	private JMenuItem btg = new JMenuItem("btg");
-	private JMenuItem bz = new JMenuItem("bz");
-	private JMenu c = new JMenu("C");
-	private JMenuItem clrf = new JMenuItem("clrf");
-	private JMenuItem comf = new JMenuItem("comf");
-	private JMenuItem cpfseq = new JMenuItem("cpfseq");
-	private JMenuItem cpfsgt = new JMenuItem("cpfsgt");
-	private JMenuItem cpfslt = new JMenuItem("cpfslt");
-	private JMenu d = new JMenu("D");
-	private JMenuItem daw = new JMenuItem("daw");
-	private JMenuItem dcfsnz = new JMenuItem("dcfsnz");
-	private JMenuItem decf = new JMenuItem("decf");
-	private JMenuItem decfsz = new JMenuItem("decfsz");
-	private JMenu g = new JMenu("G");
-	private JMenuItem gotoItem = new JMenuItem("goto");
-	private JMenu i = new JMenu("I");
-	private JMenuItem incf = new JMenuItem("incf");
-	private JMenuItem incfsz = new JMenuItem("incfsz");
-	private JMenuItem infsnz = new JMenuItem("infsnz");
-	private JMenuItem iorwf = new JMenuItem("iorwf");
-	private JMenuItem iorlw = new JMenuItem("iorlw");
-	private JMenu l = new JMenu("L");
-	private JMenuItem lfsr = new JMenuItem("lfsr");
-	private JMenu m = new JMenu("M");
-	private JMenuItem movf = new JMenuItem("movf");
-	private JMenuItem movff = new JMenuItem("movff");
-	private JMenuItem movlb = new JMenuItem("movlb");
-	private JMenuItem movlw = new JMenuItem("movlw");
-	private JMenuItem movwf = new JMenuItem("movwf");
-	private JMenuItem mullw = new JMenuItem("mullw");
-	private JMenuItem mulwf = new JMenuItem("mulwf");
-	private JMenu n = new JMenu("N");
-	private JMenuItem nop = new JMenuItem("nop");
-	private JMenuItem negf = new JMenuItem("negf");
-	private JMenu r = new JMenu("R");
-	private JMenuItem rcall = new JMenuItem("rcall");
-	private JMenuItem returnItem = new JMenuItem("return");
-	private JMenuItem rlcf = new JMenuItem("rlcf");
-	private JMenuItem rlncf = new JMenuItem("rlncf");
-	private JMenuItem rrcf = new JMenuItem("rrcf");
-	private JMenuItem rrncf = new JMenuItem("rrncf");
-	private JMenu s = new JMenu("S");
-	private JMenuItem setf = new JMenuItem("setf");
-	private JMenuItem swapf = new JMenuItem("swapf");
-	private JMenuItem sublw = new JMenuItem("sublw");
-	private JMenuItem subfwb = new JMenuItem("subfwb");
-	private JMenuItem subwf = new JMenuItem("subwf");
-	private JMenuItem subwfb = new JMenuItem("subwfb");
-	private JMenu t = new JMenu("T");
-	private JMenuItem tstfsz = new JMenuItem("tstfsz");
-	private JMenu x = new JMenu("X");
-	private JMenuItem xorlw = new JMenuItem("xorlw");
-	private JMenuItem xorwf = new JMenuItem("xorwf");
+	private final JMenu examples = new JMenu("Examples");
+	private final JMenu instructions = new JMenu("Instructions");
+	private final JMenu basic = new JMenu("Basic");
+	private final JMenu inDepth = new JMenu("In-depth");
+	private final JMenu a = new JMenu("A");
+	private final JMenuItem addlw = new JMenuItem("addlw");
+	private final JMenuItem addwf = new JMenuItem("addwf");
+	private final JMenuItem addwfc = new JMenuItem("addwfc");
+	private final JMenuItem andlw = new JMenuItem("andlw");
+	private final JMenuItem andwf = new JMenuItem("andwf");
+	private final JMenu b = new JMenu("B");
+	private final JMenuItem bc = new JMenuItem("bc");
+	private final JMenuItem bcf = new JMenuItem("bcf");
+	private final JMenuItem bn = new JMenuItem("bn");
+	private final JMenuItem bnc = new JMenuItem("bnc");
+	private final JMenuItem bnn = new JMenuItem("bnn");
+	private final JMenuItem bnov = new JMenuItem("bnov");
+	private final JMenuItem bnz = new JMenuItem("bnz");
+	private final JMenuItem bov = new JMenuItem("bov");
+	private final JMenuItem bra = new JMenuItem("bra");
+	private final JMenuItem bsf = new JMenuItem("bsf");
+	private final JMenuItem btfsc = new JMenuItem("btfsc");
+	private final JMenuItem btfss = new JMenuItem("btfss");
+	private final JMenuItem btg = new JMenuItem("btg");
+	private final JMenuItem bz = new JMenuItem("bz");
+	private final JMenu c = new JMenu("C");
+	private final JMenuItem clrf = new JMenuItem("clrf");
+	private final JMenuItem comf = new JMenuItem("comf");
+	private final JMenuItem cpfseq = new JMenuItem("cpfseq");
+	private final JMenuItem cpfsgt = new JMenuItem("cpfsgt");
+	private final JMenuItem cpfslt = new JMenuItem("cpfslt");
+	private final JMenu d = new JMenu("D");
+	private final JMenuItem daw = new JMenuItem("daw");
+	private final JMenuItem dcfsnz = new JMenuItem("dcfsnz");
+	private final JMenuItem decf = new JMenuItem("decf");
+	private final JMenuItem decfsz = new JMenuItem("decfsz");
+	private final JMenu g = new JMenu("G");
+	private final JMenuItem gotoItem = new JMenuItem("goto");
+	private final JMenu i = new JMenu("I");
+	private final JMenuItem incf = new JMenuItem("incf");
+	private final JMenuItem incfsz = new JMenuItem("incfsz");
+	private final JMenuItem infsnz = new JMenuItem("infsnz");
+	private final JMenuItem iorwf = new JMenuItem("iorwf");
+	private final JMenuItem iorlw = new JMenuItem("iorlw");
+	private final JMenu l = new JMenu("L");
+	private final JMenuItem lfsr = new JMenuItem("lfsr");
+	private final JMenu m = new JMenu("M");
+	private final JMenuItem movf = new JMenuItem("movf");
+	private final JMenuItem movff = new JMenuItem("movff");
+	private final JMenuItem movlb = new JMenuItem("movlb");
+	private final JMenuItem movlw = new JMenuItem("movlw");
+	private final JMenuItem movwf = new JMenuItem("movwf");
+	private final JMenuItem mullw = new JMenuItem("mullw");
+	private final JMenuItem mulwf = new JMenuItem("mulwf");
+	private final JMenu n = new JMenu("N");
+	private final JMenuItem nop = new JMenuItem("nop");
+	private final JMenuItem negf = new JMenuItem("negf");
+	private final JMenu r = new JMenu("R");
+	private final JMenuItem rcall = new JMenuItem("rcall");
+	private final JMenuItem returnItem = new JMenuItem("return");
+	private final JMenuItem rlcf = new JMenuItem("rlcf");
+	private final JMenuItem rlncf = new JMenuItem("rlncf");
+	private final JMenuItem rrcf = new JMenuItem("rrcf");
+	private final JMenuItem rrncf = new JMenuItem("rrncf");
+	private final JMenu s = new JMenu("S");
+	private final JMenuItem setf = new JMenuItem("setf");
+	private final JMenuItem swapf = new JMenuItem("swapf");
+	private final JMenuItem sublw = new JMenuItem("sublw");
+	private final JMenuItem subfwb = new JMenuItem("subfwb");
+	private final JMenuItem subwf = new JMenuItem("subwf");
+	private final JMenuItem subwfb = new JMenuItem("subwfb");
+	private final JMenu t = new JMenu("T");
+	private final JMenuItem tstfsz = new JMenuItem("tstfsz");
+	private final JMenu x = new JMenu("X");
+	private final JMenuItem xorlw = new JMenuItem("xorlw");
+	private final JMenuItem xorwf = new JMenuItem("xorwf");
 	
-	private JMenu aID = new JMenu("A");
-	private JMenuItem addlwIDItem = new JMenuItem("addlw");
-	private JMenuItem addwfcIDItem = new JMenuItem("addwfc");
-	private JMenuItem addwfIDItem = new JMenuItem("addwf");
-	private JMenuItem andwfIDItem = new JMenuItem("andwf");
-	private JMenu bID = new JMenu("B");
-	private JMenuItem bcIDItem = new JMenuItem("bc");
-	private JMenuItem bcfIDItem = new JMenuItem("bcf");
-	private JMenuItem bnIDItem = new JMenuItem("bn");
-	private JMenuItem bncIDItem = new JMenuItem("bnc");
-	private JMenuItem bnnIDItem = new JMenuItem("bnn");
-	private JMenuItem bnovIDItem = new JMenuItem("bnov");
-	private JMenuItem bovIDItem = new JMenuItem("bov");
-	private JMenuItem bsfIDItem = new JMenuItem("bsf");
-	private JMenuItem btfscIDItem = new JMenuItem("btfsc");
-	private JMenuItem btfssIDItem = new JMenuItem("btfss");
-	private JMenuItem btgIDItem = new JMenuItem("btg");
-	private JMenuItem bzIDItem = new JMenuItem("bz");
-	private JMenu cID = new JMenu("C");
-	private JMenuItem clrfIDItem = new JMenuItem("clrf");
-	private JMenuItem comfIDItem = new JMenuItem("comf");
-	private JMenuItem cpfseqIDItem = new JMenuItem("cpfseq");
-	private JMenuItem cpfsgtIDItem = new JMenuItem("cpfsgt");
-	private JMenuItem cpfsltIDItem = new JMenuItem("cpfslt");
-	private JMenu dID = new JMenu("D");
-	private JMenuItem dawIDItem = new JMenuItem("daw");
-	private JMenuItem dcfsnzIDItem	= new JMenuItem("dcfsnz");
-	private JMenuItem decfIDItem = new JMenuItem("decf");
-	private JMenuItem decfszIDItem	= new JMenuItem("decfsz");
-	private JMenu iID = new JMenu("I");
-	private JMenuItem incfIDItem = new JMenuItem("incf");
-	private JMenuItem incfszIDItem = new JMenuItem("incfsz");
-	private JMenuItem infsnzIDItem = new JMenuItem("infsnz");
-	private JMenuItem iorlwIDItem = new JMenuItem("iorlw");
-	private JMenuItem iorwfIDItem = new JMenuItem("iorwf");
-	private JMenu mID = new JMenu("M");
-	private JMenuItem movfIDItem = new JMenuItem("movf");
-	private JMenu nID = new JMenu("N");
-	private JMenuItem negfIDItem = new JMenuItem("negf");
-	private JMenuItem movwfIDItem = new JMenuItem("movwf");
-	private JMenuItem mullwIDItem = new JMenuItem("mullw");
-	private JMenu rID = new JMenu("R");
-	private JMenuItem rlcfIDItem = new JMenuItem("rlcf");
-	private JMenuItem rlncfIDItem = new JMenuItem("rlncf");
-	private JMenuItem rrcfIDItem = new JMenuItem("rrcf");
-	private JMenuItem rrncfIDItem = new JMenuItem("rrncf");
-	private JMenu sID = new JMenu("S");
-	private JMenuItem setfIDItem = new JMenuItem("setf");
-	private JMenuItem sublwIDItem = new JMenuItem("sublw");
-	private JMenuItem subfwbIDItem = new JMenuItem("subfwb");
-	private JMenuItem subwfIDItem = new JMenuItem("subwf");
-	private JMenuItem subwfbIDItem = new JMenuItem("subwfb");
-	private JMenuItem swapfIDItem = new JMenuItem("swapf");
-	private JMenu tID = new JMenu("T");
-	private JMenuItem tstfszIDItem = new JMenuItem("tstfsz");
-	private JMenu xID = new JMenu("X");
-	private JMenuItem xorlwIDItem = new JMenuItem("xorlw");
-	private JMenuItem xorwfIDItem = new JMenuItem("xorwf");
+	private final JMenu aID = new JMenu("A");
+	private final JMenuItem addlwIDItem = new JMenuItem("addlw");
+	private final JMenuItem addwfcIDItem = new JMenuItem("addwfc");
+	private final JMenuItem addwfIDItem = new JMenuItem("addwf");
+	private final JMenuItem andwfIDItem = new JMenuItem("andwf");
+	private final JMenu bID = new JMenu("B");
+	private final JMenuItem bcIDItem = new JMenuItem("bc");
+	private final JMenuItem bcfIDItem = new JMenuItem("bcf");
+	private final JMenuItem bnIDItem = new JMenuItem("bn");
+	private final JMenuItem bncIDItem = new JMenuItem("bnc");
+	private final JMenuItem bnnIDItem = new JMenuItem("bnn");
+	private final JMenuItem bnovIDItem = new JMenuItem("bnov");
+	private final JMenuItem bovIDItem = new JMenuItem("bov");
+	private final JMenuItem bsfIDItem = new JMenuItem("bsf");
+	private final JMenuItem btfscIDItem = new JMenuItem("btfsc");
+	private final JMenuItem btfssIDItem = new JMenuItem("btfss");
+	private final JMenuItem btgIDItem = new JMenuItem("btg");
+	private final JMenuItem bzIDItem = new JMenuItem("bz");
+	private final JMenu cID = new JMenu("C");
+	private final JMenuItem clrfIDItem = new JMenuItem("clrf");
+	private final JMenuItem comfIDItem = new JMenuItem("comf");
+	private final JMenuItem cpfseqIDItem = new JMenuItem("cpfseq");
+	private final JMenuItem cpfsgtIDItem = new JMenuItem("cpfsgt");
+	private final JMenuItem cpfsltIDItem = new JMenuItem("cpfslt");
+	private final JMenu dID = new JMenu("D");
+	private final JMenuItem dawIDItem = new JMenuItem("daw");
+	private final JMenuItem dcfsnzIDItem	= new JMenuItem("dcfsnz");
+	private final JMenuItem decfIDItem = new JMenuItem("decf");
+	private final JMenuItem decfszIDItem	= new JMenuItem("decfsz");
+	private final JMenu iID = new JMenu("I");
+	private final JMenuItem incfIDItem = new JMenuItem("incf");
+	private final JMenuItem incfszIDItem = new JMenuItem("incfsz");
+	private final JMenuItem infsnzIDItem = new JMenuItem("infsnz");
+	private final JMenuItem iorlwIDItem = new JMenuItem("iorlw");
+	private final JMenuItem iorwfIDItem = new JMenuItem("iorwf");
+	private final JMenu mID = new JMenu("M");
+	private final JMenuItem movfIDItem = new JMenuItem("movf");
+	private final JMenu nID = new JMenu("N");
+	private final JMenuItem negfIDItem = new JMenuItem("negf");
+	private final JMenuItem movwfIDItem = new JMenuItem("movwf");
+	private final JMenuItem mullwIDItem = new JMenuItem("mullw");
+	private final JMenu rID = new JMenu("R");
+	private final JMenuItem rlcfIDItem = new JMenuItem("rlcf");
+	private final JMenuItem rlncfIDItem = new JMenuItem("rlncf");
+	private final JMenuItem rrcfIDItem = new JMenuItem("rrcf");
+	private final JMenuItem rrncfIDItem = new JMenuItem("rrncf");
+	private final JMenu sID = new JMenu("S");
+	private final JMenuItem setfIDItem = new JMenuItem("setf");
+	private final JMenuItem sublwIDItem = new JMenuItem("sublw");
+	private final JMenuItem subfwbIDItem = new JMenuItem("subfwb");
+	private final JMenuItem subwfIDItem = new JMenuItem("subwf");
+	private final JMenuItem subwfbIDItem = new JMenuItem("subwfb");
+	private final JMenuItem swapfIDItem = new JMenuItem("swapf");
+	private final JMenu tID = new JMenu("T");
+	private final JMenuItem tstfszIDItem = new JMenuItem("tstfsz");
+	private final JMenu xID = new JMenu("X");
+	private final JMenuItem xorlwIDItem = new JMenuItem("xorlw");
+	private final JMenuItem xorwfIDItem = new JMenuItem("xorwf");
 
-	private JMenu generalConcepts = new JMenu("General Concepts");
-	private JMenu indirectAddressing = new JMenu("Indirect Addressing");
-	private JMenuItem indfItem = new JMenuItem("indf");
-	private JMenuItem pluswItem = new JMenuItem("plusw");
-	private JMenuItem postdecItem = new JMenuItem("postdec");
-	private JMenuItem postincItem = new JMenuItem("postinc");
-	private JMenuItem preincItem = new JMenuItem("preinc");
-	private JMenu loops = new JMenu("Loops");
-	private JMenuItem fastPortAToggleItem = new JMenuItem("Fast PORTA Toggle");
-	private JMenuItem slowToggleAllPortsItem = new JMenuItem("Slow Toggle All Ports");
+	private final JMenu generalConcepts = new JMenu("General Concepts");
+	private final JMenu indirectAddressing = new JMenu("Indirect Addressing");
+	private final JMenuItem indfItem = new JMenuItem("indf");
+	private final JMenuItem pluswItem = new JMenuItem("plusw");
+	private final JMenuItem postdecItem = new JMenuItem("postdec");
+	private final JMenuItem postincItem = new JMenuItem("postinc");
+	private final JMenuItem preincItem = new JMenuItem("preinc");
+	private final JMenu loops = new JMenu("Loops");
+	private final JMenuItem fastPortAToggleItem = new JMenuItem("Fast PORTA Toggle");
+	private final JMenuItem slowToggleAllPortsItem = new JMenuItem("Slow Toggle All Ports");
 	
-	private JMenu helpMenu = new JMenu("Help");
-	private JMenuItem testItem = new JMenuItem("Test");
+	private final JMenu helpMenu = new JMenu("Help");
+	private final JMenuItem testItem = new JMenuItem("Test");
 	
-	private JPanel mainPanel = new JPanel();
+	private final JPanel mainPanel = new JPanel();
 	
-	private JButton runButton = new JButton("Run");
-	private JButton stepButton = new JButton("Step");;
-	private JButton stopButton = new JButton("Stop");;
-	
-	JToolBar toolBar = new JToolBar(JToolBar.HORIZONTAL);
+	private final JButton runButton = new JButton("Run");
+	private final JButton stepButton = new JButton("Step");
+	private final JButton stopButton = new JButton("Stop");
+
+	private final JToolBar toolBar = new JToolBar(JToolBar.HORIZONTAL);
 	private MemoryTableModel dtm_data;
 	
-	private ProgramMemTable pgmMemTable = new ProgramMemTable();
-	private DataMemTable dataMemTable = new DataMemTable();
-	private PortRegTable portRegTable = new PortRegTable();
+	private final ProgramMemTable pgmMemTable = new ProgramMemTable();
+	private final DataMemTable dataMemTable = new DataMemTable();
+	private final PortRegTable portRegTable = new PortRegTable();
 	private MemoryTableModel dtm_pgm;
-	private DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-	private DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
-	private TableCellRenderer colRenderer;
-	
+	private final DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+	private final DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+
 	private PortRegTableModel dtm_portReg;
 	
-	JTabbedPane mainTabs;
-	JScrollPane pgmMemTabPane;
-	JScrollPane accessMemTabPane;
-	JScrollPane portRegTabPane;
+	private JTabbedPane mainTabs;
+	private JScrollPane pgmMemTabPane;
+	private JScrollPane accessMemTabPane;
+	private JScrollPane portRegTabPane;
 	
 	private HashMap<Integer, Integer> portRegList;
 
@@ -282,7 +281,7 @@ public class MainWindow extends JFrame{
 		fileMenu.setMnemonic('F');
 		
 		fileMenu.add(loadItem);
-		loadItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		loadItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 
 		loadItem.addActionListener(loadAction);
 		
@@ -555,19 +554,19 @@ public class MainWindow extends JFrame{
 
 		menuBar.add(programMenu);
 		programMenu.setMnemonic('P');
-		runItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		runItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		runItem.addActionListener(runAction);
 		runButton.addActionListener(runAction);
 		programMenu.add(runItem);
 		
-		stepItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		stepItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		stepItem.addActionListener(stepAction);
 		stepButton.addActionListener(stepAction);
 		programMenu.add(stepItem);
 		
 		programMenu.add(assembleItem);
 		
-		stopItem.setAccelerator(KeyStroke.getKeyStroke('H', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		stopItem.setAccelerator(KeyStroke.getKeyStroke('H', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		stopItem.addActionListener(stopAction);
 		stopButton.addActionListener(stopAction);
 		programMenu.add(stopItem);
@@ -587,7 +586,7 @@ public class MainWindow extends JFrame{
 		String[] colNames = {"Address (0x)", "Data (0x)"};
 		dtm_pgm = new MemoryTableModel(colNames);
 		pgmMemTable.setModel(dtm_pgm);
-		colRenderer = new PgmColumnColorRenderer(leftRenderer);
+		TableCellRenderer colRenderer = new PgmColumnColorRenderer(leftRenderer);
 		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new PgmRtColumnColorRenderer(rightRenderer);
 		pgmMemTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
@@ -685,7 +684,7 @@ public class MainWindow extends JFrame{
 		
 		//initialize hashmap for portRegTable  changes during stepping
 		//(address of change, row in portRegTable)
-		portRegList = new HashMap<Integer, Integer>();
+		portRegList = new HashMap<>();
 		portRegList.put(0xfd8, 1);
 		portRegList.put(0xfe8, 0);
 		portRegList.put(0xf80, 4);
@@ -709,7 +708,7 @@ public class MainWindow extends JFrame{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private HashSet<Integer> changes = new HashSet<Integer>();
+		private final HashSet<Integer> changes = new HashSet<>();
 
 		public boolean isCellEditable(int arg0, int arg1){
 			return false;
@@ -723,21 +722,21 @@ public class MainWindow extends JFrame{
 					return c;
 		}
 		
-		public void addChange(Integer c){
+		void addChange(Integer c){
 			changes.add(c);
 		}
 		
-		public void clearChanges(){
+		void clearChanges(){
 			changes.clear();
 		}
-	};
-	
+	}
+
 	class DataMemTable extends JTable{
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private HashSet<Integer> changes = new HashSet<Integer>();
+		private final HashSet<Integer> changes = new HashSet<>();
 
 		public boolean isCellEditable(int arg0, int arg1){
 			return false;
@@ -751,15 +750,15 @@ public class MainWindow extends JFrame{
 					return c;
 		}
 		
-		public void addChange(Integer c){
+		void addChange(Integer c){
 			changes.add(c);
 		}
 		
-		public void clearChanges(){
+		void clearChanges(){
 			changes.clear();
 		}
-	};
-	
+	}
+
 	class ProgramMemTable extends JTable{
 		
 		/**
@@ -784,7 +783,7 @@ public class MainWindow extends JFrame{
 		
 		//Called by MainWindow.updatePC(). Sets current value of pc, then calls fireTableDataChanged()
 		//which calls prepareRenderer().
-		public void highlightPc(int pc){
+		void highlightPc(int pc){
 			this.pc = pc;
 			dtm_pgm.fireTableDataChanged();
 		}
@@ -803,10 +802,9 @@ public class MainWindow extends JFrame{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		protected DefaultTableCellRenderer delegate;
-		Integer value;
+		final DefaultTableCellRenderer delegate;
 		
-		public ColumnColorRenderer(DefaultTableCellRenderer defaultRenderer){
+		ColumnColorRenderer(DefaultTableCellRenderer defaultRenderer){
 			
 			//pointer to table renderer, either rightRenderer or leftRenderer
 			//depending on which column it is
@@ -828,7 +826,7 @@ public class MainWindow extends JFrame{
 			}
 			value = Integer.parseInt(delegate.getText(), 2);
 			delegate.setToolTipText("Hexadecimal: " + Integer.toHexString((int)value) + ", Decimal: " +
-					Integer.toString((int)value));
+					value);
 			return c;
 		}
 	}
@@ -863,9 +861,9 @@ public class MainWindow extends JFrame{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private DefaultTableCellRenderer delegate;
+		private final DefaultTableCellRenderer delegate;
 		
-		public PgmColumnColorRenderer(DefaultTableCellRenderer defaultRenderer){
+		PgmColumnColorRenderer(DefaultTableCellRenderer defaultRenderer){
 			
 			//pointer to table renderer, either rightRenderer or leftRenderer
 			//depending on which column it is
@@ -896,9 +894,9 @@ public class MainWindow extends JFrame{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private DefaultTableCellRenderer delegate;
+		private final DefaultTableCellRenderer delegate;
 		
-		public PgmRtColumnColorRenderer(DefaultTableCellRenderer defaultRenderer){
+		PgmRtColumnColorRenderer(DefaultTableCellRenderer defaultRenderer){
 			
 			//pointer to table renderer, either rightRenderer or leftRenderer
 			//depending on which column it is
@@ -929,15 +927,15 @@ public class MainWindow extends JFrame{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		protected String[] columnNames;
-		protected Vector<Vector<String> > data;
+		final String[] columnNames;
+		final Vector<Vector<String> > data;
 	
-		public MemoryTableModel(String[] columnNames){
+		MemoryTableModel(String[] columnNames){
 			this.columnNames = columnNames;
-			this.data = new Vector<Vector<String> >();
+			this.data = new Vector<>();
 		}
 		
-		public void addRow(Vector<String> rowData){
+		void addRow(Vector<String> rowData){
 			data.addElement(rowData);
 			this.fireTableDataChanged();
 		}
@@ -960,7 +958,7 @@ public class MainWindow extends JFrame{
 			return columnNames[col];
 		}
 		
-		public void setValueAt(int value, int row, int column){
+		void setValueAt(int value, int row, int column){
 			if(!(data.get(row).get(column).equals(Integer.toHexString(value)))){
 				data.get(row).set(column, Integer.toHexString(value));
 				while(data.get(row).get(column).length() < 2)
@@ -980,11 +978,11 @@ public class MainWindow extends JFrame{
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		public PortRegTableModel(String[] columnNames){
+		PortRegTableModel(String[] columnNames){
 			super(columnNames);
 		}
 		
-		public void setValueAt(int value, int row, int col){
+		void setValueAt(int value, int row, int col){
 			data.get(row).set(col, Integer.toBinaryString(value));
 			while(data.get(row).get(col).length() < 8)
 				data.get(row).set(col, "0" + data.get(row).get(col));
@@ -998,7 +996,7 @@ public class MainWindow extends JFrame{
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		public DataTableModel(String[] columnNames){
+		DataTableModel(String[] columnNames){
 			super(columnNames);
 		}
 		
@@ -1057,28 +1055,29 @@ public class MainWindow extends JFrame{
 		}	
 	}
 	
-	class LstAction implements ActionListener{
+	private class LstAction implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(!lstFileName.equals(""))
 				//displayLstFile();
 				lstPanel.loadLstFile();
-			else JOptionPane.showMessageDialog(null, "Cannot display .lst file until a program is loaded", null, 2);
+			else JOptionPane.showMessageDialog(null
+					, "Cannot display .lst file until a program is loaded", null, JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
 	class ExampleAction implements ActionListener{
-		private String name = "", directory = "", subDirectory = "";
+		private String name, directory, subDirectory = "";
 		
-		public ExampleAction(String directory, String name){
+		ExampleAction(String directory, String name){
 			this.name = name;
 			this.directory = directory;
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(directory.equals("basic") || directory.equals("inDepth"))
-				subDirectory = "/" + Character.toString(name.charAt(0))+ "/";
+				subDirectory = "/" + name.charAt(0) + "/";
 			else subDirectory = "/";
 //			System.out.println("directory is: " + directory);
 			
@@ -1097,9 +1096,9 @@ public class MainWindow extends JFrame{
 	}
 	
 	class HelpAction implements ActionListener{
-		private String name = "", directory = "";
+		private String name, directory;
 		
-		public HelpAction(String directory, String name){
+		HelpAction(String directory, String name){
 			this.name = name;
 			this.directory = directory;
 		}
@@ -1129,9 +1128,9 @@ public class MainWindow extends JFrame{
 		//line start character number, [1] is line end character number. Will
 		//be used by highlighter to know range of characters to highlight when
 		//key matches program counter value.
-		private HashMap<String, int[]> lineList = new HashMap<String, int[]>();
+		private final HashMap<String, int[]> lineList = new HashMap<>();
 		
-		private JTextPane textArea = new JTextPane();
+		private final JTextPane textArea = new JTextPane();
 		private StringBuilder fileContents; 
 		private Highlighter.HighlightPainter highlighter;
 		
@@ -1140,17 +1139,17 @@ public class MainWindow extends JFrame{
 		//line contains an instruction and thus will need to be highlighted.
 		private final Character[] hexNums = {'0', '1', '2', '3', '4', '5', '6', '7', '8', 
 				'9', 'a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e', 'E', 'f', 'F'};
-		private HashSet<Character> hexChars = new HashSet<Character>(Arrays.asList(hexNums));
+		private final HashSet<Character> hexChars = new HashSet<>(Arrays.asList(hexNums));
 		private final int NUM_HEX_DIGITS = 4;
 		String currentLine = "";
 		Font font;
 		
-		public LstFileWindow(){
+		LstFileWindow(){
 			super(new BorderLayout());
 			initUI();
 		}
 		
-		public void initUI(){
+		void initUI(){
 			highlighter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 			textArea.setText("No program currently loaded\n\nTo load an example"
 					+ ", go to the \"Examples\" menu\n\nTo load one of your own programs, choose"
@@ -1161,15 +1160,15 @@ public class MainWindow extends JFrame{
 			add(textArea);
 		}
 		
-		public void loadLstFile(){
+		void loadLstFile(){
 			lineStartPos = 0; lineEndPos = -1; filePos = 0;
 			//remove all key value pairs from lineList hashmap
 			lineList.clear();
 			fileContents = new StringBuilder();
 			@SuppressWarnings("unused")
 			File file;
-			String line = null, key;
-			int count = 0;
+			String line, key;
+			int count;
 			BufferedReader reader = null;
 			try{
 				
@@ -1205,7 +1204,6 @@ public class MainWindow extends JFrame{
 				try {
 //					while((line = reader.readLine()) != null){
 					while(((reader != null) && (line = reader.readLine()) != null)){
-						key = "";
 						line = line + "\n";
 						fileContents.append(line);
 						lineStartPos = filePos;
@@ -1239,7 +1237,7 @@ public class MainWindow extends JFrame{
 				mainTabs.setTitleAt(mainTabs.getSelectedIndex(), lstFileName);
 		}
 		
-		public void highlight(String key){
+		void highlight(String key){
 			try{
 				textArea.getHighlighter().removeAllHighlights();
 				textArea.getHighlighter().addHighlight(lineList.get(key)[0], lineList.get(key)[1], highlighter);
@@ -1257,17 +1255,18 @@ public class MainWindow extends JFrame{
 	
 	public void initDataMemTable(ArrayList<Integer> dm){
 		Vector<String> ob;
-		String address, value;
+		StringBuilder address;
+		StringBuilder value;
 		for(int i = 0; i < dm.size(); i++){
-			ob  = new Vector<String>();
-			address = Integer.toHexString(i);
+			ob  = new Vector<>();
+			address = new StringBuilder(Integer.toHexString(i));
 			while(address.length() < 3)
-				address = "0" + address;
-			ob.add(address);
-			value = Integer.toBinaryString(dm.get(i));
+				address.insert(0, "0");
+			ob.add(address.toString());
+			value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 			while(value.length() < 8)
-				value = "0" + value;
-			ob.add(value);
+				value.insert(0, "0");
+			ob.add(value.toString());
 			dtm_data.addRow(ob);
 		}
 	}
@@ -1286,7 +1285,7 @@ public class MainWindow extends JFrame{
 			//for every change, if it's in the ports/reg list, change the value
 			if(portRegList.containsKey(change)){
 				dtm_portReg.setValueAt((int)dm.get(change), (int)portRegList.get(change), 1);
-				portRegTable.addChange((int)portRegList.get(change));
+				portRegTable.addChange(portRegList.get(change));
 			}
 			dtm_data.setValueAt((int)dm.get(change), (int)change, 1);
 			dataMemTable.addChange(change);
@@ -1316,7 +1315,7 @@ public class MainWindow extends JFrame{
 				dataMemTable.addChange(i);
 				if(portRegList.containsKey(i)){
 					dtm_portReg.setValueAt((int)dm.get(i), (int)portRegList.get(i), 1);
-					portRegTable.addChange((int)portRegList.get(i));
+					portRegTable.addChange(portRegList.get(i));
 				}	
 			}
 		}
@@ -1326,12 +1325,11 @@ public class MainWindow extends JFrame{
 		Vector<String> ob;
 		String address, value;
 		for(int i = 0; i < pm.size(); i++){
-			ob = new Vector<String>();
+			ob = new Vector<>();
 			address = Integer.toHexString(i);
 			while(address.length() < 4)
 				address = "0" + address;
 			ob.add(address);
-			value = Integer.toHexString(pm.get(i));
 			value = Integer.toHexString(0);
 			if(value.length() < 2)
 				value = "0" + value;
@@ -1393,247 +1391,246 @@ public class MainWindow extends JFrame{
 	/**
 	 * Adds values to Ports/Registers table. Loads new table after Stop and Step.
 	 * 
-	 * @param dm
 	 */
 	
 	public void initPortRegMemTable(ArrayList<Integer> dm){
 		Vector<String> ob;
 		int i;
-		String value;
+		StringBuilder value;
 		
 		//add wreg
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0e8;
 		ob.add("WREG");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		
 		//add status
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0d8;
 		ob.add("STATUS");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add intcon
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f2;
 		ob.add("INTCON");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add TRISA
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f92;
 		ob.add("TRISA");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add portA
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x080;
 		ob.add("PORTA");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add TRISB
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f93;
 		ob.add("TRISB");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add portB
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0xf81;
 		ob.add("PORTB");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add TRISC
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f94;
 		ob.add("TRISC");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add portC
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0xf82;
 		ob.add("PORTC");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add TRISD
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f95;
 		ob.add("TRISD");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add portD
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0xf83;
 		ob.add("PORTD");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add TRISE
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f96;
 		ob.add("TRISE");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add portE
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0xf84;
 		ob.add("PORTE");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);	
 		
 		//add BSR
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0xfe0;
 		ob.add("BSR");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8){
-			value = "0" + value;
+			value.insert(0, "0");
 		}
-		ob.add(value);
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add Fsr0L
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0e9;
 		ob.add("FSR0L");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add Fsr0h
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0ea;
 		ob.add("FSR0H");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add Fsr1L
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0e1;
 		ob.add("FSR1L");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add Fsr1h
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0e2;
 		ob.add("FSR1H");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add Fsr2L
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0d9;
 		ob.add("FSR2L");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add Fsr2h
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0da;
 		ob.add("FSR2H");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add ProdL
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f3;
 		ob.add("PRODL");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 		
 		//add Prodh
-		ob = new Vector<String>();
+		ob = new Vector<>();
 		i = 0x0f4;
 		ob.add("PRODH");
-		value = Integer.toBinaryString(dm.get(i));
+		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
 		while(value.length() < 8)
-			value = "0" + value;
-		ob.add(value);
+			value.insert(0, "0");
+		ob.add(value.toString());
 		dtm_portReg.addRow(ob);
 	}
 
@@ -1643,12 +1640,12 @@ public class MainWindow extends JFrame{
 	//updates lstFileWindow if it is open, catches exception if it is not
 	public void updatePc(int pc) {
 		pgmMemTable.highlightPc(pc);
-		String pcString = Integer.toHexString(pc);
-		pcString = pcString.toUpperCase();
+		StringBuilder pcString = new StringBuilder(Integer.toHexString(pc));
+		pcString = new StringBuilder(pcString.toString().toUpperCase());
 		while(pcString.length() < 4)
-			pcString = "0" + pcString;
+			pcString.insert(0, "0");
 		try{
-			lstPanel.highlight(pcString);
+			lstPanel.highlight(pcString.toString());
 		}
 		catch(Exception e){
 			System.out.println(e.getMessage() + " exception thrown trying to call "

@@ -5,7 +5,7 @@ public class Movlw extends Instruction{
 	
 	private int value;
 	
-	public Movlw(int instruction, Pic18F452 pic18, String name){
+	Movlw(int instruction, Pic18F452 pic18, String name){
 		super(instruction, pic18, name);
 	}
 	
@@ -18,9 +18,5 @@ public class Movlw extends Instruction{
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
 }
 

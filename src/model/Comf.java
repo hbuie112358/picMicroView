@@ -22,10 +22,4 @@ public class Comf extends Instruction {
 
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
-
 }

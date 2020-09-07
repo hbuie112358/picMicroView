@@ -26,10 +26,4 @@ public class Sublw extends Instruction {
 
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
-
 }

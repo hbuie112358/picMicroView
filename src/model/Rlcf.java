@@ -46,10 +46,4 @@ public class Rlcf extends Instruction {
 //		else pic18.dataMem.wreg.write(result);
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
-
 }

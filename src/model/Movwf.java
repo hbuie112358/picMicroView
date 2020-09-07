@@ -5,7 +5,7 @@ public class Movwf extends Instruction{
 	
 	private int freg;
 	
-	public Movwf(int instruction, Pic18F452 pic18, String name){
+	Movwf(int instruction, Pic18F452 pic18, String name){
 		super(instruction, pic18, name);
 	}
 	
@@ -36,11 +36,6 @@ public class Movwf extends Instruction{
 		dataMem.gpMem[freg].write(dataMem.wreg.read());
 		//System.out.println("command is " + name);
 		//System.out.println("in movwf, contents of register: " + pic18.dataMem.gpMem[address].read());
-	}
-	
-	@Override
-	protected void initialize(int instruction) {
-		this.setInstruction(instruction);
 	}
 
 }

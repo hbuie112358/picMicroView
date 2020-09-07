@@ -16,10 +16,4 @@ public class Clrf extends Instruction {
 
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
-
 }

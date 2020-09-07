@@ -3,7 +3,7 @@ package model;
 
 public class Movf extends Instruction {
 
-	public Movf(int instruction, Pic18F452 pic18, String name) {
+	Movf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -24,11 +24,6 @@ public class Movf extends Instruction {
 		adjustZbit(result);
 		adjustNbit(result);
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 	}
 
 }

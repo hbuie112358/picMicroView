@@ -14,9 +14,9 @@ import model.Pic18F452;
  *
  */
 public class RequestController{
-	private Pic18F452 pic18;
-	private ReplyController repCont;
-	static ExecutorService pool = Executors.newCachedThreadPool();
+	private final Pic18F452 pic18;
+	private final ReplyController repCont;
+	private static final ExecutorService pool = Executors.newCachedThreadPool();
 	
 	public RequestController(Pic18F452 pic18, ReplyController repCont){
 		 this.pic18 = pic18;
@@ -28,69 +28,51 @@ public class RequestController{
 			return false;
 		}
 		else{
-			pool.execute(new Runnable(){
-				public void run() {
-					pic18.loadHexFile(fileName);
-					ArrayList<Integer> pm = pic18.getPgmMemory();
-					repCont.updatePgmMemTable(pm);
-					repCont.updatePc(pic18.getPcValue());
+			pool.execute(() -> {
+				pic18.loadHexFile(fileName);
+				ArrayList<Integer> pm = pic18.getPgmMemory();
+				repCont.updatePgmMemTable(pm);
+				repCont.updatePc(pic18.getPcValue());
 
-				}		
-			});	
+			});
 			return true;
 		}
 	}
 	
 	public void stepAction(){
-		pool.execute(new Runnable(){
-			public void run() {
-				pic18.setStepState();
-				pic18.run();
-				updateDataMemory();
-				repCont.updatePc(pic18.getPcValue());
-			}		
-		});	
+		pool.execute(() -> {
+			pic18.setStepState();
+			pic18.run();
+			updateDataMemory();
+			repCont.updatePc(pic18.getPcValue());
+		});
 	}
 
 	public void runAction() {
-		pool.execute(new Runnable(){
-			public void run() {
-				pic18.start();
-//				pic18.setRunState();
+		//				pic18.setRunState();
 //				pic18.getClock().start();
-			}		
-		});		
+		pool.execute(pic18::start);
 	}
 	
 	public void stopAction(){
-		pool.execute(new Runnable(){
-			public void run() {
-				pic18.stop();
+		pool.execute(() -> {
+			pic18.stop();
 //				pic18.getClock().stop();
 //				pic18.setStepState();
 //				pic18.run();
 //				updateDataMemory();
-				updateDataMemoryOnStop();
-				repCont.updatePc(pic18.getPcValue());
-				//pic18.initPic();
-			}		
-		});		
-	}
-	
-	public void testAction(){
-		pool.execute(new Runnable(){
-			public void run(){
-				pic18.executeTest();
-			}
+			updateDataMemoryOnStop();
+			repCont.updatePc(pic18.getPcValue());
+			//pic18.initPic();
 		});
 	}
 	
+	public void testAction(){
+		pool.execute(pic18::executeTest);
+	}
+	
 	public void initialize(){
-		pool.execute(new Runnable(){
-			public void run() {
-				initialize_pvt();
-			}		
-		});	
+		pool.execute(this::initialize_pvt);
 	}
 
 	//called as a thread by loadAction(), stepAction, and initialize()

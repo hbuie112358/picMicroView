@@ -24,10 +24,4 @@ public class Andwf extends Instruction {
 
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
-
 }

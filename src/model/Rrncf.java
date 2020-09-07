@@ -22,9 +22,4 @@ public class Rrncf extends Instruction {
 		adjustNbit(result);
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
-
 }

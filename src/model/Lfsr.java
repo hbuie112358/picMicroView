@@ -2,8 +2,8 @@ package model;
 
 public class Lfsr extends Instruction{
 
-	int fsrhVal, fsrlVal, fsrNum, nextWord;
-	public Lfsr(int instruction, Pic18F452 pic18, String name) {
+	private int fsrhVal, fsrlVal, fsrNum, nextWord;
+	Lfsr(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -34,11 +34,6 @@ public class Lfsr extends Instruction{
 		setInstruction(instruction);
 		this.nextWord = nextWord;
 		
-	}
-	
-	@Override
-	protected void initialize(int instruction) {
-		// TODO Auto-generated method stub
 	}
 
 }

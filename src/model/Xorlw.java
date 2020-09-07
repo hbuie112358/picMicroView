@@ -15,10 +15,4 @@ public class Xorlw extends Instruction {
 		adjustNbit(result);
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
-
 }

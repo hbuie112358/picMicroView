@@ -2,7 +2,7 @@ package model;
 
 public class Addwfc extends Instruction {
 
-	public Addwfc(int instruction, Pic18F452 pic18, String name) {
+	Addwfc(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -31,11 +31,6 @@ public class Addwfc extends Instruction {
 		adjustZbit(result);
 		adjustNbit(result);
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 	}
 
 }

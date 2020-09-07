@@ -6,89 +6,65 @@ import java.util.HashSet;
 public class DataMemory {
 
 
-	private Pic18F452 pic18;
+	private final Pic18F452 pic18;
 	
-	Register[] gpMem;
-	Register wreg;
-	Register status;
-	Register pcL;
-	Register pclatH;
-	Register pclatU;
-	Register stkptr;
-	Register intcon;
-	Register porta;
-	Register portb;
-	Register portc;
-	Register portd;
-	Register porte;
-	Register bsr;
-	Register fsr0L;
-	Register fsr0h;
-	Register plusw0;
-	Register preinc0;
-	Register postdec0;
-	Register postinc0;
-	Register indf0;
-	Register fsr1L;
-	Register fsr1h;
-	Register plusw1;
-	Register preinc1;
-	Register postdec1;
-	Register postinc1;
-	Register indf1;
-	Register fsr2L;
-	Register fsr2h;
-	Register plusw2;
-	Register preinc2;
-	Register postdec2;
-	Register postinc2;
-	Register indf2;
-	Register prodL;
-	Register prodh;
-	
-	private int freg, carry, address;
-//	private int highByte;
-	private int bsrVal = 0;
-	HashSet<Integer> indfs;
+	final Register[] gpMem;
+	final Register wreg;
+	final Register status;
+	final Register pclatH;
+	final Register pclatU;
+	final Register stkptr;
+	final Register intcon;
+	final Register bsr;
+	final Register fsr0L;
+	final Register fsr0h;
+	final Register fsr1L;
+	final Register fsr1h;
+	final Register fsr2L;
+	final Register fsr2h;
+	final Register prodL;
+	final Register prodh;
+
+	private final HashSet<Integer> indfs;
 	
 	public DataMemory(Pic18F452 pic18) {
 		this.pic18 = pic18;
 		gpMem = new Register[4096];
 		initialize();
 		wreg = gpMem[0x0e8];
-		status = gpMem[0x0d8];	
-		pcL = gpMem[0x0f9];
+		status = gpMem[0x0d8];
+		Register pcL = gpMem[0x0f9];
 		pclatH = gpMem[0x0fa];
 		pclatU = gpMem[0x0fb];
 		stkptr = gpMem[0x0fc];
 		intcon = gpMem[0x0f2];
-		porta = gpMem[0x080];
-		portb = gpMem[0x081];
-		portc = gpMem[0x082];
-		portd = gpMem[0x083];
-		porte = gpMem[0x084];
+		Register porta = gpMem[0x080];
+		Register portb = gpMem[0x081];
+		Register portc = gpMem[0x082];
+		Register portd = gpMem[0x083];
+		Register porte = gpMem[0x084];
 		bsr = gpMem[0x0e0];
 		fsr0L = gpMem[0x0e9];
 		fsr0h = gpMem[0x0ea];
-		plusw0 = gpMem[0x0eb];
-		preinc0 = gpMem[0x0ec];
-		postdec0 = gpMem[0x0ed];
-		postinc0 = gpMem[0x0ee];
-		indf0 = gpMem[0x0ef];
+		Register plusw0 = gpMem[0x0eb];
+		Register preinc0 = gpMem[0x0ec];
+		Register postdec0 = gpMem[0x0ed];
+		Register postinc0 = gpMem[0x0ee];
+		Register indf0 = gpMem[0x0ef];
 		fsr1L = gpMem[0x0e1];
 		fsr1h = gpMem[0x0e2];
-		plusw1 = gpMem[0x0e3];
-		preinc1 = gpMem[0x0e4];
-		postdec1 = gpMem[0x0e5];
-		postinc1 = gpMem[0x0e6];
-		indf1 = gpMem[0x0e7];
+		Register plusw1 = gpMem[0x0e3];
+		Register preinc1 = gpMem[0x0e4];
+		Register postdec1 = gpMem[0x0e5];
+		Register postinc1 = gpMem[0x0e6];
+		Register indf1 = gpMem[0x0e7];
 		fsr2L = gpMem[0x0d9];
 		fsr2h = gpMem[0x0da];
-		plusw2 = gpMem[0x0db];
-		preinc2 = gpMem[0x0dc];
-		postdec2 = gpMem[0x0dd];
-		postinc2 = gpMem[0x0de];
-		indf2 = gpMem[0x0df];
+		Register plusw2 = gpMem[0x0db];
+		Register preinc2 = gpMem[0x0dc];
+		Register postdec2 = gpMem[0x0dd];
+		Register postinc2 = gpMem[0x0de];
+		Register indf2 = gpMem[0x0df];
 		prodL = gpMem[0x0f3];
 		prodh = gpMem[0x0f4];
 		
@@ -96,21 +72,21 @@ public class DataMemory {
 		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 
 		//disregard banked addressing. This causes a hole in all banks within
 		//the ranges below. See addwf.asm or addwf.lst for more complete explanation.
-		indfs = new HashSet<Integer>();
+		indfs = new HashSet<>();
 		int i;
 		for(i = 0x0eb; i < 0x0f0; i++)	//add INDF0's to hashset
-			indfs.add((Integer)i);
+			indfs.add(i);
 		for(i = 0x0e3; i < 0x0e8; i++)	//add INDF1's to hashset
-			indfs.add((Integer)i);
+			indfs.add(i);
 		for(i = 0x0db; i < 0x0e0; i++)	//add INDF2's to hashset
-			indfs.add((Integer)i);
+			indfs.add(i);
 		//Add FSR's as well
-		indfs.add((Integer)0x0e9);	//FSR0L
-		indfs.add((Integer)0x0ea);	//FSR0H
-		indfs.add((Integer)0x0e1);	//FSR1L
-		indfs.add((Integer)0x0e2);	//FSR1H
-		indfs.add((Integer)0x0d9);	//FSR2L
-		indfs.add((Integer)0x0da);	//FSR2H
+		indfs.add(0x0e9);	//FSR0L
+		indfs.add(0x0ea);	//FSR0H
+		indfs.add(0x0e1);	//FSR1L
+		indfs.add(0x0e2);	//FSR1H
+		indfs.add(0x0d9);	//FSR2L
+		indfs.add(0x0da);	//FSR2H
 		
 //		System.out.println("gmMem[0x09a] is object of type: " + gpMem[0x09a].getClass() + " " + gpMem[0x09a]);
 //		System.out.println("gmMem[0xf9a] is object of type: " + gpMem[0xf9a].getClass() + " " + gpMem[0xf9a]);
@@ -122,7 +98,7 @@ public class DataMemory {
 	}
 	
 	void write(int address, int value){
-		gpMem[address].write(value);;
+		gpMem[address].write(value);
 	}
 	
 	void decrement(int address){
@@ -286,15 +262,16 @@ public class DataMemory {
 
 //		System.out.println("instruction is: " + Integer.toHexString(instruction) + 
 //				", bit 16 is: " + (instruction & 0x100));
-		
-		address = instruction & 0x00ff;	 //isolate address portion of instruction
+		int freg;
+		int address = instruction & 0x00ff;     //isolate address portion of instruction
 		if((instruction & 0x100) == 0x100){	//If "a" bit is set
 			if(indfs.contains(address)){	//If address is of an INDF register
 //				System.out.println("in alu.addwf.if.indfs.contains, address is: " + address);
 				freg = address;		//Set freg to lowest 8 bytes
 			}
 			else{
-				bsrVal = pic18.getDataMem().bsr.read();
+				//	private int highByte;
+				int bsrVal = pic18.getDataMem().bsr.read();
 				freg = (bsrVal << 8) | (instruction & 0xff);
 			}
 		}

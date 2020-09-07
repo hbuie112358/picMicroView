@@ -3,7 +3,7 @@ package model;
 
 public class Bra extends Instruction {
 
-	public Bra(int instruction, Pic18F452 pic18, String name) {
+	Bra(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -27,8 +27,4 @@ public class Bra extends Instruction {
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
 }

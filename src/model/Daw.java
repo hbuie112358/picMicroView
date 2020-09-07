@@ -29,8 +29,4 @@ public class Daw extends Instruction {
 		else dataMem.wreg.write(result);
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
 }

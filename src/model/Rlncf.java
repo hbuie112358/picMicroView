@@ -28,10 +28,4 @@ public class Rlncf extends Instruction {
 
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
-
 }

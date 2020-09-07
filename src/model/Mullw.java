@@ -1,7 +1,7 @@
 package model;
 
 public class Mullw extends Instruction {
-	int highByte, lowByte, result;
+	private int highByte, lowByte, result;
 
 	public Mullw(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -18,12 +18,6 @@ public class Mullw extends Instruction {
 		lowByte = result & 0xff;
 		dataMem.prodh.write(highByte);
 		dataMem.prodL.write(lowByte);
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
 	}
 
 }

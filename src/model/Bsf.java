@@ -27,10 +27,4 @@ public class Bsf extends Instruction {
 		//System.out.println(System.nanoTime());
 	}
 
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
-
 }

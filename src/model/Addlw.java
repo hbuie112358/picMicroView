@@ -18,11 +18,6 @@ public class Addlw extends Instruction {
 //		pic18.alu.execute(this);
 //
 	}
-
-	@Override
-	protected void initialize(int instruction) {
-
-	}
 //	@Override
 //	protected void initialize(int instruction) {
 //		this.instruction = instruction;

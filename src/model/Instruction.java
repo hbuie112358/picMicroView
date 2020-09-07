@@ -17,18 +17,6 @@ public abstract class Instruction {
 	protected Pic18F452 getPic18() {
 		return pic18;
 	}
-
-	protected void setPic18(Pic18F452 pic18) {
-		this.pic18 = pic18;
-	}
-
-	protected String getName() {
-		return name;
-	}
-
-	protected void setName(String name) {
-		this.name = name;
-	}
 	
 	public Instruction (int instruction, Pic18F452 pic18, String name){
 		this.instruction = instruction;
@@ -39,23 +27,16 @@ public abstract class Instruction {
 	
 	protected abstract void execute();
 
-	protected abstract void initialize(int instruction);
-
-
-
-
-	protected void adjustDCbit(int arg1, int arg2){
+	void adjustDCbit(int arg1, int arg2){
 		boolean dc = (((arg1 & 0x0f) + (arg2 & 0x0f)) & 0x10) == 0x10;
 //		System.out.println("arg1 & 0x0f: " + Integer.toBinaryString((arg1 & 0x0f)));
 //		System.out.println("arg2 & 0x0f: " + Integer.toBinaryString((arg2 & 0x0f)));
-		if(dc == true)
+		if(dc)
 			pic18.getDataMem().status.setBit(1);
 		else pic18.getDataMem().status.clearBit(1);
-
-
 	}
 
-	protected void adjustOVbit(String operation, int arg1, int arg2){
+	void adjustOVbit(String operation, int arg1, int arg2){
 //		System.out.println("arg1 & 0x7f: " + Integer.toBinaryString((arg1 & 0x7f)));
 //		System.out.println("arg2 & 0x7f: " + Integer.toBinaryString((arg2 & 0x7f)));
 		boolean ov = (((arg1 & 0x7f) + (arg2 & 0x7f)) & 0x80) == 0x80;

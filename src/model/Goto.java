@@ -6,7 +6,7 @@ package model;
 public class Goto extends Instruction{
 	private int nextWord;
 	
-	public Goto(int instruction, int nextWord, Pic18F452 pic18, String name){
+	Goto(int instruction, int nextWord, Pic18F452 pic18, String name){
 		super(instruction, pic18, name);
 		this.nextWord = nextWord;
 	}
@@ -34,11 +34,6 @@ public class Goto extends Instruction{
 		this.nextWord = nextWord;
 //		System.out.println("in goto.initialize, setting nextWord to: " + Integer.toHexString(nextWord));
 		setInstruction(instruction);
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		// TODO Auto-generated method stub
 	}
 
 }

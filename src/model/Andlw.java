@@ -2,7 +2,7 @@ package model;
 
 public class Andlw extends Instruction {
 	
-	public Andlw(int instruction, Pic18F452 pic18, String name) {
+	Andlw(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -17,11 +17,6 @@ public class Andlw extends Instruction {
 		adjustNbit(result);
 		//System.out.println("status register is " + Integer.toBinaryString(pic18.getDataMem().status.read()));
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 	}
 
 }

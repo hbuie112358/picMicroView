@@ -4,7 +4,7 @@ package model;
 public class Output implements Runnable {
 
 	private Pic18F452 pic18;
-	public Output(Pic18F452 pic18) {
+	Output(Pic18F452 pic18) {
 		this.pic18 = pic18;
 	}
 

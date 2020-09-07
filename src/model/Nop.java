@@ -7,7 +7,7 @@ public class Nop extends Instruction{
 //	private Pic18F452 pic18;
 //	private String name = "nop";
 	
-	public Nop(int instruction, Pic18F452 pic18, String name){
+	Nop(int instruction, Pic18F452 pic18, String name){
 //		this.instruction = instruction;
 //		this.pic18 = pic18;
 		super(instruction, pic18, name);
@@ -19,8 +19,4 @@ public class Nop extends Instruction{
 		//System.out.println("alivecnt is " + pic18.dataMem.gpMem[0x03].read());
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
 }

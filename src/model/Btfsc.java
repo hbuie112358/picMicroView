@@ -20,14 +20,10 @@ public class Btfsc extends Instruction {
 		ProgramCounter pc  = pic18.getProgramCounter();
 		if (getPic18().getDataMem().gpMem[freg].getBit(bit) == 0) {
 			pc.increment();
-			if (pic18.checkTwoCycle() == true) {
+			if (pic18.checkTwoCycle()) {
 				pc.increment();
 			}
 		}
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
 }

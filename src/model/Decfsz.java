@@ -19,7 +19,7 @@ public class Decfsz extends Instruction {
 			result--;
 		if(result == 0){
 			pic18.getProgramCounter().increment();
-			if(getPic18().checkTwoCycle() == true){
+			if(getPic18().checkTwoCycle()){
 				pic18.getProgramCounter().increment();
 			}
 		}
@@ -30,9 +30,4 @@ public class Decfsz extends Instruction {
 		else dataMem.wreg.write(result);
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-
-	}
 }

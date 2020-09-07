@@ -3,7 +3,7 @@ package model;
 
 public class Bnz extends Instruction {
 
-	public Bnz(int instruction, Pic18F452 pic18, String name) {
+    Bnz(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -23,8 +23,4 @@ public class Bnz extends Instruction {
 		}
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
 }

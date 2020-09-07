@@ -15,16 +15,10 @@ public class Cpfsgt extends Instruction {
 		freg = dataMem.getRegAddress(getInstruction());
 		if(dataMem.gpMem[freg].read() > dataMem.wreg.read()){
 			pic18.getProgramCounter().increment();
-			if(pic18.checkTwoCycle() == true){
+			if(pic18.checkTwoCycle()){
 				pic18.getProgramCounter().increment();
 			}
 		}
-
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 
 	}
 

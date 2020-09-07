@@ -2,7 +2,7 @@ package model;
 
 public class Xorwf extends Instruction {
 
-	public Xorwf(int instruction, Pic18F452 pic18, String name) {
+	Xorwf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -23,12 +23,6 @@ public class Xorwf extends Instruction {
 		else dataMem.wreg.write(result);
 		adjustZbit(result);
 		adjustNbit(result);
-
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 
 	}
 

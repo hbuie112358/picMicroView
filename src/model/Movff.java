@@ -3,7 +3,7 @@ package model;
 
 public class Movff extends Instruction {
 
-	public Movff(int instruction, Pic18F452 pic18, String name) {
+	Movff(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 		// TODO Auto-generated constructor stub
 	}
@@ -23,11 +23,6 @@ public class Movff extends Instruction {
 		//System.out.println("data at destination is " + 
 		//		Integer.toHexString(pic18.dataMem.gpMem[destination].read()));
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 	}
 
 }

@@ -28,9 +28,4 @@ public class Iorwf extends Instruction {
 		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
-
 }

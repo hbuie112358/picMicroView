@@ -2,7 +2,7 @@ package model;
 
 public class Addwf extends Instruction {
 
-	public Addwf(int instruction, Pic18F452 pic18, String name) {
+	Addwf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -41,11 +41,6 @@ public class Addwf extends Instruction {
 			}
 		}
 		else dataMem.wreg.write(result);
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 	}
 
 }

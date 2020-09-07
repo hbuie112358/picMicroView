@@ -5,7 +5,7 @@ public class Btfss extends Instruction {
 
 	private int freg;
 	
-	public Btfss(int instruction, Pic18F452 pic18, String name) {
+	Btfss(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -19,16 +19,11 @@ public class Btfss extends Instruction {
 
 		if(pic18.getDataMem().gpMem[freg].getBit(bit) == 1){
 			pc.increment();
-			if(pic18.checkTwoCycle() == true){
+			if(pic18.checkTwoCycle()){
 				pc.increment();
 			}
 
 		}
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 	}
 
 }

@@ -20,7 +20,7 @@ public class Incfsz extends Instruction {
 			result++;
 		if(result == 0){
 			pic18.getProgramCounter().increment();
-			if(pic18.checkTwoCycle() == true){
+			if(pic18.checkTwoCycle()){
 				pic18.getProgramCounter().increment();
 			}
 		}
@@ -29,12 +29,6 @@ public class Incfsz extends Instruction {
 		if((getInstruction() & 0x200) == 0x200)
 			dataMem.gpMem[freg].write(result);
 		else dataMem.wreg.write(result);
-
-	}
-
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
 
 	}
 

@@ -24,9 +24,4 @@ public class Bcf extends Instruction {
 		//System.out.println("");
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
-
 }

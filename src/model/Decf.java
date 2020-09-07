@@ -3,7 +3,7 @@ package model;
 
 public class Decf extends Instruction {
 
-	public Decf(int instruction, Pic18F452 pic18, String name) {
+	Decf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
@@ -27,8 +27,4 @@ public class Decf extends Instruction {
 		//pic18.incrementPc();
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
 }

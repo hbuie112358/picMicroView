@@ -20,9 +20,4 @@ public class Swapf extends Instruction {
 		else dataMem.wreg.write(result);
 	}
 
-	@Override
-	protected void initialize(int instruction) {
-		setInstruction(instruction);
-	}
-
 }
