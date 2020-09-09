@@ -1,6 +1,6 @@
 package model;
 
-public class Tstfsz extends Instruction {
+public class Tstfsz extends PicInstruction {
 
 	int freg, result;
 	
@@ -9,7 +9,7 @@ public class Tstfsz extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());

@@ -1,6 +1,6 @@
 package model;
 
-public class Rlcf extends Instruction {
+public class Rlcf extends PicInstruction {
 
 	private int freg, result, carry;
 	
@@ -9,7 +9,7 @@ public class Rlcf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
 		result = dataMem.gpMem[freg].read() << 1;

@@ -1,7 +1,7 @@
 package model;
 
 
-public class Btg extends Instruction {
+public class Btg extends PicInstruction {
 
 	private int freg;
 	
@@ -9,7 +9,7 @@ public class Btg extends Instruction {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
 //		System.out.println("address is " + Integer.toHexString(freg));

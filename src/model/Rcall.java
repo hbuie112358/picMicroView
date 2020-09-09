@@ -1,13 +1,13 @@
 package model;
 
 
-public class Rcall extends Instruction {
+public class Rcall extends PicInstruction {
 
 	Rcall(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		//System.out.println("command is : " + name);
 		
 		//subtract 2 since pc was incremented when rcall instruction was retrieved

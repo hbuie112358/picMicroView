@@ -1,6 +1,6 @@
 package model;
 
-public class Decfsz extends Instruction {
+public class Decfsz extends PicInstruction {
 	
 	private int freg, result;
 
@@ -8,7 +8,7 @@ public class Decfsz extends Instruction {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute(){
+	public void execute(){
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());

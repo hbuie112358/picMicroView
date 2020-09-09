@@ -1,6 +1,6 @@
 package model;
 
-public class Addlw extends Instruction {
+public class Addlw extends PicInstruction {
 
 	public Addlw(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -14,7 +14,7 @@ public class Addlw extends Instruction {
 		getPic18().getDataMem().wreg.write(result);
 		adjustCbit(result);
 		adjustZbit(result);
-//	protected void execute() {
+//	public void execute() {
 //		pic18.alu.execute(this);
 //
 	}

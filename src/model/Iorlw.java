@@ -1,13 +1,13 @@
 package model;
 
-public class Iorlw extends Instruction {
+public class Iorlw extends PicInstruction {
 
 	public Iorlw(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int wreg = dataMem.wreg.read();
 		int result = getInstruction() | wreg;

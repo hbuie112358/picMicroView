@@ -1,6 +1,6 @@
 package model;
 
-public class Lfsr extends Instruction{
+public class Lfsr extends PicInstruction {
 
 	private int fsrhVal, fsrlVal, fsrNum, nextWord;
 	Lfsr(int instruction, Pic18F452 pic18, String name) {
@@ -8,7 +8,7 @@ public class Lfsr extends Instruction{
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		fsrhVal = getInstruction() & 0x0f;

@@ -1,6 +1,6 @@
 package model;
 
-public class Incf extends Instruction {
+public class Incf extends PicInstruction {
 	
 	private int freg, result;
 
@@ -9,7 +9,7 @@ public class Incf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
 		int origValue = result = dataMem.gpMem[freg].read();

@@ -1,7 +1,7 @@
 package model;
 
 
-public class Btfss extends Instruction {
+public class Btfss extends PicInstruction {
 
 	private int freg;
 	
@@ -9,7 +9,7 @@ public class Btfss extends Instruction {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		ProgramCounter pc  = pic18.getProgramCounter();
 		freg = pic18.getDataMem().getRegAddress(getInstruction());

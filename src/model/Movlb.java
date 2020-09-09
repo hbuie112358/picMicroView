@@ -1,6 +1,6 @@
 package model;
 
-public class Movlb extends Instruction {
+public class Movlb extends PicInstruction {
 	
 	private int value;
 
@@ -10,7 +10,7 @@ public class Movlb extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		//Make sure only low nibble is written to bsr, then write value
 		value = getInstruction() & 0x000f;
 		getPic18().getDataMem().bsr.write(value);

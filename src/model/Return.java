@@ -1,13 +1,13 @@
 package model;
 
 
-public class Return extends Instruction {
+public class Return extends PicInstruction {
 
 	Return(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		//returns to instruction after calling instruction
 		//System.out.println("command is : " + name);

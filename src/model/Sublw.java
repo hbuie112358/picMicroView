@@ -1,6 +1,6 @@
 package model;
 
-public class Sublw extends Instruction {
+public class Sublw extends PicInstruction {
 
 	public Sublw(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -8,7 +8,7 @@ public class Sublw extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		//get two's complement of value in wreg
 		int twosComp = Alu.getTwosComplement(dataMem.wreg.read() & 0xff);

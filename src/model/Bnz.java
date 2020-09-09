@@ -1,13 +1,13 @@
 package model;
 
 
-public class Bnz extends Instruction {
+public class Bnz extends PicInstruction {
 
     Bnz(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		//System.out.println("command is : " + name);
 		int offset = getInstruction() & 0x00FF;

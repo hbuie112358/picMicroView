@@ -1,13 +1,13 @@
 package model;
 
-public class Andwf extends Instruction {
+public class Andwf extends PicInstruction {
 
 	public Andwf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());

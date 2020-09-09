@@ -1,6 +1,6 @@
 package model;
 
-public class Comf extends Instruction {
+public class Comf extends PicInstruction {
 
 	public Comf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -8,7 +8,7 @@ public class Comf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
 		int result = dataMem.gpMem[freg].getContents();

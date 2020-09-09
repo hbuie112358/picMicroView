@@ -1,7 +1,7 @@
 package model;
 
 
-public class Bcf extends Instruction {
+public class Bcf extends PicInstruction {
 
 	private int freg;
 	
@@ -10,7 +10,7 @@ public class Bcf extends Instruction {
 		freg = 0;
 	}
 
-	protected void execute() {
+	public void execute() {
 		//System.out.println("command is " + name);
 
 		freg = getPic18().getDataMem().getRegAddress(getInstruction());

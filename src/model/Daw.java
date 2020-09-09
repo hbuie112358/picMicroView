@@ -1,13 +1,13 @@
 package model;
 
-public class Daw extends Instruction {
+public class Daw extends PicInstruction {
 
 	public Daw(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 
 		int lowNibble, highNibble = 0;
 		DataMemory dataMem = getPic18().getDataMem();

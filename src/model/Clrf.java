@@ -1,6 +1,6 @@
 package model;
 
-public class Clrf extends Instruction {
+public class Clrf extends PicInstruction {
 
 	public Clrf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -8,7 +8,7 @@ public class Clrf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
 		dataMem.gpMem[freg].clear();

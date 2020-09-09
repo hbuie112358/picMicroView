@@ -1,12 +1,12 @@
 package model;
 
-public class Andlw extends Instruction {
+public class Andlw extends PicInstruction {
 	
 	Andlw(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		//System.out.println("command is " + name);
 		Pic18F452 pic18 = getPic18();
 		int value = getInstruction() & 0x00ff;

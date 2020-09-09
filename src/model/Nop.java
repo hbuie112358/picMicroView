@@ -1,7 +1,7 @@
 package model;
 
 
-public class Nop extends Instruction{
+public class Nop extends PicInstruction {
 	
 //	private int instruction;
 //	private Pic18F452 pic18;
@@ -13,7 +13,7 @@ public class Nop extends Instruction{
 		super(instruction, pic18, name);
 	}
 	
-	protected void execute(){
+	public void execute(){
 		//pic18.incrementPc();
 		//System.out.println("command is " + name);
 		//System.out.println("alivecnt is " + pic18.dataMem.gpMem[0x03].read());

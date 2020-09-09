@@ -3,15 +3,15 @@ package model;
 /*
  * 
  */
-public class Goto extends Instruction{
+public class Goto extends PicInstruction {
 	private int nextWord;
 	
 	Goto(int instruction, int nextWord, Pic18F452 pic18, String name){
 		super(instruction, pic18, name);
 		this.nextWord = nextWord;
 	}
-	
-	protected void execute(){		
+
+	public void execute(){
 //		System.out.println("starting execute(), instruction is: " + Integer.toHexString(instruction) + " and pc is: " +
 //				Integer.toHexString(pic18.pc.getPc()) + ", nextWord is: " + Integer.toHexString(nextWord));
 		//lowByte: low 2 nibbles of instruction are k7 through k0 of pc, the "&" masks off 

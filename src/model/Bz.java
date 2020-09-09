@@ -1,14 +1,14 @@
 package model;
 
 
-public class Bz extends Instruction {
+public class Bz extends PicInstruction {
 
 	public Bz(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 		// TODO Auto-generated constructor stub
 	}
 
-	protected void execute() {
+	public void execute() {
 		//System.out.println("command is : " + name);
 		int offset = getInstruction() & 0x00FF;
 		Pic18F452 pic18 = getPic18();

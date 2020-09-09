@@ -1,6 +1,6 @@
 package model;
 
-public class Setf extends Instruction {
+public class Setf extends PicInstruction {
 
 	private int freg;
 	
@@ -9,7 +9,7 @@ public class Setf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
 		dataMem.gpMem[freg].write(0xff);

@@ -1,13 +1,13 @@
 package model;
 
 
-public class Decf extends Instruction {
+public class Decf extends PicInstruction {
 
 	Decf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		//System.out.println("command is " + name);
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());

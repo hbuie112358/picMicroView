@@ -1,15 +1,15 @@
 package model;
 
 
-public class Movlw extends Instruction{
+public class Movlw extends PicInstruction {
 	
 	private int value;
 	
 	Movlw(int instruction, Pic18F452 pic18, String name){
 		super(instruction, pic18, name);
 	}
-	
-	protected void execute(){
+
+	public void execute(){
 		//System.out.println("command is " + name );
 		value = getInstruction() & 0x00FF;
 		getPic18().getDataMem().wreg.write(value);

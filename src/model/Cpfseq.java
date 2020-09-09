@@ -1,8 +1,6 @@
 package model;
 
-import javax.xml.crypto.Data;
-
-public class Cpfseq extends Instruction {
+public class Cpfseq extends PicInstruction {
 
 	private int freg;
 	
@@ -11,7 +9,7 @@ public class Cpfseq extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());

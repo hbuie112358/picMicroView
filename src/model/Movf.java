@@ -1,13 +1,13 @@
 package model;
 
 
-public class Movf extends Instruction {
+public class Movf extends PicInstruction {
 
 	Movf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		//System.out.println("command is " + name);
 		//get register address

@@ -1,14 +1,14 @@
 package model;
 
 
-public class Movff extends Instruction {
+public class Movff extends PicInstruction {
 
 	Movff(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 		// TODO Auto-generated constructor stub
 	}
 
-	protected void execute(){
+	public void execute(){
 		//System.out.println("command is " + name);
 		int instruction = getInstruction();
 		Pic18F452 pic18 = getPic18();

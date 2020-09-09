@@ -1,6 +1,6 @@
 package model;
 
-public class Negf extends Instruction {
+public class Negf extends PicInstruction {
 
 	public Negf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -8,7 +8,7 @@ public class Negf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
 		int origValue = dataMem.gpMem[freg].read();

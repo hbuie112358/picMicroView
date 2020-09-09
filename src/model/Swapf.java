@@ -1,6 +1,6 @@
 package model;
 
-public class Swapf extends Instruction {
+public class Swapf extends PicInstruction {
 
 	int freg, result, temp;
 	
@@ -9,7 +9,7 @@ public class Swapf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int instruction = getInstruction();
 		freg = dataMem.getRegAddress(instruction);

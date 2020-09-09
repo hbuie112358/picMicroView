@@ -1,6 +1,6 @@
 package model;
 
-public class Btfsc extends Instruction {
+public class Btfsc extends PicInstruction {
 
 	private int freg;
 
@@ -9,7 +9,7 @@ public class Btfsc extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 
 		freg = getPic18().getDataMem().getRegAddress(getInstruction());
 //		System.out.println("address to be checked is " + Integer.toHexString(freg));

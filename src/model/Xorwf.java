@@ -1,13 +1,13 @@
 package model;
 
-public class Xorwf extends Instruction {
+public class Xorwf extends PicInstruction {
 
 	Xorwf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		//get register address
 		int freg = dataMem.getRegAddress(getInstruction());

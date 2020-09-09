@@ -1,6 +1,6 @@
 package model;
 
-public class Mulwf extends Instruction {
+public class Mulwf extends PicInstruction {
 
 	private int highByte, lowByte, result, address;
 	
@@ -13,7 +13,7 @@ public class Mulwf extends Instruction {
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		address = dataMem.getRegAddress(getInstruction());
 		result = dataMem.gpMem[address].read() * dataMem.wreg.read();

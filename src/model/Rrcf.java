@@ -1,13 +1,13 @@
 package model;
 
-public class Rrcf extends Instruction {
+public class Rrcf extends PicInstruction {
 
 	public Rrcf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
 	@Override
-	protected void execute() {
+	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
 		int carry = dataMem.status.getBit(0) << 8;
