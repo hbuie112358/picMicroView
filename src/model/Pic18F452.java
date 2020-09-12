@@ -46,7 +46,7 @@ public class Pic18F452 implements SetState{
 		dataMem = new DataMemory(this);
 		initPic();
 		clock = new Clock(this);
-		alu = new Alu(this);
+		alu = new Alu();
 		stack = new Stack(this);
 		testMain = new TestMain(this);
 	}
@@ -188,9 +188,10 @@ public class Pic18F452 implements SetState{
 	}
 	
 	void runInstruction(){
-
-//		changes.clear();
-		int hByteHnibble, hByteLnibble, lByte, nextWord;
+		int hByteHnibble
+				, hByteLnibble
+				, lByte
+				, nextWord;
 			
 		//fetch
 		instruction = pc.getWord();//increments program counter
@@ -263,7 +264,6 @@ public class Pic18F452 implements SetState{
 			}
 			else{
 				System.out.println("instruction not implemented");
-				System.exit(0);
 			}
 		}	
 		else if(hByteHnibble ==	0x1000){
@@ -291,7 +291,6 @@ public class Pic18F452 implements SetState{
 			}
 			else{
 				System.out.println("instruction not implemented");
-				System.exit(0);
 			}
 		}
 		else if(hByteHnibble ==	0x2000){
@@ -320,7 +319,6 @@ public class Pic18F452 implements SetState{
 			}
 			else{
 				System.out.println("instruction not implemented");
-				System.exit(0);
 			}
 		}
 		else if(hByteHnibble == 0x3000){
@@ -394,7 +392,6 @@ public class Pic18F452 implements SetState{
 			}
 			else{
 				System.out.println("instruction not implemented");
-				System.exit(0);
 			}
 		}
 		else if(hByteHnibble == 0x6000){
@@ -435,7 +432,6 @@ public class Pic18F452 implements SetState{
 			}
 			else{
 				System.out.println("instruction not implemented");
-				System.exit(0);
 			}
 		}
 		else if(hByteHnibble ==	0x7000){
@@ -483,7 +479,6 @@ public class Pic18F452 implements SetState{
 			}
 			else{
 				System.out.println("instruction not implemented");
-				System.exit(0);
 			}
 		}	
 		
@@ -537,7 +532,6 @@ public class Pic18F452 implements SetState{
 			}
 			else{
 				System.out.println("instruction not implemented");
-				System.exit(0);
 			}
 		}
 		else if(hByteHnibble == 0xf000){
@@ -547,7 +541,6 @@ public class Pic18F452 implements SetState{
 		}
 		else{
 			System.out.println("instruction not implemented " + Integer.toHexString(instruction));
-			System.exit(0);
 		}
 		//System.out.println("wreg after " + Integer.toHexString(instruction) + " is " + dataMem.getWreg().read());
 		//printStatusReg();

@@ -7,12 +7,8 @@ package model;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+ class Source {
 
-public class Source {
-
-
-	private File file;
-	private FileReader fileReader;
 	private BufferedReader bufferedReader;
 	private String currentLine;
 	@SuppressWarnings("unused")
@@ -21,7 +17,7 @@ public class Source {
 			
 
 			
-	public Source(String fileName){
+	Source(String fileName){
 		try{	//open file
 			
 			//checks first for .hex file in the example directory in classpath
@@ -34,8 +30,8 @@ public class Source {
 			try{
 				
 				//if .hex file not found in examples, tries to find it in local file system
-				file = new File(fileName);
-				fileReader = new FileReader(file);
+				File file = new File(fileName);
+				FileReader fileReader = new FileReader(file);
 				bufferedReader = new BufferedReader(fileReader);
 				System.out.println("in source, " + fileName + " was found in local file system");
 			}
@@ -56,7 +52,7 @@ public class Source {
 		eof = false;
 	}
 	
-	public void nextLine(){
+	void nextLine(){
 		try{
 			currentLine = bufferedReader.readLine();
 		}
@@ -65,7 +61,7 @@ public class Source {
 		}
 	}
 	
-	public String currentLine(){
+	String currentLine(){
 		return currentLine;
 	}
 		

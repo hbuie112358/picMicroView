@@ -2,7 +2,7 @@ package model;
 
 public interface SetState {
 
-	public void setRunState();
+	void setRunState();
 	
-	public void setStepState();
+	void setStepState();
 }

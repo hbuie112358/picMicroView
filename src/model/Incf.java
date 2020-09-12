@@ -1,8 +1,6 @@
 package model;
 
 public class Incf extends PicInstruction {
-	
-	private int freg, result;
 
 	public Incf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -11,7 +9,8 @@ public class Incf extends PicInstruction {
 	@Override
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
-		freg = dataMem.getRegAddress(getInstruction());
+		int freg = dataMem.getRegAddress(getInstruction());
+		int result;
 		int origValue = result = dataMem.getGpMem()[freg].read();
 		result++;
 		adjustCbit(result);

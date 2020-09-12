@@ -12,7 +12,7 @@ package model;
  */
 public class PortA extends Register {
 
-	public PortA(Pic18F452 pic18, int address, String name) {
+	PortA(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
 		regRunState = new PortARunState(this);
 		regStepState = new PortAStepState(this);
@@ -47,7 +47,7 @@ public class PortA extends Register {
 	
 	public class PortARunState extends RegRunState{
 		
-		public PortARunState(Register register){
+		PortARunState(Register register){
 			super(register);
 		}
 		
@@ -85,7 +85,7 @@ public class PortA extends Register {
 	
 	public class PortAStepState extends RegStepState{
 		
-		public PortAStepState(Register register){
+		PortAStepState(Register register){
 			super(register);
 		}
 		

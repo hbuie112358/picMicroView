@@ -6,7 +6,7 @@ class Alu {
 
 	private HashSet<Integer> indfs;
 	
-	Alu(Pic18F452 pic18){
+	Alu(){
 
 		//indfs is hashset of addresses that are INDFx registers: INDF, PLUSW,
 		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 

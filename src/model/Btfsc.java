@@ -2,8 +2,6 @@ package model;
 
 public class Btfsc extends PicInstruction {
 
-	private int freg;
-
 	public Btfsc(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
@@ -11,7 +9,7 @@ public class Btfsc extends PicInstruction {
 	@Override
 	public void execute() {
 
-		freg = getPic18().getDataMem().getRegAddress(getInstruction());
+		int freg = getPic18().getDataMem().getRegAddress(getInstruction());
 //		System.out.println("address to be checked is " + Integer.toHexString(freg));
 		int bit = getInstruction() & 0x0e00;
 		bit = (bit / 256) >> 1;

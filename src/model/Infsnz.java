@@ -1,8 +1,6 @@
 package model;
 
 public class Infsnz extends PicInstruction {
-	
-	private int freg, result;
 
 	public Infsnz(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
@@ -12,8 +10,8 @@ public class Infsnz extends PicInstruction {
 	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
-		freg = dataMem.getRegAddress(getInstruction());
-		result = dataMem.getGpMem()[freg].read();
+		int freg = dataMem.getRegAddress(getInstruction());
+		int result = dataMem.getGpMem()[freg].read();
 		if (result == 0xff)
 			result = 0x00;
 		else

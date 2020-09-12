@@ -8,7 +8,7 @@ public class Timer {
 	private Pic18F452 pic18;
 	
 	
-	public Timer(Pic18F452 pic18, String name) {
+	Timer(Pic18F452 pic18, String name) {
 		clear();
 		this.pic18 = pic18;
 		this.name = name;

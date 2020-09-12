@@ -59,7 +59,7 @@ public class FsrH extends Register {
 	
 	class FsrHStepState extends RegStepState{
 		
-		public FsrHStepState(Register register){
+		FsrHStepState(Register register){
 			super(register);
 		}
 		//Masks off all but least significant nibble. Bits 4-7 of FSRHx are 

@@ -3,7 +3,7 @@ package model;
 
 public class Intcon extends Register {
 
-	public Intcon(Pic18F452 pic18, int address, String name) {
+	Intcon(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
 	}
 

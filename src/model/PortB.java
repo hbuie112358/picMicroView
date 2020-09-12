@@ -12,7 +12,7 @@ package model;
  */
 public class PortB extends Register {
 
-	public PortB(Pic18F452 pic18, int address, String name) {
+	PortB(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
 		regRunState = new PortBRunState(this);
 		regStepState = new PortBStepState(this);
@@ -49,7 +49,7 @@ public class PortB extends Register {
 	public class PortBRunState extends RegRunState{
 		Register register;
 		
-		public PortBRunState(Register register){
+		PortBRunState(Register register){
 			super(register);
 		}
 		
@@ -88,7 +88,7 @@ public class PortB extends Register {
 	public class PortBStepState extends RegStepState{
 		Register register;
 		
-		public PortBStepState(Register register){
+		PortBStepState(Register register){
 			super(register);
 		}
 		

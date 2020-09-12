@@ -3,15 +3,13 @@ package model;
 
 public class Btg extends PicInstruction {
 
-	private int freg;
-	
 	public Btg(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
 
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
-		freg = dataMem.getRegAddress(getInstruction());
+		int freg = dataMem.getRegAddress(getInstruction());
 //		System.out.println("address is " + Integer.toHexString(freg));
 //		System.out.println("memory contents before toggle: " + Integer.toBinaryString(pic18.dataMem.getGpMem()[freg].read()));
 //		int bit = instruction & 0x0e00;

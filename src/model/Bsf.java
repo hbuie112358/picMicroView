@@ -3,8 +3,6 @@ package model;
 
 public class Bsf extends PicInstruction {
 	
-	private int freg;
-
 	public Bsf(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
@@ -13,7 +11,7 @@ public class Bsf extends PicInstruction {
 	public void execute() {
 		//System.out.println("command is " + name);
 
-		freg = getPic18().getDataMem().getRegAddress(getInstruction());
+		int freg = getPic18().getDataMem().getRegAddress(getInstruction());
 //		int address = instruction & 0x00ff;
 		//System.out.println("memory contents before toggle: " + Integer.toBinaryString(pic18.dataMem.getGpMem()[address].read()));
 		int bit = getInstruction() & 0x0e00;

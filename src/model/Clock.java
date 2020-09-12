@@ -1,10 +1,7 @@
 package model;
 
-//import java.util.Date;
-
 public class Clock{
 	
-//	private long CYCLE = 400;
 	long last;
 	long now;
 	//	private int inTimer;
@@ -33,17 +30,11 @@ public class Clock{
 			go = true;
 			int i;
 			long [] time = new long[12];
-			long timeAvg = 0;
 			for(i = 0; i < time.length; i++){
 				time1 = System.nanoTime();
 				long time2 = System.nanoTime();
 				time[i] = time2 - time1;
 			}
-			
-			for(i = 2; i < time.length; i++){
-				timeAvg += time[i];
-			}
-//			System.out.println(timeAvg / 10);
 
 			while(go){
 

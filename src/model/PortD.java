@@ -48,7 +48,7 @@ public class PortD extends Register {
 	
 	public class PortDRunState extends RegRunState{
 		
-		public PortDRunState(Register register){
+		PortDRunState(Register register){
 			super(register);
 		}
 		
@@ -86,7 +86,7 @@ public class PortD extends Register {
 	
 	public class PortDStepState extends RegStepState{
 		
-		public PortDStepState(Register register){
+		PortDStepState(Register register){
 			super(register);
 		}
 		

@@ -48,7 +48,7 @@ public class PortE extends Register {
 	public class PortERunState extends RegRunState{
 		Register register;
 		
-		public PortERunState(Register register){
+		PortERunState(Register register){
 			super(register);
 		}
 		
@@ -87,7 +87,7 @@ public class PortE extends Register {
 	public class PortEStepState extends RegStepState{
 		Register register;
 		
-		public PortEStepState(Register register){
+		PortEStepState(Register register){
 			super(register);
 		}
 		
