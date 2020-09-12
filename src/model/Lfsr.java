@@ -2,7 +2,7 @@ package model;
 
 public class Lfsr extends PicInstruction {
 
-	private int fsrhVal, fsrlVal, fsrNum, nextWord;
+	private int nextWord;
 	Lfsr(int instruction, Pic18F452 pic18, String name) {
 		super(instruction, pic18, name);
 	}
@@ -11,9 +11,9 @@ public class Lfsr extends PicInstruction {
 	public void execute() {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
-		fsrhVal = getInstruction() & 0x0f;
-		fsrNum = (getInstruction() & 0x30) >> 4;
-		fsrlVal = nextWord & 0xff;
+		int fsrhVal = getInstruction() & 0x0f;
+		int fsrNum = (getInstruction() & 0x30) >> 4;
+		int fsrlVal = nextWord & 0xff;
 //		System.out.println("in lfsr, fsrlVal is: " + Integer.toHexString(fsrlVal));
 		if(fsrNum == 0){
 			dataMem.fsr0L.write(fsrlVal);

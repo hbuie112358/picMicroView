@@ -8,10 +8,8 @@ package model;
 import java.util.ArrayList;
 
 //records make themselves by getting current line from source.
-public class Record {
+class Record {
 
-	@SuppressWarnings("unused")
-	private Source source;
 	private String r;
 	private int recLen;
 	private int loadOffset;
@@ -19,8 +17,8 @@ public class Record {
 	private ArrayList<Integer> infoData;
 	private int chkSum;
 	
-	public Record(Source source){
-		this.source = source;
+	Record(Source source){
+
 		//read current line into record
 		this.r = source.currentLine();
 		//set record length and load offset values
@@ -28,7 +26,7 @@ public class Record {
 		setLoadOffset();
 		//decode record type based on characters at position 7 and 8 in record, then
 		//set record type to that value
-		String type = Character.toString(r.charAt(7)) + Character.toString(r.charAt(8));
+		String type = Character.toString(r.charAt(7)) + r.charAt(8);
 		switch(type){
 		case "00": setRecType(RecType.DATA);
 					break;
@@ -45,47 +43,47 @@ public class Record {
 		default : setRecType(RecType.ERROR);
 		}
 		
-		infoData = new ArrayList<Integer>();
+		infoData = new ArrayList<>();
 		convertInfoData();
 		setChkSum();		
 		source.nextLine();	
 	}
 	
-	public int getRecLen() {
+	int getRecLen() {
 		return recLen;
 	}
 	
 	//get byte 1 and 2 from current record, convert to string, convert string to 
 	//integer value and set value of reclen to that value
 	private void setRecLen() {
-		String rl = "0x" + Character.toString(r.charAt(1)) + Character.toString(r.charAt(2));
+		String rl = "0x" + r.charAt(1) + r.charAt(2);
 		recLen = (Integer.decode(rl));
 	}
 	
-	public int getLoadOffset() {
+	int getLoadOffset() {
 		return loadOffset;
 	}
 	
 	//get byts 3 and 4 from current record, convert to string, convert string to
 	//integer value and set value of loadOffset to that value
 	private void setLoadOffset() {
-		String ldofst = "0x" + Character.toString(r.charAt(3)) + Character.toString(r.charAt(4)) +
-				Character.toString(r.charAt(5)) + Character.toString(r.charAt(6));
+		String ldofst = "0x" + r.charAt(3) + r.charAt(4) +
+				r.charAt(5) + r.charAt(6);
 		this.loadOffset = Integer.decode(ldofst);
 	}
 	
-	public RecType getRecType() {
+	RecType getRecType() {
 		return recType;
 	}
 	
 	private void setRecType(RecType recType) {
 		this.recType = recType;
 	}
-	public ArrayList<Integer> getInfoData() {
+	ArrayList<Integer> getInfoData() {
 		return infoData;
 	}
 	
-	public void setInfoData(int index, int data){
+	void setInfoData(int index, int data){
 		infoData.set(index, data);
 	}
 	
@@ -101,8 +99,8 @@ public class Record {
 			int data, numChars = recLen * 2, sStart = 9;
 			int last = sStart + numChars;
 			while(sStart < last){
-				strByte = "0x" + Character.toString(r.charAt(sStart)) + 
-						Character.toString(r.charAt(sStart + 1));
+				strByte = "0x" + r.charAt(sStart) +
+						r.charAt(sStart + 1);
 				data = Integer.decode(strByte);
 				infoData.add(data);
 				sStart = sStart + 2;
@@ -110,13 +108,13 @@ public class Record {
 		}
 	}
 	
-	public int getChkSum() {
+	int getChkSum() {
 		return chkSum;
 	}
 	
 	private void setChkSum() {
-		String chkSum = "0x" + Character.toString(r.charAt(r.length() -2))
-				+ Character.toString(r.charAt(r.length() -1));
+		String chkSum = "0x" + r.charAt(r.length() -2)
+				+ r.charAt(r.length() -1);
 		this.chkSum = Integer.decode(chkSum);
 	}
 }

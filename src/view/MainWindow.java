@@ -1068,7 +1068,9 @@ public class MainWindow extends JFrame{
 	}
 	
 	class ExampleAction implements ActionListener{
-		private String name, directory, subDirectory = "";
+		private String name
+				, directory
+				, subDirectory = "";
 		
 		ExampleAction(String directory, String name){
 			this.name = name;
@@ -1096,7 +1098,8 @@ public class MainWindow extends JFrame{
 	}
 	
 	class HelpAction implements ActionListener{
-		private String name, directory;
+		private String name
+				, directory;
 		
 		HelpAction(String directory, String name){
 			this.name = name;
@@ -1161,7 +1164,9 @@ public class MainWindow extends JFrame{
 		}
 		
 		void loadLstFile(){
-			lineStartPos = 0; lineEndPos = -1; filePos = 0;
+			lineStartPos = 0;
+			lineEndPos = -1;
+			filePos = 0;
 			//remove all key value pairs from lineList hashmap
 			lineList.clear();
 			fileContents = new StringBuilder();

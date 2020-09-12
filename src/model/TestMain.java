@@ -19,7 +19,9 @@ public class TestMain {
 	
 	void execute(){
 		pic18.setStepState();
-		int nopCount = 1, address, value;
+		int nopCount = 1
+				, address
+				, value;
 		String addressString = "", valueString = "", instructionString = "";
 		while(nopCount < 4){
 			address = 0;

@@ -2,8 +2,8 @@ package model;
 
 public class Plusw extends Register {
 	
-	int fullAddress, highAddress, lowAddress;
-	int fsrl, fsrh, wregVal;
+	private int fullAddress;
+	private int fsrl, fsrh;
 
 	public Plusw(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
@@ -29,9 +29,9 @@ public class Plusw extends Register {
 	//It needs to know whether to get address from fsr0, fsr1, or fsr2.
 	private void getFullAddress(){
 		DataMemory dataMem = pic18.getDataMem();
-		wregVal = dataMem.getWreg().read();
-		lowAddress = dataMem.getGpMem()[fsrl].read();
-		highAddress = dataMem.getGpMem()[fsrh].read();
+		int wregVal = dataMem.getWreg().read();
+		int lowAddress = dataMem.getGpMem()[fsrl].read();
+		int highAddress = dataMem.getGpMem()[fsrh].read();
 //		System.out.println("in plusw just after read, lowAddress is: " + Integer.toHexString(lowAddress));
 //		System.out.println("in plusw just after read, wregVal is: " + Integer.toHexString(wregVal));
 		//if wregVal bit 7 is 1, then wreg is negative number 
@@ -92,7 +92,7 @@ public class Plusw extends Register {
 	class PluswRunState extends RegRunState{
 		Register register;
 		
-		public PluswRunState(Register register){
+		PluswRunState(Register register){
 //			this.register = register;
 			super(register);
 		}
@@ -187,7 +187,7 @@ public class Plusw extends Register {
 			
 			//tells callee that caller is an indf register
 			pic18.getDataMem().getGpMem()[fullAddress].write(value, register);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 
 			//System.out.println("in " + name", written by register at address: " + Integer.toHexString(address));
 		}
@@ -204,7 +204,7 @@ public class Plusw extends Register {
 		public void clear() {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].clear(register);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void clear(Register r){
@@ -215,7 +215,7 @@ public class Plusw extends Register {
 		public void setBit(int bit) {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].setBit(bit, register);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void setBit(int bit, Register r){
@@ -226,7 +226,7 @@ public class Plusw extends Register {
 		public void clearBit(int bit) {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].clear(register);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void clearBit(int bit, Register r){
@@ -237,7 +237,7 @@ public class Plusw extends Register {
 		public void decrement() {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].decrement(register);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void decrement(Register r){
@@ -248,7 +248,7 @@ public class Plusw extends Register {
 		public void increment() {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].increment(register);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void increment(Register r){
