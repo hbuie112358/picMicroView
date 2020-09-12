@@ -96,8 +96,8 @@ public class Pic18F452 implements SetState{
 	
 	public ArrayList<Integer> getDataMemory(){
 		ArrayList<Integer> dm = new ArrayList<>();
-		for(int i = 0; i < dataMem.gpMem.length; i++){
-			dm.add(dataMem.gpMem[i].getContents());
+		for(int i = 0; i < dataMem.getGpMem().length; i++){
+			dm.add(dataMem.getGpMem()[i].getContents());
 		}
 		return dm;
 	}
@@ -167,15 +167,15 @@ public class Pic18F452 implements SetState{
 	
 	public void setRunState(){
 		picState = runState;
-		for(int i = 0; i < dataMem.gpMem.length; i++)
-			dataMem.gpMem[i].setRunState();
+		for(int i = 0; i < dataMem.getGpMem().length; i++)
+			dataMem.getGpMem()[i].setRunState();
 	}
 	
 	public void setStepState(){
 		picState = stepState;
-		for(int i = 0; i < dataMem.gpMem.length; i++){
-			dataMem.gpMem[i].setStepState();
-//			System.out.println("in Pic.setStepState, state for " + Integer.toHexString(i)+ "is: " + dataMem.gpMem[i].registerState);
+		for(int i = 0; i < dataMem.getGpMem().length; i++){
+			dataMem.getGpMem()[i].setStepState();
+//			System.out.println("in Pic.setStepState, state for " + Integer.toHexString(i)+ "is: " + dataMem.getGpMem()[i].registerState);
 		}
 	}
 	
@@ -549,7 +549,7 @@ public class Pic18F452 implements SetState{
 			System.out.println("instruction not implemented " + Integer.toHexString(instruction));
 			System.exit(0);
 		}
-		//System.out.println("wreg after " + Integer.toHexString(instruction) + " is " + dataMem.wreg.read());
+		//System.out.println("wreg after " + Integer.toHexString(instruction) + " is " + dataMem.getWreg().read());
 		//printStatusReg();
 	
 		//System.out.println("ran instruction: " + Integer.toHexString(instruction));
@@ -595,7 +595,7 @@ public class Pic18F452 implements SetState{
 	}
 //
 //	void printStatusReg(){
-//		System.out.println("status reg is " + dataMem.status.read());
+//		System.out.println("status reg is " + dataMem.getStatus().read());
 //	}
 //
 //
@@ -603,7 +603,7 @@ public class Pic18F452 implements SetState{
 //		int i = 0;
 //		while(i < 0xff){
 //			System.out.println(Integer.toHexString(i) + " " +
-//				Integer.toHexString(dataMem.gpMem[i].read()));
+//				Integer.toHexString(dataMem.getGpMem()[i].read()));
 //			i++;
 //		}
 //	}

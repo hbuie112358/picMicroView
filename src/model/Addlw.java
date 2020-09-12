@@ -8,10 +8,10 @@ public class Addlw extends PicInstruction {
 
 	@Override
 	public void execute(){
-		int result = (getInstruction() & 0xff) + getPic18().getDataMem().wreg.read();
-		adjustDCbit(getPic18().getDataMem().wreg.read(), (getInstruction() & 0xff));
-		adjustOVbit("add", getPic18().getDataMem().wreg.read(), (getInstruction() & 0xff));
-		getPic18().getDataMem().wreg.write(result);
+		int result = (getInstruction() & 0xff) + getPic18().getDataMem().getWreg().read();
+		adjustDCbit(getPic18().getDataMem().getWreg().read(), (getInstruction() & 0xff));
+		adjustOVbit("add", getPic18().getDataMem().getWreg().read(), (getInstruction() & 0xff));
+		getPic18().getDataMem().getWreg().write(result);
 		adjustCbit(result);
 		adjustZbit(result);
 //	public void execute() {

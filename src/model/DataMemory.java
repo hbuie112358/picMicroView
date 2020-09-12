@@ -7,10 +7,9 @@ public class DataMemory {
 
 
 	private final Pic18F452 pic18;
-	
-	final Register[] gpMem;
-	final Register wreg;
-	final Register status;
+	private final Register[] gpMem;
+	private final Register wreg;
+	private final Register status;
 	final Register pclatH;
 	final Register pclatU;
 	final Register stkptr;
@@ -107,6 +106,18 @@ public class DataMemory {
 	
 	void increment(int address){
 		gpMem[address].increment();
+	}
+
+	Register[] getGpMem() {
+		return gpMem;
+	}
+
+	Register getWreg() {
+		return wreg;
+	}
+
+	Register getStatus() {
+		return status;
 	}
 	
 	private void initialize(){

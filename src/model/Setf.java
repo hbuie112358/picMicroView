@@ -12,7 +12,7 @@ public class Setf extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
-		dataMem.gpMem[freg].write(0xff);
+		dataMem.getGpMem()[freg].write(0xff);
 
 	}
 

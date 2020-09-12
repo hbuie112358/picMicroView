@@ -20,7 +20,7 @@ public class Clock{
 		this.pic18 = pic18;
 //		long outTimer = 0;
 //		inTimer = 0;
-		int clockDelay = 300;
+		int clockDelay = 300; //300
 		a = new int[clockDelay];
 	}
 	

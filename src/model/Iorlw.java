@@ -9,9 +9,9 @@ public class Iorlw extends PicInstruction {
 	@Override
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
-		int wreg = dataMem.wreg.read();
+		int wreg = dataMem.getWreg().read();
 		int result = getInstruction() | wreg;
-		dataMem.wreg.write(result);
+		dataMem.getWreg().write(result);
 		adjustZbit(result);
 		adjustNbit(result);
 	}

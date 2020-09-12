@@ -13,7 +13,7 @@ public class Dcfsnz extends PicInstruction {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
-		result = dataMem.gpMem[freg].read();
+		result = dataMem.getGpMem()[freg].read();
 		if(result == 0)
 			result = 0xff;
 		else
@@ -27,8 +27,8 @@ public class Dcfsnz extends PicInstruction {
 		//if bit 9 of instruction is high, write result to f register
 		//else write to wreg
 		if((getInstruction() & 0x200) == 0x200)
-			dataMem.gpMem[freg].write(result);
-		else dataMem.wreg.write(result);
+			dataMem.getGpMem()[freg].write(result);
+		else dataMem.getWreg().write(result);
 	}
 
 }

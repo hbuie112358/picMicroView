@@ -9,7 +9,7 @@ public class Addwf extends PicInstruction {
 	public void execute() {
 		//System.out.println("command is " + name);
 		//get wreg value
-		//wreg = pic18.getDataMem().wreg.read();
+		//wreg = pic18.getDataMem().getWreg().read();
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
@@ -17,7 +17,7 @@ public class Addwf extends PicInstruction {
 //		System.out.println("in alu.addwf, freg address is: " + Integer.toHexString(freg));
 
 		//find sum of wreg, value in gpMem[freg]
-		int result = dataMem.wreg.read() + dataMem.gpMem[freg].read();
+		int result = dataMem.getWreg().read() + dataMem.getGpMem()[freg].read();
 		adjustCbit(result);
 		adjustZbit(result);
 		adjustNbit(result);
@@ -26,8 +26,8 @@ public class Addwf extends PicInstruction {
 		//If f is a FSRxL register, then find out if FSR0, 1, or 2 and
 		//if carry bit is 1, increment corresponding FSRxH register.
 		if((getInstruction() & 0x200) == 0x200){
-			dataMem.gpMem[freg].write(result);
-			if(pic18.getDataMem().status.getBit(0) == 1){
+			dataMem.getGpMem()[freg].write(result);
+			if(pic18.getDataMem().getStatus().getBit(0) == 1){
 //				System.out.println("in alu.addwf, fsr0L address is " + Integer.toHexString(pic18.getDataMem().fsr0L.address));
 				if(freg == (dataMem.fsr0L.address & 0xff))	//& 0xff because register actually lives at 0xfe9,
 					dataMem.fsr0h.increment();				//but is mapped to 0x0e9 for Access Memory
@@ -37,10 +37,10 @@ public class Addwf extends PicInstruction {
 					dataMem.fsr2h.increment();
 
 				//Clear carry bit since carry was reflected in FSRxH
-				dataMem.status.clearBit(0);
+				dataMem.getStatus().clearBit(0);
 			}
 		}
-		else dataMem.wreg.write(result);
+		else dataMem.getWreg().write(result);
 	}
 
 }

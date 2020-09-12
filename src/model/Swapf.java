@@ -13,11 +13,11 @@ public class Swapf extends PicInstruction {
 		DataMemory dataMem = getPic18().getDataMem();
 		int instruction = getInstruction();
 		freg = dataMem.getRegAddress(instruction);
-		result = dataMem.gpMem[freg].read();
+		result = dataMem.getGpMem()[freg].read();
 		result = (((result & 0x0f) << 4) | ((result & 0xf0) >> 4));
 		if((instruction & 0x200) == 0x200) 
-			dataMem.gpMem[freg].write(result);
-		else dataMem.wreg.write(result);
+			dataMem.getGpMem()[freg].write(result);
+		else dataMem.getWreg().write(result);
 	}
 
 }

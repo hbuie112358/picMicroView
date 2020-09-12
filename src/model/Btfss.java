@@ -17,7 +17,7 @@ public class Btfss extends PicInstruction {
 		int bit = getInstruction() & 0x0e00;
 		bit = (bit / 256) >> 1;
 
-		if(pic18.getDataMem().gpMem[freg].getBit(bit) == 1){
+		if(pic18.getDataMem().getGpMem()[freg].getBit(bit) == 1){
 			pc.increment();
 			if(pic18.checkTwoCycle()){
 				pc.increment();

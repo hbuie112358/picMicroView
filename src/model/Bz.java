@@ -12,7 +12,7 @@ public class Bz extends PicInstruction {
 		//System.out.println("command is : " + name);
 		int offset = getInstruction() & 0x00FF;
 		Pic18F452 pic18 = getPic18();
-		if((pic18.getDataMem().status.read() & 0x0004) == 0x0004){
+		if((pic18.getDataMem().getStatus().read() & 0x0004) == 0x0004){
 			//System.out.println("calculated offset in bz execute is " + 
 			//		Integer.toHexString(pic18.pc.calcOffset(offset)) + " hex");
 			//pic18.setProgramCounter(pic18.pc.getPc() + pic18.calcOffset(offset));

@@ -11,8 +11,8 @@ public class Bnz extends PicInstruction {
 		Pic18F452 pic18 = getPic18();
 		//System.out.println("command is : " + name);
 		int offset = getInstruction() & 0x00FF;
-		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
-		if(!((pic18.getDataMem().status.read() & 0x0004) == 0x0004)){
+		//System.out.println("contents of memory 03 is " + pic18.dataMem.getGpMem()[0x03].read());
+		if(!((pic18.getDataMem().getStatus().read() & 0x0004) == 0x0004)){
 			//System.out.println("calculated offset in bnz execute is " + 
 			//		Integer.toHexString(pic18.pc.calcOffset(offset)) + " hex");
 			//pic18.setProgramCounter(pic18.pc.getPc() + pic18.calcOffset(offset));

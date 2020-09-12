@@ -24,7 +24,7 @@ public class Bra extends PicInstruction {
 		
 		//increment pc to return address, push onto stack
 		//pic18.pc.increment();
-		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
+		//System.out.println("contents of memory 03 is " + pic18.dataMem.getGpMem()[0x03].read());
 	}
 
 }

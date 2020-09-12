@@ -16,16 +16,16 @@ public class Iorwf extends PicInstruction {
 //		System.out.println("in iorwf.movf, freg address is: " + Integer.toHexString(freg));
 
 		//perform OR function with wreg value
-		int result = dataMem.wreg.read() | dataMem.gpMem[freg].read();
+		int result = dataMem.getWreg().read() | dataMem.getGpMem()[freg].read();
 
 		//if bit 9 of instruction is high, write result to f register
 		//else write to wreg
 		if((getInstruction() & 0x200) == 0x200)
-			dataMem.gpMem[freg].write(result);
-		else dataMem.wreg.write(result);
+			dataMem.getGpMem()[freg].write(result);
+		else dataMem.getWreg().write(result);
 		adjustZbit(result);
 		adjustNbit(result);
-		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
+		//System.out.println("contents of memory 03 is " + pic18.dataMem.getGpMem()[0x03].read());
 	}
 
 }

@@ -13,7 +13,7 @@ public class Tstfsz extends PicInstruction {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
-		if(dataMem.gpMem[freg].read() == 0){
+		if(dataMem.getGpMem()[freg].read() == 0){
 			pic18.getProgramCounter().increment();
 			if(pic18.checkTwoCycle()){
 				pic18.getProgramCounter().increment();

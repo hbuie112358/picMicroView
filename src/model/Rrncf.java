@@ -10,13 +10,13 @@ public class Rrncf extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
-		int result = dataMem.gpMem[freg].read();
+		int result = dataMem.getGpMem()[freg].read();
 		result = (((result & 0x01) << 8) | result) >> 1;
 		if((getInstruction() & 0x200) == 0x200) {
-			dataMem.gpMem[freg].write(result);
+			dataMem.getGpMem()[freg].write(result);
 		}
 		else {
-			dataMem.wreg.write(result);
+			dataMem.getWreg().write(result);
 		}
 		adjustZbit(result);
 		adjustNbit(result);

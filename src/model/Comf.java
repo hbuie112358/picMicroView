@@ -11,12 +11,12 @@ public class Comf extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
-		int result = dataMem.gpMem[freg].getContents();
+		int result = dataMem.getGpMem()[freg].getContents();
 
 		//if bit 9 of instruction is high, write result to f register
 		if((getInstruction() & 0x200) == 0x200)
-			dataMem.gpMem[freg].write(result);
-		else dataMem.wreg.write(result);
+			dataMem.getGpMem()[freg].write(result);
+		else dataMem.getWreg().write(result);
 		adjustZbit(result);
 		adjustNbit(result);
 

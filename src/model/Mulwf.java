@@ -16,7 +16,7 @@ public class Mulwf extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		address = dataMem.getRegAddress(getInstruction());
-		result = dataMem.gpMem[address].read() * dataMem.wreg.read();
+		result = dataMem.getGpMem()[address].read() * dataMem.getWreg().read();
 		highByte = (result & 0xff00) >> 8;
 		lowByte = result & 0xff;
 		dataMem.prodh.write(highByte);

@@ -16,7 +16,7 @@ public class Nop extends PicInstruction {
 	public void execute(){
 		//pic18.incrementPc();
 		//System.out.println("command is " + name);
-		//System.out.println("alivecnt is " + pic18.dataMem.gpMem[0x03].read());
+		//System.out.println("alivecnt is " + pic18.dataMem.getGpMem()[0x03].read());
 	}
 
 }

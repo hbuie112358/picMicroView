@@ -24,7 +24,7 @@ public class FsrL extends Register {
 		registerState.increment();
 //		if(contents == 0xff){
 //			contents = 0;
-//			pic18.dataMem.gpMem[fsrh].increment();
+//			pic18.dataMem.getGpMem()[fsrh].increment();
 //		}
 //		else contents++;
 	}
@@ -35,7 +35,7 @@ public class FsrL extends Register {
 //		System.out.println("in " + name + ", decrement() was called");
 //		if(contents == 0x00){
 //			contents = 0xff;
-//			pic18.dataMem.gpMem[fsrh].decrement();
+//			pic18.dataMem.getGpMem()[fsrh].decrement();
 //		}
 //		else contents--;
 	}
@@ -50,7 +50,7 @@ public class FsrL extends Register {
 		public void increment(){
 			if(contents == 0xff){
 				contents = 0;
-				pic18.getDataMem().gpMem[fsrh].increment();
+				pic18.getDataMem().getGpMem()[fsrh].increment();
 			}
 			else contents++;
 		}
@@ -60,7 +60,7 @@ public class FsrL extends Register {
 //			System.out.println("in " + name + ", decrement() was called");
 			if(contents == 0x00){
 				contents = 0xff;
-				pic18.getDataMem().gpMem[fsrh].decrement();
+				pic18.getDataMem().getGpMem()[fsrh].decrement();
 			}
 			else contents--;
 		}	
@@ -78,7 +78,7 @@ public class FsrL extends Register {
 		public void increment(){
 			if(contents == 0xff){
 				contents = 0;
-				pic18.getDataMem().gpMem[fsrh].increment();
+				pic18.getDataMem().getGpMem()[fsrh].increment();
 			}
 			else contents++;
 			pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
@@ -90,7 +90,7 @@ public class FsrL extends Register {
 //			System.out.println("in " + name + ", decrement() was called");
 			if(contents == 0x00){
 				contents = 0xff;
-				pic18.getDataMem().gpMem[fsrh].decrement();
+				pic18.getDataMem().getGpMem()[fsrh].decrement();
 			}
 			else contents--;
 			pic18.changes.add((Integer)address);	//tracks changes pic state during instruction

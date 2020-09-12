@@ -12,7 +12,7 @@ public class Incf extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
-		int origValue = result = dataMem.gpMem[freg].read();
+		int origValue = result = dataMem.getGpMem()[freg].read();
 		result++;
 		adjustCbit(result);
 		if(result == 0x100)
@@ -21,8 +21,8 @@ public class Incf extends PicInstruction {
 		//if bit 9 of instruction is high, write result to f register
 		//else write to wreg
 		if((getInstruction() & 0x200) == 0x200)
-			dataMem.gpMem[freg].write(result);
-		else dataMem.wreg.write(result);
+			dataMem.getGpMem()[freg].write(result);
+		else dataMem.getWreg().write(result);
 		adjustDCbit(origValue, 1);
 		adjustOVbit("", origValue, 1);
 		adjustZbit(result);

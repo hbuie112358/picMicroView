@@ -13,7 +13,7 @@ public class Mullw extends PicInstruction {
 	@Override
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
-		result = (getInstruction() & 0xff) * dataMem.wreg.read();
+		result = (getInstruction() & 0xff) * dataMem.getWreg().read();
 		highByte = (result & 0xff00) >> 8;
 		lowByte = result & 0xff;
 		dataMem.prodh.write(highByte);

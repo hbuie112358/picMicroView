@@ -41,7 +41,7 @@ public class Indf extends Register {
 		getFullAddress();
 		
 		//tells callee that caller is an indf register
-		return pic18.getDataMem().gpMem[fullAddress].read(this);
+		return pic18.getDataMem().getGpMem()[fullAddress].read(this);
 
 	}
 	
@@ -61,7 +61,7 @@ public class Indf extends Register {
 			getFullAddress();
 			
 			//tells callee that caller is an indf register
-			pic18.getDataMem().gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().getGpMem()[fullAddress].write(value, register);
 			
 			//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 		}
@@ -76,7 +76,7 @@ public class Indf extends Register {
 		
 		public void clear(){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].clear(register);
+			pic18.getDataMem().getGpMem()[fullAddress].clear(register);
 		}
 		
 		public void clear(Register r){
@@ -85,7 +85,7 @@ public class Indf extends Register {
 		
 		public void setBit(int bit){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].setBit(bit, register);
+			pic18.getDataMem().getGpMem()[fullAddress].setBit(bit, register);
 		}
 		
 		public void setBit(int bit, Register r){
@@ -94,7 +94,7 @@ public class Indf extends Register {
 		
 		public void clearBit(int bit){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].clearBit(bit, register);
+			pic18.getDataMem().getGpMem()[fullAddress].clearBit(bit, register);
 		}
 		
 		public void clearBit(int bit, Register r){
@@ -103,7 +103,7 @@ public class Indf extends Register {
 		
 		public void decrement(){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].decrement();
+			pic18.getDataMem().getGpMem()[fullAddress].decrement();
 		}
 		
 		public void decrement(Register r){
@@ -112,7 +112,7 @@ public class Indf extends Register {
 		
 		public void increment(){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].increment();
+			pic18.getDataMem().getGpMem()[fullAddress].increment();
 		}
 		
 		public void increment(Register r){
@@ -138,7 +138,7 @@ public class Indf extends Register {
 //					+ register.name + " at " + Integer.toHexString(register.address) + ", fullAddress is: " 
 //					+ Integer.toHexString(fullAddress));
 			//tells callee that caller is an indf register
-			pic18.getDataMem().gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().getGpMem()[fullAddress].write(value, register);
 			
 			//fullAddress is the value in the FSR. 
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
@@ -156,7 +156,7 @@ public class Indf extends Register {
 		
 		public void clear(){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].clear(register);
+			pic18.getDataMem().getGpMem()[fullAddress].clear(register);
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
@@ -168,7 +168,7 @@ public class Indf extends Register {
 			getFullAddress();
 //			System.out.println("in IndfStepState.setBit(bit), calling " + Integer.toHexString(fullAddress)
 //					+ ".setBit(bit, r)");
-			pic18.getDataMem().gpMem[fullAddress].setBit(bit, register);
+			pic18.getDataMem().getGpMem()[fullAddress].setBit(bit, register);
 
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
@@ -180,7 +180,7 @@ public class Indf extends Register {
 		
 		public void clearBit(int bit){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].clearBit(bit, register);
+			pic18.getDataMem().getGpMem()[fullAddress].clearBit(bit, register);
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
@@ -190,7 +190,7 @@ public class Indf extends Register {
 		
 		public void decrement(){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].decrement(register);
+			pic18.getDataMem().getGpMem()[fullAddress].decrement(register);
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
@@ -200,7 +200,7 @@ public class Indf extends Register {
 		
 		public void increment(){
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].increment(register);
+			pic18.getDataMem().getGpMem()[fullAddress].increment(register);
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		

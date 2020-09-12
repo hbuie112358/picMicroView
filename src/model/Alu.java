@@ -3,19 +3,11 @@ package model;
 import java.util.HashSet;
 
 class Alu {
-	private Pic18F452 pic18;
-	private int result;
-//	private int address;
-	private int twosComp;
-	private int freg, wreg, carry, origValue, lowNibble, highNibble;
-	private boolean dc, ov;
-//	private int highByte;
-//	private int bsrVal = 0;
+
 	private HashSet<Integer> indfs;
 	
 	Alu(Pic18F452 pic18){
-		this.pic18 = pic18;
-		
+
 		//indfs is hashset of addresses that are INDFx registers: INDF, PLUSW,
 		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 
 		//disregard banked addressing. This causes a hole in all banks within

@@ -12,10 +12,10 @@ public class Movlw extends PicInstruction {
 	public void execute(){
 		//System.out.println("command is " + name );
 		value = getInstruction() & 0x00FF;
-		getPic18().getDataMem().wreg.write(value);
-		//System.out.println("wreg is " + Integer.toBinaryString(pic18.dataMem.wreg.read()));
-		//System.out.println("status register is " + Integer.toBinaryString(pic18.dataMem.status.read()));
-		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
+		getPic18().getDataMem().getWreg().write(value);
+		//System.out.println("wreg is " + Integer.toBinaryString(pic18.dataMem.getWreg().read()));
+		//System.out.println("status register is " + Integer.toBinaryString(pic18.dataMem.getStatus().read()));
+		//System.out.println("contents of memory 03 is " + pic18.dataMem.getGpMem()[0x03].read());
 	}
 
 }

@@ -11,7 +11,7 @@ public class Clrf extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
-		dataMem.gpMem[freg].clear();
+		dataMem.getGpMem()[freg].clear();
 		adjustZbit(0); //this may not have worked before
 
 	}

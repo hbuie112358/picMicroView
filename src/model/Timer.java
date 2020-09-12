@@ -25,7 +25,7 @@ public class Timer {
 		}
 		//System.out.println("timer0 value is " + Long.toHexString(count));
 		//System.out.println("intcon is " + pic18.dataMem.intcon.read());
-		//System.out.println("contents of memory 0x03 is " + pic18.dataMem.gpMem[0x03].read());
+		//System.out.println("contents of memory 0x03 is " + pic18.dataMem.getGpMem()[0x03].read());
 
 	}
 	

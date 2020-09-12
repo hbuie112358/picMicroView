@@ -8,9 +8,9 @@ public class Xorlw extends PicInstruction {
 
 	@Override
 	public void execute() {
-		int wreg = getPic18().getDataMem().wreg.read();
+		int wreg = getPic18().getDataMem().getWreg().read();
 		int result = getInstruction() ^ wreg;
-		getPic18().getDataMem().wreg.write(result);
+		getPic18().getDataMem().getWreg().write(result);
 		adjustZbit(result);
 		adjustNbit(result);
 	}

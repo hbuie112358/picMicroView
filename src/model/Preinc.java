@@ -28,8 +28,8 @@ public class Preinc extends Register {
 	//Gets full address based on whether it is an instance of indf0, indf1, or indf2.
 	//It needs to know whether to get address from fsr0, fsr1, or fsr2.
 	private void getFullAddress(){
-		highAddress = pic18.getDataMem().gpMem[fsrh].read();
-		lowAddress = pic18.getDataMem().gpMem[fsrl].read();
+		highAddress = pic18.getDataMem().getGpMem()[fsrh].read();
+		lowAddress = pic18.getDataMem().getGpMem()[fsrl].read();
 		highAddress = highAddress << 8;
 		fullAddress = highAddress | lowAddress;
 	}
@@ -42,11 +42,11 @@ public class Preinc extends Register {
 	int read(){
 		
 		//increment before getting full address
-		pic18.getDataMem().gpMem[fsrl].increment();
+		pic18.getDataMem().getGpMem()[fsrl].increment();
 		getFullAddress();
 		
 		//tells callee that caller is an indf register
-		return pic18.getDataMem().gpMem[fullAddress].read(this);
+		return pic18.getDataMem().getGpMem()[fullAddress].read(this);
 	}
 	
 	//Returns the register contents via the read() method. Used by pic18.getDataMemory()
@@ -71,11 +71,11 @@ public class Preinc extends Register {
 		//no effect. After write operation, decrements FSR
 		public void write(int value){
 			//increment before getting address
-			pic18.getDataMem().gpMem[fsrl].increment();
+			pic18.getDataMem().getGpMem()[fsrl].increment();
 			getFullAddress();
 		
 			//tells callee that caller is an indf register
-			pic18.getDataMem().gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().getGpMem()[fullAddress].write(value, register);
 		}
 		
 		//This function overrides parent function.
@@ -87,9 +87,9 @@ public class Preinc extends Register {
 		}
 		
 		public void clear(){
-			pic18.getDataMem().gpMem[fsrl].increment();
+			pic18.getDataMem().getGpMem()[fsrl].increment();
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].clear(register);
+			pic18.getDataMem().getGpMem()[fullAddress].clear(register);
 		}
 		
 		public void clear(Register r){
@@ -97,9 +97,9 @@ public class Preinc extends Register {
 		}
 		
 		public void setBit(int bit){
-			pic18.getDataMem().gpMem[fsrl].increment();
+			pic18.getDataMem().getGpMem()[fsrl].increment();
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].setBit(bit, register);
+			pic18.getDataMem().getGpMem()[fullAddress].setBit(bit, register);
 		}
 		
 		public void setBit(int bit, Register r){
@@ -107,9 +107,9 @@ public class Preinc extends Register {
 		}
 		
 		public void clearBit(int bit){
-			pic18.getDataMem().gpMem[fsrl].increment();
+			pic18.getDataMem().getGpMem()[fsrl].increment();
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].clearBit(bit, register);
+			pic18.getDataMem().getGpMem()[fullAddress].clearBit(bit, register);
 		}
 		
 		public void clearBit(int bit, Register r){
@@ -117,9 +117,9 @@ public class Preinc extends Register {
 		}
 		
 		public void decrement(){
-			pic18.getDataMem().gpMem[fsrl].increment();
+			pic18.getDataMem().getGpMem()[fsrl].increment();
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].decrement();
+			pic18.getDataMem().getGpMem()[fullAddress].decrement();
 		}
 		
 		public void decrement(Register r){
@@ -127,9 +127,9 @@ public class Preinc extends Register {
 		}
 		
 		public void increment(){
-			pic18.getDataMem().gpMem[fsrl].increment();
+			pic18.getDataMem().getGpMem()[fsrl].increment();
 			getFullAddress();
-			pic18.getDataMem().gpMem[fullAddress].increment(register);
+			pic18.getDataMem().getGpMem()[fullAddress].increment(register);
 		}
 		
 		public void increment(Register r){
@@ -151,11 +151,11 @@ public class Preinc extends Register {
 		//no effect. After write operation, decrements FSR
 		public void write(int value){
 			//increment before getting address
-			pic18.getDataMem().gpMem[fsrl].increment();
+			pic18.getDataMem().getGpMem()[fsrl].increment();
 			getFullAddress();
 			
 			//tells callee that caller is an indf register
-			pic18.getDataMem().gpMem[fullAddress].write(value, register);
+			pic18.getDataMem().getGpMem()[fullAddress].write(value, register);
 			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
 		}
 		

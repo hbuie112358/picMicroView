@@ -11,10 +11,10 @@ public class Negf extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
-		int origValue = dataMem.gpMem[freg].read();
+		int origValue = dataMem.getGpMem()[freg].read();
 		int result = Alu.getTwosComplement(origValue & 0xff);
 		adjustDCbit(~origValue, (0x01));
-		dataMem.gpMem[freg].write(result);
+		dataMem.getGpMem()[freg].write(result);
 		adjustZbit(result);
 		adjustNbit(result);
 		adjustCbit(result);

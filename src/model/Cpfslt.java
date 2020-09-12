@@ -13,7 +13,7 @@ public class Cpfslt extends PicInstruction {
 		Pic18F452 pic18 = getPic18();
 		DataMemory dataMem = pic18.getDataMem();
 		freg = dataMem.getRegAddress(getInstruction());
-		if(dataMem.gpMem[freg].read() < dataMem.wreg.read()){
+		if(dataMem.getGpMem()[freg].read() < dataMem.getWreg().read()){
 			System.out.println("in less than");
 			pic18.getProgramCounter().increment();
 			if(pic18.checkTwoCycle()){

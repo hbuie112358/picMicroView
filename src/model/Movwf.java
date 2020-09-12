@@ -2,9 +2,7 @@ package model;
 
 
 public class Movwf extends PicInstruction {
-	
-	private int freg;
-	
+
 	Movwf(int instruction, Pic18F452 pic18, String name){
 		super(instruction, pic18, name);
 	}
@@ -13,7 +11,7 @@ public class Movwf extends PicInstruction {
 		
 //		int address = pic18.dataMem.getRegAddress(instruction);
 		DataMemory dataMem = getPic18().getDataMem();
-		freg = dataMem.getRegAddress(getInstruction());
+		int freg = dataMem.getRegAddress(getInstruction());
 		//isolate a bit for bsr bank from op code
 //		int address = instruction & 0x00FF;
 //	//	System.out.println("in movwf, address is: " + Integer.toHexString(address));
@@ -30,12 +28,12 @@ public class Movwf extends PicInstruction {
 //			address = address | extendedAddress;
 ////			System.out.println("in movlw, after added bsr value, extendedAddress is: " + Integer.toHexString(extendedAddress));
 ////			System.out.println("in movlw, after added bsr value, address is: " + Integer.toHexString(address));
-////			pic18.dataMem.gpMem[address].write(pic18.dataMem.wreg.read());
+////			pic18.dataMem.getGpMem()[address].write(pic18.dataMem.getWreg().read());
 //		}
 		
-		dataMem.gpMem[freg].write(dataMem.wreg.read());
+		dataMem.getGpMem()[freg].write(dataMem.getWreg().read());
 		//System.out.println("command is " + name);
-		//System.out.println("in movwf, contents of register: " + pic18.dataMem.gpMem[address].read());
+		//System.out.println("in movwf, contents of register: " + pic18.dataMem.getGpMem()[address].read());
 	}
 
 }

@@ -18,7 +18,7 @@ public class Btfsc extends PicInstruction {
 
 		Pic18F452 pic18 = getPic18();
 		ProgramCounter pc  = pic18.getProgramCounter();
-		if (getPic18().getDataMem().gpMem[freg].getBit(bit) == 0) {
+		if (getPic18().getDataMem().getGpMem()[freg].getBit(bit) == 0) {
 			pc.increment();
 			if (pic18.checkTwoCycle()) {
 				pc.increment();

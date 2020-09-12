@@ -18,9 +18,9 @@ public class Bcf extends PicInstruction {
 		//int address = instruction & 0x00ff;
 		int bit = getInstruction() & 0x0e00;
 		bit = (bit / 256) >> 1;
-		//System.out.println("memory contents before clear: " + Integer.toBinaryString(pic18.dataMem.gpMem[address].read()));
-		getPic18().getDataMem().gpMem[freg].clearBit(bit);
-		//System.out.println("memory contents after clear: " + Integer.toBinaryString(pic18.dataMem.gpMem[address].read()));
+		//System.out.println("memory contents before clear: " + Integer.toBinaryString(pic18.dataMem.getGpMem()[address].read()));
+		getPic18().getDataMem().getGpMem()[freg].clearBit(bit);
+		//System.out.println("memory contents after clear: " + Integer.toBinaryString(pic18.dataMem.getGpMem()[address].read()));
 		//System.out.println("");
 	}
 

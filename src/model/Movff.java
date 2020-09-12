@@ -15,14 +15,14 @@ public class Movff extends PicInstruction {
 		DataMemory dataMem = pic18.getDataMem();
 		int source = instruction & 0x00ff;
 		//System.out.println("source address is " + Integer.toHexString(source) +
-		//		"and contents is " + pic18.dataMem.gpMem[source].read());
+		//		"and contents is " + pic18.dataMem.getGpMem()[source].read());
 		instruction = pic18.getProgramCounter().getWord();
 		int destination = instruction & 0x00ff;
 		//System.out.println("destination address is " + Integer.toHexString(destination));
-		dataMem.gpMem[destination].write(dataMem.gpMem[source].read());
+		dataMem.getGpMem()[destination].write(dataMem.getGpMem()[source].read());
 		//System.out.println("data at destination is " + 
-		//		Integer.toHexString(pic18.dataMem.gpMem[destination].read()));
-		//System.out.println("contents of memory 03 is " + pic18.dataMem.gpMem[0x03].read());
+		//		Integer.toHexString(pic18.dataMem.getGpMem()[destination].read()));
+		//System.out.println("contents of memory 03 is " + pic18.dataMem.getGpMem()[0x03].read());
 	}
 
 }

@@ -11,7 +11,7 @@ public class Decf extends PicInstruction {
 		//System.out.println("command is " + name);
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
-		int result = dataMem.gpMem[freg].read();
+		int result = dataMem.getGpMem()[freg].read();
 		if(result == 0)
 			result = 0xff;
 		else
@@ -20,8 +20,8 @@ public class Decf extends PicInstruction {
 		//if bit 9 of instruction is high, write result to f register
 		//else write to wreg
 		if((getInstruction() & 0x200) == 0x200)
-			dataMem.gpMem[freg].write(result);
-		else dataMem.wreg.write(result);
+			dataMem.getGpMem()[freg].write(result);
+		else dataMem.getWreg().write(result);
 		adjustZbit(result);
 		adjustNbit(result);
 		//pic18.incrementPc();
