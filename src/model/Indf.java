@@ -47,7 +47,7 @@ public class Indf extends Register {
 	
 	class IndfRunState extends RegRunState{
 		
-		public IndfRunState(Register register){
+		IndfRunState(Register register){
 			super(register);
 		}
 		
@@ -77,35 +77,35 @@ public class Indf extends Register {
 			pic18.getDataMem().getGpMem()[fullAddress].clear(register);
 		}
 		
-		public void clear(Register r){}
+		public void clear(Register r){ return; }
 		
 		public void setBit(int bit){
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].setBit(bit, register);
 		}
 		
-		public void setBit(int bit, Register r){}
+		public void setBit(int bit, Register r){ return; }
 		
 		public void clearBit(int bit){
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].clearBit(bit, register);
 		}
 		
-		public void clearBit(int bit, Register r){}
+		public void clearBit(int bit, Register r){ return; }
 		
 		public void decrement(){
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].decrement();
 		}
 		
-		public void decrement(Register r){}
+		public void decrement(Register r){ return; }
 		
 		public void increment(){
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].increment();
 		}
 		
-		public void increment(Register r){}
+		public void increment(Register r){ return; }
 	}
 	
 	class IndfStepState extends RegStepState{
@@ -138,7 +138,7 @@ public class Indf extends Register {
 		//The only entity that calls this function is another indf register. Its purpose is to 
 		//cause an attempt by one indf to access another indf to have no effect by letting the function
 		//know that it is being called by another indf. It is inherited from Register.
-		public void write(int value, Register r){}
+		public void write(int value, Register r){ return; }
 		
 		public void clear(){
 			getFullAddress();
@@ -146,7 +146,7 @@ public class Indf extends Register {
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
-		public void clear(Register r){}
+		public void clear(Register r){ return; }
 		
 		public void setBit(int bit){
 			getFullAddress();
@@ -168,7 +168,7 @@ public class Indf extends Register {
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
-		public void clearBit(int bit, Register r){}
+		public void clearBit(int bit, Register r){ return; }
 		
 		public void decrement(){
 			getFullAddress();
@@ -176,7 +176,7 @@ public class Indf extends Register {
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
-		public void decrement(Register r){}
+		public void decrement(Register r){ return; }
 		
 		public void increment(){
 			getFullAddress();
@@ -184,6 +184,6 @@ public class Indf extends Register {
 			register.pic18.changes.add((Integer)fullAddress);	//tracks changes pic state during instruction
 		}
 		
-		public void increment(Register r){}
+		public void increment(Register r){ return; }
 	}
 }
