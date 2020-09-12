@@ -1,4 +1,7 @@
 # picMicroView
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b948384e6dc44b3383ce3e14caef0d1f)](https://app.codacy.com/manual/hbuie112358/picMicroView?utm_source=github.com&utm_medium=referral&utm_content=hbuie112358/picMicroView&utm_campaign=Badge_Grade_Dashboard)
+
 picMicroView is an emulator for a PIC18F452 microprocessor. Its main purpose is to educate by allowing the user to step through instructions one at a time and inspect the corresponding discrete internal state of the microprocessor. See the screen shot below.
 
 **New in version 0.7: 1. Integrated view of program memory, data memory, and .lst file, with program memory and specific line in .lst file highlighted with current instruction when stepping. 2. Separate Ports/Registers table showing Special Function Registers. 3. Ports/Registers table and Data Memory table highlight which addresses were written to by previous instruction when in step mode. 4. Commented examples of many instructions along with general concepts such as indirect addressing and assembly language loops. 5. Ports A through E update Ports/Registers table in real time as program runs. 6. Indirect addressing with INDF, PLUSW, POSTDEC, POSTINC, PREINC. 7. Banked addressing with BSR. More instructions and features on the way with next release around April 1.
