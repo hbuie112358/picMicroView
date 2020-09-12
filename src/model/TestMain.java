@@ -6,29 +6,31 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-public class TestMain {
+class TestMain {
 	
 	private ArrayList<TestInstruction> testInstructions;
 	private Pic18F452 pic18;
 	
 
-	public TestMain(Pic18F452 pic18) {
+	TestMain(Pic18F452 pic18) {
 		this.pic18 = pic18;	
-		testInstructions = new ArrayList<TestInstruction>();
+		testInstructions = new ArrayList<>();
 	}
 	
 	void execute(){
 		pic18.setStepState();
-		int nopCount = 1
-				, address
-				, value;
-		String addressString = "", valueString = "", instructionString = "";
+		int nopCount = 1;
+		int address;
+		int value;
+		String addressString;
+		String valueString;
+		String instructionString;
 		while(nopCount < 4){
 			address = 0;
 			value = 0;
 			pic18.run();	
 			for(Integer iter : pic18.changes){
-				address = (int)iter;
+				address = iter;
 				value = pic18.getDataMem().getGpMem()[address].getContents();
 			}
 			testInstructions.add(new TestInstruction(pic18.getInstruction(), address, value));

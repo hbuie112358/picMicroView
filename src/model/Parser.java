@@ -10,18 +10,17 @@ import java.util.ArrayList;
 @SuppressWarnings("unused")
 public class Parser {
 	private Scanner scanner;
-	private Record s;
 	private HashMap<Integer, ArrayList<Integer> > program;
 	private int memOffset;
 	
-	public Parser(Scanner scanner){
+	Parser(Scanner scanner){
 		this.scanner = scanner;
-		this.program = new HashMap<Integer, ArrayList<Integer> >();
+		this.program = new HashMap<>();
 	}
 	
 	//parse() - gets first record, parses rest of file in while loop
 	private void parse(){
-		s = scanner.nextRecord();
+		Record s = scanner.nextRecord();
 		//printRecord(s);
 		parse(s);
 		while((s.getRecType() != RecType.EOF) && (s.getRecType() != RecType.ERROR)){

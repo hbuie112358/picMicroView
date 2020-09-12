@@ -1,11 +1,12 @@
 package model;
 
-public class Preinc extends Register {
+class Preinc extends Register {
 	
-	int fullAddress, highAddress, lowAddress;
-	int fsrl, fsrh;
+	private int fullAddress;
+	private int fsrl;
+	private int fsrh;
 
-	public Preinc(Pic18F452 pic18, int address, String name) {
+	Preinc(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
 		regRunState = new PreincRunState(this);
 		regStepState = new PreincStepState(this);
@@ -28,8 +29,8 @@ public class Preinc extends Register {
 	//Gets full address based on whether it is an instance of indf0, indf1, or indf2.
 	//It needs to know whether to get address from fsr0, fsr1, or fsr2.
 	private void getFullAddress(){
-		highAddress = pic18.getDataMem().getGpMem()[fsrh].read();
-		lowAddress = pic18.getDataMem().getGpMem()[fsrl].read();
+		int highAddress = pic18.getDataMem().getGpMem()[fsrh].read();
+		int lowAddress = pic18.getDataMem().getGpMem()[fsrl].read();
 		highAddress = highAddress << 8;
 		fullAddress = highAddress | lowAddress;
 	}
@@ -59,7 +60,7 @@ public class Preinc extends Register {
 	
 	class PreincRunState extends RegRunState{
 		
-		public PreincRunState(Register register){
+		PreincRunState(Register register){
 			super(register);
 		}
 		
@@ -139,7 +140,7 @@ public class Preinc extends Register {
 	
 	class PreincStepState extends RegStepState{
 		
-		public PreincStepState(Register register){
+		PreincStepState(Register register){
 			super(register);
 		}
 		
@@ -156,7 +157,7 @@ public class Preinc extends Register {
 			
 			//tells callee that caller is an indf register
 			pic18.getDataMem().getGpMem()[fullAddress].write(value, register);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		//This function overrides parent function.

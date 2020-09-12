@@ -42,7 +42,8 @@ public class Timer {
 	}
 	
 	public void timeTest(){
-		long a = 0, b = 1;
+		long a = 0;
+		long b = 1;
 		while(a < 65536){
 			a = a + b;
 			//System.out.println(Long.toBinaryString(a));

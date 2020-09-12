@@ -96,7 +96,9 @@ class Record {
 		}
 		else{
 			String strByte;
-			int data, numChars = recLen * 2, sStart = 9;
+			int data;
+			int numChars = recLen * 2;
+			int sStart = 9;
 			int last = sStart + numChars;
 			while(sStart < last){
 				strByte = "0x" + r.charAt(sStart) +

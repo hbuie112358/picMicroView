@@ -3,7 +3,8 @@ package model;
 public class Plusw extends Register {
 	
 	private int fullAddress;
-	private int fsrl, fsrh;
+	private int fsrl;
+	private int fsrh;
 
 	public Plusw(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
@@ -171,7 +172,7 @@ public class Plusw extends Register {
 	class PluswStepState extends RegStepState{
 		Register register;
 		
-		public PluswStepState(Register register){
+		PluswStepState(Register register){
 //			this.register = register;
 			super(register);
 		}

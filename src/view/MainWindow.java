@@ -1123,7 +1123,9 @@ public class MainWindow extends JFrame{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private int lineStartPos = 0, lineEndPos = -1, filePos = 0;
+		private int lineStartPos = 0;
+		private int lineEndPos = -1;
+		private int filePos = 0;
 		
 		//hashmap containing lines that start with a four digit hex value, 
 		//which indicates that the line contains an instruction (based on .lst
@@ -1172,7 +1174,8 @@ public class MainWindow extends JFrame{
 			fileContents = new StringBuilder();
 			@SuppressWarnings("unused")
 			File file;
-			String line, key;
+			String line;
+			String key;
 			int count;
 			BufferedReader reader = null;
 			try{
@@ -1328,7 +1331,8 @@ public class MainWindow extends JFrame{
 	
 	public void initPgmMemTable(ArrayList<Integer> pm){
 		Vector<String> ob;
-		String address, value;
+		String address;
+		String value;
 		for(int i = 0; i < pm.size(); i++){
 			ob = new Vector<>();
 			address = Integer.toHexString(i);

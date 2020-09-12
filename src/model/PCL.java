@@ -40,7 +40,9 @@ public class PCL extends Register {
 //			System.out.println("in PCL write()");
 			this.write(value); 
 			clearBit(0);
-			int newValue, pch, pcu;
+			int newValue
+					, pch
+					, pcu;
 			pch = pic18.getDataMem().pclatH.read() * 256;
 			pcu = pic18.getDataMem().pclatU.read() & 0x1f;
 			pcu = pcu * 65536;

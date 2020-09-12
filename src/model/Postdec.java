@@ -1,11 +1,12 @@
 package model;
 
-public class Postdec extends Register {
-	
-	int fullAddress, highAddress, lowAddress;
-	int fsrl, fsrh, readReturn;
+class Postdec extends Register {
 
-	public Postdec(Pic18F452 pic18, int address, String name) {
+	private int fullAddress;
+	private int fsrl;
+	private int fsrh;
+
+	Postdec(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
 		regRunState = new PostdecRunState(this);
 		regStepState = new PostdecStepState(this);
@@ -28,8 +29,8 @@ public class Postdec extends Register {
 	//Gets full address based on whether it is an instance of indf0, indf1, or indf2.
 	//It needs to know whether to get address from fsr0, fsr1, or fsr2.
 	private void getFullAddress(){
-		highAddress = pic18.getDataMem().getGpMem()[fsrh].read();
-		lowAddress = pic18.getDataMem().getGpMem()[fsrl].read();
+		int highAddress = pic18.getDataMem().getGpMem()[fsrh].read();
+		int lowAddress = pic18.getDataMem().getGpMem()[fsrl].read();
 		highAddress = highAddress << 8;
 		fullAddress = highAddress | lowAddress;
 	}
@@ -43,7 +44,7 @@ public class Postdec extends Register {
 		getFullAddress();
 		
 		//tells callee that caller is an indf register
-		readReturn = pic18.getDataMem().getGpMem()[fullAddress].read(this);
+		int readReturn = pic18.getDataMem().getGpMem()[fullAddress].read(this);
 		pic18.getDataMem().getGpMem()[fsrl].decrement();
 		return readReturn;
 	}
@@ -58,7 +59,7 @@ public class Postdec extends Register {
 	
 	class PostdecRunState extends RegRunState{
 		
-		public PostdecRunState(Register register){
+		PostdecRunState(Register register){
 			super(register);
 		}
 		
@@ -154,7 +155,7 @@ public class Postdec extends Register {
 			//tells callee that caller is an indf register
 			pic18.getDataMem().getGpMem()[fullAddress].write(value, register);
 			pic18.getDataMem().getGpMem()[fsrl].decrement();
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		//This function overrides parent function.
@@ -169,7 +170,7 @@ public class Postdec extends Register {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].clear(register);
 			pic18.getDataMem().getGpMem()[fsrl].decrement();
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void clear(Register r){
@@ -180,7 +181,7 @@ public class Postdec extends Register {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].setBit(bit, register);
 			pic18.getDataMem().getGpMem()[fsrl].decrement();
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void setBit(int bit, Register r){
@@ -191,7 +192,7 @@ public class Postdec extends Register {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].clearBit(bit, register);
 			pic18.getDataMem().getGpMem()[fsrl].decrement();
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void clearBit(int bit, Register r){
@@ -202,7 +203,7 @@ public class Postdec extends Register {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].decrement(register);
 			pic18.getDataMem().getGpMem()[fsrl].decrement();
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void decrement(Register r){
@@ -213,7 +214,7 @@ public class Postdec extends Register {
 			getFullAddress();
 			pic18.getDataMem().getGpMem()[fullAddress].increment(register);
 			pic18.getDataMem().getGpMem()[fsrl].decrement();
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 		}
 		
 		public void increment(Register r){
