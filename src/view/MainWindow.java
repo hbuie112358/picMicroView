@@ -1397,250 +1397,46 @@ public class MainWindow extends JFrame{
 //		DemoController demoController = new DemoController(this);
 //	}
 	
+	
+	private void addRegisterToPortRegMemTable(ArrayList<Integer> dm, int address, String addressName){
+		//add register
+		Vector<String> ob = new Vector<>();
+		ob.add(addressName);
+		StringBuilder value = new StringBuilder(Integer.toBinaryString(dm.get(address)));
+		while(value.length() < 8){
+			value.insert(0, "0");
+		}
+		ob.add(value.toString());
+		dtm_portReg.addRow(ob);
+	}
+
 	/**
 	 * Adds values to Ports/Registers table. Loads new table after Stop and Step.
-	 * 
+	 *
 	 */
-	
 	public void initPortRegMemTable(ArrayList<Integer> dm){
-		Vector<String> ob;
-		int i;
-		StringBuilder value;
-		
-		//add wreg
-		ob = new Vector<>();
-		i = 0x0e8;
-		ob.add("WREG");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		
-		//add status
-		ob = new Vector<>();
-		i = 0x0d8;
-		ob.add("STATUS");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add intcon
-		ob = new Vector<>();
-		i = 0x0f2;
-		ob.add("INTCON");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add TRISA
-		ob = new Vector<>();
-		i = 0x0f92;
-		ob.add("TRISA");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add portA
-		ob = new Vector<>();
-		i = 0x080;
-		ob.add("PORTA");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add TRISB
-		ob = new Vector<>();
-		i = 0x0f93;
-		ob.add("TRISB");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add portB
-		ob = new Vector<>();
-		i = 0xf81;
-		ob.add("PORTB");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add TRISC
-		ob = new Vector<>();
-		i = 0x0f94;
-		ob.add("TRISC");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add portC
-		ob = new Vector<>();
-		i = 0xf82;
-		ob.add("PORTC");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add TRISD
-		ob = new Vector<>();
-		i = 0x0f95;
-		ob.add("TRISD");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add portD
-		ob = new Vector<>();
-		i = 0xf83;
-		ob.add("PORTD");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add TRISE
-		ob = new Vector<>();
-		i = 0x0f96;
-		ob.add("TRISE");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add portE
-		ob = new Vector<>();
-		i = 0xf84;
-		ob.add("PORTE");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);	
-		
-		//add BSR
-		ob = new Vector<>();
-		i = 0xfe0;
-		ob.add("BSR");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8){
-			value.insert(0, "0");
-		}
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add Fsr0L
-		ob = new Vector<>();
-		i = 0x0e9;
-		ob.add("FSR0L");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add Fsr0h
-		ob = new Vector<>();
-		i = 0x0ea;
-		ob.add("FSR0H");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add Fsr1L
-		ob = new Vector<>();
-		i = 0x0e1;
-		ob.add("FSR1L");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add Fsr1h
-		ob = new Vector<>();
-		i = 0x0e2;
-		ob.add("FSR1H");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add Fsr2L
-		ob = new Vector<>();
-		i = 0x0d9;
-		ob.add("FSR2L");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add Fsr2h
-		ob = new Vector<>();
-		i = 0x0da;
-		ob.add("FSR2H");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add ProdL
-		ob = new Vector<>();
-		i = 0x0f3;
-		ob.add("PRODL");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
-		
-		//add Prodh
-		ob = new Vector<>();
-		i = 0x0f4;
-		ob.add("PRODH");
-		value = new StringBuilder(Integer.toBinaryString(dm.get(i)));
-		while(value.length() < 8)
-			value.insert(0, "0");
-		ob.add(value.toString());
-		dtm_portReg.addRow(ob);
+		addRegisterToPortRegMemTable(dm, 0x0e8, "WREG");
+		addRegisterToPortRegMemTable(dm, 0x0d8, "STATUS");
+		addRegisterToPortRegMemTable(dm, 0x0f2, "INTCON");
+		addRegisterToPortRegMemTable(dm, 0x080, "PORTA");
+		addRegisterToPortRegMemTable(dm, 0xf81, "PORTB");
+		addRegisterToPortRegMemTable(dm, 0xf82, "PORTC");
+		addRegisterToPortRegMemTable(dm, 0xf83, "PORTD");
+		addRegisterToPortRegMemTable(dm, 0xf84, "PORTE");
+		addRegisterToPortRegMemTable(dm, 0x0f92, "TRISA");
+		addRegisterToPortRegMemTable(dm, 0x0f93, "TRISB");
+		addRegisterToPortRegMemTable(dm, 0x0f94, "TRISC");
+		addRegisterToPortRegMemTable(dm, 0x0f95, "TRISD");
+		addRegisterToPortRegMemTable(dm, 0x0f96, "TRISE");
+		addRegisterToPortRegMemTable(dm, 0xfe0, "BSR");
+		addRegisterToPortRegMemTable(dm, 0x0e9, "FSR0L");
+		addRegisterToPortRegMemTable(dm, 0x0ea, "FSR0H");
+		addRegisterToPortRegMemTable(dm, 0x0e1, "FSR1L");
+		addRegisterToPortRegMemTable(dm, 0x0e2, "FSR1H");
+		addRegisterToPortRegMemTable(dm, 0x0d9, "FSR2L");
+		addRegisterToPortRegMemTable(dm, 0x0da, "FSR2H");
+		addRegisterToPortRegMemTable(dm, 0x0f3, "PRODL");
+		addRegisterToPortRegMemTable(dm, 0x0f4, "PRODH");
 	}
 
 	//Called by ReplyController.updatePC(), which is called by 
