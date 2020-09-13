@@ -22,7 +22,7 @@ public class BSR extends Register {
 	
 	class BsrRunState extends RegRunState{
 		
-		public BsrRunState(Register register){
+		BsrRunState(Register register){
 			super(register);
 		}
 		
@@ -31,8 +31,7 @@ public class BSR extends Register {
 			//ignore write if bank not implemented (only 0-f is implemented)
 			if(value < 0x10){
 				//mask bits 7-4 so that only lower nibble is used
-				int newValue = value & 0x000f;
-				register.contents = newValue;
+				register.contents = value & 0x000f;
 
 				//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 			}
@@ -41,20 +40,16 @@ public class BSR extends Register {
 	
 	class BsrStepState extends RegStepState{
 		
-		public BsrStepState(Register register){
+		BsrStepState(Register register){
 			super(register);
 		}
 		
 		@Override
 		public void write(int value){
-			//ignore write if bank not implemented (only 0-f is implemented)
-			if(value > 0x0f)
-				return;
-			else{
+			if(value < 0x10){
 				//mask bits 7-4 so that only lower nibble is used
-				value = value & 0x000f;
-				register.contents = value;
-				register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+				register.contents = value & 0x000f;
+				register.pic18.changes.add(address);	//tracks changes pic state during instruction
 
 				//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 			}
