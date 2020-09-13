@@ -11,7 +11,7 @@ public class Sublw extends PicInstruction {
 	public void execute() {
 		DataMemory dataMem = getPic18().getDataMem();
 		//get two's complement of value in wreg
-		int twosComp = Alu.getTwosComplement(dataMem.getWreg().read() & 0xff);
+		int twosComp = ALU.getTwosComplement(dataMem.getWreg().read() & 0xff);
 
 		//mask "k" portion of instruction, add to two's complement of wreg value
 		int result = (getInstruction() & 0xff) + twosComp;

@@ -21,7 +21,7 @@ public class Subfwb extends PicInstruction {
 			origValue = origValue + 1;
 
 		//get two's complement
-		int twosComp = Alu.getTwosComplement(origValue & 0xff);
+		int twosComp = ALU.getTwosComplement(origValue & 0xff);
 
 //		System.out.println("twos comp after adding borrow is: " + Integer.toHexString(twosComp));
 		//find sum of wreg and two's complement of f

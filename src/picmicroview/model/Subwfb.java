@@ -1,6 +1,6 @@
 package picmicroview.model;
 
-import static picmicroview.model.Alu.getTwosComplement;
+import static picmicroview.model.ALU.getTwosComplement;
 
 public class Subwfb extends PicInstruction {
 
