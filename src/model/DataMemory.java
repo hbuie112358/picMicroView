@@ -37,36 +37,38 @@ public class DataMemory {
 		pclatU = gpMem[0x0fb];
 		stkptr = gpMem[0x0fc];
 		intcon = gpMem[0x0f2];
-		Register porta = gpMem[0x080];
-		Register portb = gpMem[0x081];
-		Register portc = gpMem[0x082];
-		Register portd = gpMem[0x083];
-		Register porte = gpMem[0x084];
 		bsr = gpMem[0x0e0];
 		fsr0L = gpMem[0x0e9];
 		fsr0h = gpMem[0x0ea];
-		Register plusw0 = gpMem[0x0eb];
-		Register preinc0 = gpMem[0x0ec];
-		Register postdec0 = gpMem[0x0ed];
-		Register postinc0 = gpMem[0x0ee];
-		Register indf0 = gpMem[0x0ef];
 		fsr1L = gpMem[0x0e1];
 		fsr1h = gpMem[0x0e2];
-		Register plusw1 = gpMem[0x0e3];
-		Register preinc1 = gpMem[0x0e4];
-		Register postdec1 = gpMem[0x0e5];
-		Register postinc1 = gpMem[0x0e6];
-		Register indf1 = gpMem[0x0e7];
 		fsr2L = gpMem[0x0d9];
 		fsr2h = gpMem[0x0da];
-		Register plusw2 = gpMem[0x0db];
-		Register preinc2 = gpMem[0x0dc];
-		Register postdec2 = gpMem[0x0dd];
-		Register postinc2 = gpMem[0x0de];
-		Register indf2 = gpMem[0x0df];
 		prodL = gpMem[0x0f3];
 		prodh = gpMem[0x0f4];
-		
+
+		//future
+// 		Register porta = gpMem[0x080];
+//		Register portb = gpMem[0x081];
+//		Register portc = gpMem[0x082];
+//		Register portd = gpMem[0x083];
+//		Register porte = gpMem[0x084];
+//		Register plusw0 = gpMem[0x0eb];
+//		Register preinc0 = gpMem[0x0ec];
+//		Register postdec0 = gpMem[0x0ed];
+//		Register postinc0 = gpMem[0x0ee];
+//		Register indf0 = gpMem[0x0ef];
+//		Register plusw1 = gpMem[0x0e3];
+//		Register preinc1 = gpMem[0x0e4];
+//		Register postdec1 = gpMem[0x0e5];
+//		Register postinc1 = gpMem[0x0e6];
+//		Register indf1 = gpMem[0x0e7];
+//		Register plusw2 = gpMem[0x0db];
+//		Register preinc2 = gpMem[0x0dc];
+//		Register postdec2 = gpMem[0x0dd];
+//		Register postinc2 = gpMem[0x0de];
+//		Register indf2 = gpMem[0x0df];
+
 		//indfs is hashset of addresses that are INDFx registers: INDF, PLUSW,
 		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 
 		//disregard banked addressing. This causes a hole in all banks within

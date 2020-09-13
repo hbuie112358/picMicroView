@@ -186,13 +186,358 @@ public class Pic18F452 implements SetState{
 	public HashSet<Integer> getChanges(){
 		return changes;
 	}
+
+	private void decode0000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x0000");
+		if(instruction == 0){
+			//System.out.println("command low nibble has been decoded as 0X0000");
+			Nop nop = new Nop(instruction, this, "nop");
+			nop.execute();
+		}
+		else if ((hByteLnibble == 0x0000) && ((lByte == 0x0012) || (lByte == 0x0013))){
+			Return Return = new Return(instruction, this, "return");
+			Return.execute();
+		}
+		else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
+				|| (hByteLnibble == 0x0700)){
+			Decf decf = new Decf(instruction, this, "decf");
+			decf.execute();
+		}
+		else if (hByteLnibble == 0x0100){
+			Movlb movlb = new Movlb(instruction, this, "movlb");
+			movlb.execute();
+		}
+		else if((hByteLnibble == 0x0200) || (hByteLnibble == 0x0300)){
+			Mulwf mulwf = new Mulwf(instruction, this, "mulwf");
+			mulwf.execute();
+		}
+		else if(hByteLnibble == 0x0800){
+			Sublw sublw = new Sublw(instruction, this, "sublw");
+			sublw.execute();
+		}
+		else if(hByteLnibble == 0x0900){
+			Iorlw iorlw = new Iorlw(instruction, this, "iorlw");
+			iorlw.execute();
+		}
+		else if(hByteLnibble == 0x0a00){
+			//System.out.println("command low nibble has been decoded as 0X0E00");
+			Xorlw xorlw = new Xorlw(instruction, this, "xorlw");
+			xorlw.execute();
+		}
+		else if(hByteLnibble == 0x0b00){
+			//System.out.println("command low nibble has been decoded as 0X0E00");
+			Andlw andlw = new Andlw(instruction, this, "andlw");
+			andlw.execute();
+		}
+		else if (hByteLnibble == 0x0d00){
+			Mullw mullw = new Mullw(instruction, this, "mullw");
+			mullw.execute();
+		}
+		else if(hByteLnibble == 0x0e00){
+			//System.out.println("command low nibble has been decoded as 0X0E00");
+			Movlw movlw = new Movlw(instruction, this, "movlw");
+			movlw.execute();
+		}
+		else if((hByteLnibble == 0x0f00)){
+			Addlw addlw  = new Addlw(instruction, this, "addlw");
+			addlw.execute();
+		}
+		else if((hByteLnibble == 0x0000) && lByte == 0x07){
+			Daw daw = new Daw(instruction, this, "daw");
+			daw.execute();
+		}
+		else{
+			System.out.println("instruction not implemented");
+		}
+	}
+
+	private void decode1000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x2000");
+		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
+				|| (hByteLnibble == 0x0300)){
+			//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+			Iorwf iorwf = new Iorwf(instruction, this, "iorwf");
+			iorwf.execute();
+		}
+		else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
+				|| (hByteLnibble == 0x0700)){
+			Andwf andwf = new Andwf(instruction, this, "andwf");
+			andwf.execute();
+		}
+		else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+				|| hByteLnibble == 0x0b00){
+			Xorwf xorwf = new Xorwf(instruction, this, "xorwf");
+			xorwf.execute();
+		}
+		else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+				|| (hByteLnibble == 0x0f00)){
+			Comf comf = new Comf(instruction, this, "comf");
+			comf.execute();
+		}
+		else{
+			System.out.println("instruction not implemented");
+		}
+	}
+
+	private void decode2000(int hByteLnibble, int lByte){
+//			System.out.println("command high nibble has been decoded as 0x2000");
+		if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
+				|| (hByteLnibble == 0x0700)){
+//				System.out.println("in inner case addwf " + Integer.toHexString(hByteLnibble));
+			Addwf addwf = new Addwf(instruction, this, "addwf");
+			addwf.execute();
+		}
+		else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+				|| hByteLnibble == 0x0b00){
+			Incf incf = new Incf(instruction, this, "incf");
+			incf.execute();
+		}
+		else if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
+				|| (hByteLnibble == 0x0300)){
+//				System.out.println("in inner case addwfc " + Integer.toHexString(hByteLnibble));
+			Addwfc addwfc = new Addwfc(instruction, this, "addwfc");
+			addwfc.execute();
+		}
+		else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+				|| (hByteLnibble == 0x0f00)){
+			Decfsz decfsz = new Decfsz(instruction, this, "decfsz");
+			decfsz.execute();
+		}
+		else{
+			System.out.println("instruction not implemented");
+		}
+	}
+
+	private void decode3000(int hByteLnibble, int lByte){
+		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
+				|| (hByteLnibble == 0x0300)){
+			//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+			Rrcf rrcf = new Rrcf(instruction, this, "rccf");
+			rrcf.execute();
+		}
+		if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
+				|| (hByteLnibble == 0x0700)){
+			Rlcf rlcf = new Rlcf(instruction, this, "rlcf");
+			rlcf.execute();
+		}
+		else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+				|| hByteLnibble == 0x0b00){
+			Swapf swapf = new Swapf(instruction, this, "swapf");
+			swapf.execute();
+		}
+		else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+				|| (hByteLnibble == 0x0f00)){
+			Incfsz incfsz = new Incfsz(instruction, this, "incfsz");
+			incfsz.execute();
+		}
+	}
+
+	private void decode4000(int hByteLnibble, int lByte){
+		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
+				|| (hByteLnibble == 0x0300)){
+			//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+			Rrncf rrncf = new Rrncf(instruction, this, "rrncf");
+			rrncf.execute();
+		}
+		if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
+				|| (hByteLnibble == 0x0700)){
+			Rlncf rlncf = new Rlncf(instruction, this, "rlncf");
+			rlncf.execute();
+		}
+		if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+				|| hByteLnibble == 0x0b00){
+			Infsnz infsnz = new Infsnz(instruction, this, "infsnz");
+			infsnz.execute();
+		}
+		else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+				|| (hByteLnibble == 0x0f00)){
+			Dcfsnz dcfsnz = new Dcfsnz(instruction, this, "dcfsnz");
+			dcfsnz.execute();
+		}
+	}
+
+	private void decode5000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x2000");
+		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
+				|| (hByteLnibble == 0x0300)){
+			//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
+			Movf movf = new Movf(instruction, this, "movf");
+			movf.execute();
+		}
+		else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
+				|| (hByteLnibble == 0x0700)){
+			Subfwb subfwb = new Subfwb(instruction, this, "subfwb");
+			subfwb.execute();
+		}
+		else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+				|| hByteLnibble == 0x0b00){
+			Subwfb subwfb = new Subwfb(instruction, this, "subwfb");
+			subwfb.execute();
+		}
+		else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
+				|| (hByteLnibble == 0x0f00)){
+			Subwf subwf = new Subwf(instruction, this, "subwf");
+			subwf.execute();
+		}
+		else{
+			System.out.println("instruction not implemented");
+		}
+	}
+
+	private void decode6000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x6000");
+		if((hByteLnibble == 0x0E00) || (hByteLnibble == 0x0F00)){
+			//System.out.println("command low nibble has been decoded as 0X0E00");
+			Movwf movwf = new Movwf(instruction, this, "movwf");
+			movwf.execute();
+		}
+		else if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100)){
+			Cpfslt cpfslt = new Cpfslt(instruction, this, "cpfslt");
+			cpfslt.execute();
+		}
+		else if((hByteLnibble == 0x0200) || (hByteLnibble == 0x0300)){
+			Cpfseq cpfseq = new Cpfseq(instruction, this, "cpfseq");
+			cpfseq.execute();
+		}
+		else if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500)){
+			Cpfsgt cpfsgt = new Cpfsgt(instruction, this, "cpfsgt");
+			cpfsgt.execute();
+		}
+		else if((hByteLnibble == 0x0600) || (hByteLnibble == 0x0700)){
+			Tstfsz tstfsz = new Tstfsz(instruction, this, "tstfsz");
+			tstfsz.execute();
+		}
+		else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900)){
+			Setf setf = new Setf(instruction, this, "setf");
+			setf.execute();
+		}
+		else if((hByteLnibble == 0x0a00) || (hByteLnibble == 0x0b00)){
+			Clrf clrf = new Clrf(instruction, this, "clrf");
+			clrf.execute();
+		}
+
+		else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00)){
+			Negf negf = new Negf(instruction, this, "negf");
+			negf.execute();
+		}
+		else{
+			System.out.println("instruction not implemented");
+		}
+	}
+
+	private void decode7000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x2000");
+		Btg btg = new Btg(instruction, this, "btg");
+		btg.execute();
+	}
+
+	private void decode8000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x2000");
+		Bsf bsf = new Bsf(instruction, this, "bsf");
+		bsf.execute();
+	}
+
+	private void decode9000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x2000");
+		Bcf bcf = new Bcf(instruction, this, "bcf");
+		bcf.execute();
+	}
+
+	private void decodea000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x2000");
+		Btfss btfss = new Btfss(instruction, this, "btfss");
+		btfss.execute();
+	}
+
+	private void decodeb000(int hByteLnibble, int lByte){
+		Btfsc btfsc = new Btfsc(instruction, this, "btfsc");
+		btfsc.execute();
+	}
+
+	private void decodec000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0x2000");
+		Movff movff = new Movff(instruction, this, "movff");
+		movff.execute();
+	}
+
+	private void decoded000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0xd000");
+		if((hByteLnibble & 0x0800) == 0x0000){
+			//System.out.println("command low nibble has been decoded as 0x0000");
+			Bra bra = new Bra(instruction, this, "bra");
+			bra.execute();
+		}
+		else if((hByteLnibble & 0x0800) == 0x0800){
+			//System.out.println("command low nibble has been decoded as 0X0800");
+			Rcall rcall = new Rcall(instruction, this, "rcall");
+			rcall.execute();
+		}
+		else{
+			System.out.println("instruction not implemented");
+		}
+	}
+
+	private void decodee000(int hByteLnibble, int lByte){
+		//System.out.println("command high nibble has been decoded as 0xE000");
+		if(hByteLnibble == 0x0f00){
+			//System.out.println("command low nibble has been decoded as 0X0F00");
+			int nextWord = pc.getWord();
+//				System.out.println("in Pic18, nextWord is: " + Integer.toHexString(nextWord));
+			Goto GOTO = new Goto(instruction, nextWord, this, "goto");
+			GOTO.execute();
+		}
+		else if(hByteLnibble == 0x0e00){
+			int nextWord = pc.getWord();
+			Lfsr lfsr = new Lfsr(nextWord, this, "lfsr");
+			lfsr.execute();
+		}
+		else if(hByteLnibble == 0x0400){
+			Bov bov = new Bov(instruction, this, "bov");
+			bov.execute();
+		}
+		else if(hByteLnibble == 0x0500){
+			Bnov bnov = new Bnov(instruction, this, "bnov");
+			bnov.execute();
+		}
+		else if(hByteLnibble == 0x0600){
+			Bn bn = new Bn(instruction, this, "bn");
+			bn.execute();
+		}
+		else if(hByteLnibble == 0x0700){
+			Bnn bnn = new Bnn(instruction, this, "bnn");
+			bnn.execute();
+		}
+		else if(hByteLnibble == 0x0100){
+			Bnz bnz = new Bnz(instruction, this, "bnz");
+			bnz.execute();
+		}
+		else if(hByteLnibble == 0x0000){
+			Bz bz = new Bz(instruction, this, "bz");
+			bz.execute();
+		}
+		else if(hByteLnibble == 0x0200){
+			Bc bc = new Bc(instruction, this, "bc");
+			bc.execute();
+		}
+		else if(hByteLnibble == 0x0300){
+			Bnc bnc = new Bnc(instruction, this, "bnc");
+			bnc.execute();
+		}
+		else{
+			System.out.println("instruction not implemented");
+		}
+	}
+
+	private void decodef000(int hByteLnibble, int lByte){
+		//System.out.println("command low nibble has been decoded as 0X0000");
+		Nop nop = new Nop(instruction, this, "nop");
+		nop.execute();
+	}
 	
 	void runInstruction(){
-		int hByteHnibble
-				, hByteLnibble
-				, lByte
-				, nextWord;
-			
+		int hByteHnibble;
+		int hByteLnibble;
+		int lByte;
 		//fetch
 		instruction = pc.getWord();//increments program counter
 			
@@ -201,346 +546,46 @@ public class Pic18F452 implements SetState{
 		lByte = instruction & 0x00ff;
 
 		//decode
+//		String tempInstruction = Integer.toHexString(instruction);
+//		String temphByteHnibble = Integer.toHexString(hByteHnibble);
+//		String temphByteLnibble = Integer.toHexString(hByteLnibble);
+//		String templByte = Integer.toHexString(lByte);
 //		System.out.println("instruction is: " + Integer.toHexString(instruction));
 
-		if(hByteHnibble == 0x0000){
-			//System.out.println("command high nibble has been decoded as 0x0000");
-			if(instruction == 0){
-				//System.out.println("command low nibble has been decoded as 0X0000");
-				Nop nop = new Nop(instruction, this, "nop");
-				nop.execute();
-			}
-			else if ((hByteLnibble == 0x0000) && ((lByte == 0x0012) || (lByte == 0x0013))){
-				Return Return = new Return(instruction, this, "return");
-				Return.execute();
-			}
-			else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
-					|| (hByteLnibble == 0x0700)){
-				Decf decf = new Decf(instruction, this, "decf");
-				decf.execute();
-			}
-			else if (hByteLnibble == 0x0100){
-				Movlb movlb = new Movlb(instruction, this, "movlb");
-				movlb.execute();
-			}
-			else if((hByteLnibble == 0x0200) || (hByteLnibble == 0x0300)){
-				Mulwf mulwf = new Mulwf(instruction, this, "mulwf");
-				mulwf.execute();
-			}
-			else if(hByteLnibble == 0x0800){
-				Sublw sublw = new Sublw(instruction, this, "sublw");
-				sublw.execute();
-			}
-			else if(hByteLnibble == 0x0900){
-				Iorlw iorlw = new Iorlw(instruction, this, "iorlw");
-				iorlw.execute();
-			}
-			else if(hByteLnibble == 0x0a00){
-				//System.out.println("command low nibble has been decoded as 0X0E00");
-				Xorlw xorlw = new Xorlw(instruction, this, "xorlw");
-				xorlw.execute();
-			}
-			else if(hByteLnibble == 0x0b00){
-				//System.out.println("command low nibble has been decoded as 0X0E00");
-				Andlw andlw = new Andlw(instruction, this, "andlw");
-				andlw.execute();
-			}	
-			else if (hByteLnibble == 0x0d00){
-				Mullw mullw = new Mullw(instruction, this, "mullw");
-				mullw.execute();
-			}
-			else if(hByteLnibble == 0x0e00){
-				//System.out.println("command low nibble has been decoded as 0X0E00");
-				Movlw movlw = new Movlw(instruction, this, "movlw");
-				movlw.execute();
-			}	
-			else if((hByteLnibble == 0x0f00)){
-				Addlw addlw  = new Addlw(instruction, this, "addlw");
-				addlw.execute();
-			}
-			else if((hByteLnibble == 0x0000) && lByte == 0x07){
-				Daw daw = new Daw(instruction, this, "daw");
-				daw.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-			}
-		}	
-		else if(hByteHnibble ==	0x1000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
-			if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
-					|| (hByteLnibble == 0x0300)){
-				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
-				Iorwf iorwf = new Iorwf(instruction, this, "iorwf");
-				iorwf.execute();
-			}
-			else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
-					|| (hByteLnibble == 0x0700)){
-				Andwf andwf = new Andwf(instruction, this, "andwf");
-				andwf.execute();
-			}
-			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
-					|| hByteLnibble == 0x0b00){
-				Xorwf xorwf = new Xorwf(instruction, this, "xorwf");
-				xorwf.execute();
-			}
-			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
-					|| (hByteLnibble == 0x0f00)){
-				Comf comf = new Comf(instruction, this, "comf");
-				comf.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-			}
-		}
-		else if(hByteHnibble ==	0x2000){
-//			System.out.println("command high nibble has been decoded as 0x2000");				
-			if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
-					|| (hByteLnibble == 0x0700)){
-//				System.out.println("in inner case addwf " + Integer.toHexString(hByteLnibble));
-				Addwf addwf = new Addwf(instruction, this, "addwf");
-				addwf.execute();
-			}
-			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
-					|| hByteLnibble == 0x0b00){
-				Incf incf = new Incf(instruction, this, "incf");
-				incf.execute();
-			}
-			else if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
-					|| (hByteLnibble == 0x0300)){
-//				System.out.println("in inner case addwfc " + Integer.toHexString(hByteLnibble));
-				Addwfc addwfc = new Addwfc(instruction, this, "addwfc");
-				addwfc.execute();
-			}
-			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
-					|| (hByteLnibble == 0x0f00)){
-				Decfsz decfsz = new Decfsz(instruction, this, "decfsz");
-				decfsz.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-			}
-		}
-		else if(hByteHnibble == 0x3000){
-			if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
-					|| (hByteLnibble == 0x0300)){
-				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
-				Rrcf rrcf = new Rrcf(instruction, this, "rccf");
-				rrcf.execute();
-			}
-			if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
-					|| (hByteLnibble == 0x0700)){
-				Rlcf rlcf = new Rlcf(instruction, this, "rlcf");
-				rlcf.execute();
-			}
-			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
-					|| hByteLnibble == 0x0b00){
-				Swapf swapf = new Swapf(instruction, this, "swapf");
-				swapf.execute();
-			}
-			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
-					|| (hByteLnibble == 0x0f00)){
-				Incfsz incfsz = new Incfsz(instruction, this, "incfsz");
-				incfsz.execute();
-			}
-		}
-		else if(hByteHnibble == 0x4000){
-			if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
-					|| (hByteLnibble == 0x0300)){
-				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
-				Rrncf rrncf = new Rrncf(instruction, this, "rrncf");
-				rrncf.execute();
-			}
-			if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
-					|| (hByteLnibble == 0x0700)){
-				Rlncf rlncf = new Rlncf(instruction, this, "rlncf");
-				rlncf.execute();
-			}
-			if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
-					|| hByteLnibble == 0x0b00){
-				Infsnz infsnz = new Infsnz(instruction, this, "infsnz");
-				infsnz.execute();
-			}
-			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
-					|| (hByteLnibble == 0x0f00)){
-				Dcfsnz dcfsnz = new Dcfsnz(instruction, this, "dcfsnz");
-				dcfsnz.execute();
-			}
-		}
-		else if(hByteHnibble ==	0x5000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
-			if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200) 
-					|| (hByteLnibble == 0x0300)){
-				//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
-				Movf movf = new Movf(instruction, this, "movf");
-				movf.execute();
-			}
-			else if ((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600) 
-					|| (hByteLnibble == 0x0700)){
-				Subfwb subfwb = new Subfwb(instruction, this, "subfwb");
-				subfwb.execute();
-			}
-			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
-					|| hByteLnibble == 0x0b00){
-				Subwfb subwfb = new Subwfb(instruction, this, "subwfb");
-				subwfb.execute();
-			}
-			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00) || (hByteLnibble == 0x0e00)
-					|| (hByteLnibble == 0x0f00)){
-				Subwf subwf = new Subwf(instruction, this, "subwf");
-				subwf.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-			}
-		}
-		else if(hByteHnibble == 0x6000){
-			//System.out.println("command high nibble has been decoded as 0x6000");
-			if((hByteLnibble == 0x0E00) || (hByteLnibble == 0x0F00)){
-				//System.out.println("command low nibble has been decoded as 0X0E00");
-				Movwf movwf = new Movwf(instruction, this, "movwf");
-				movwf.execute();
-			}
-			else if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100)){
-				Cpfslt cpfslt = new Cpfslt(instruction, this, "cpfslt");
-				cpfslt.execute();
-			}
-			else if((hByteLnibble == 0x0200) || (hByteLnibble == 0x0300)){
-				Cpfseq cpfseq = new Cpfseq(instruction, this, "cpfseq");
-				cpfseq.execute();
-			}
-			else if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500)){
-				Cpfsgt cpfsgt = new Cpfsgt(instruction, this, "cpfsgt");
-				cpfsgt.execute();
-			}
-			else if((hByteLnibble == 0x0600) || (hByteLnibble == 0x0700)){
-				Tstfsz tstfsz = new Tstfsz(instruction, this, "tstfsz");
-				tstfsz.execute();
-			}
-			else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900)){
-				Setf setf = new Setf(instruction, this, "setf");
-				setf.execute();
-			}
-			else if((hByteLnibble == 0x0a00) || (hByteLnibble == 0x0b00)){
-				Clrf clrf = new Clrf(instruction, this, "clrf");
-				clrf.execute();
-			}
-			
-			else if((hByteLnibble == 0x0c00) || (hByteLnibble == 0x0d00)){
-				Negf negf = new Negf(instruction, this, "negf");
-				negf.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-			}
-		}
-		else if(hByteHnibble ==	0x7000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
-				Btg btg = new Btg(instruction, this, "btg");
-				btg.execute();
-				
-		}
-		else if(hByteHnibble ==	0x8000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
-				Bsf bsf = new Bsf(instruction, this, "bsf");
-				bsf.execute();
-		}
-		else if(hByteHnibble ==	0x9000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
-				Bcf bcf = new Bcf(instruction, this, "bcf");
-				bcf.execute();
-		}
-		else if(hByteHnibble ==	0xa000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
-				Btfss btfss = new Btfss(instruction, this, "btfss");
-				btfss.execute();
-				
-		}
-		else if (hByteHnibble == 0xb000){
-			Btfsc btfsc = new Btfsc(instruction, this, "btfsc");
-			btfsc.execute();
-		}
-		else if(hByteHnibble ==	0xc000){
-			//System.out.println("command high nibble has been decoded as 0x2000");				
-				Movff movff = new Movff(instruction, this, "movff");
-				movff.execute();
-		}
-		else if(hByteHnibble == 0xd000){
-			//System.out.println("command high nibble has been decoded as 0xd000");
-			if((hByteLnibble & 0x0800) == 0x0000){
-				//System.out.println("command low nibble has been decoded as 0x0000");
-				Bra bra = new Bra(instruction, this, "bra");
-				bra.execute();
-			}
-			else if((hByteLnibble & 0x0800) == 0x0800){
-				//System.out.println("command low nibble has been decoded as 0X0800");
-				Rcall rcall = new Rcall(instruction, this, "rcall");
-				rcall.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-			}
-		}	
-		
-		else if (hByteHnibble == 0xe000){
-			//System.out.println("command high nibble has been decoded as 0xE000");
-			if(hByteLnibble == 0x0f00){
-				//System.out.println("command low nibble has been decoded as 0X0F00");
-				//pc.increment();
-				nextWord = pc.getWord();
-//				System.out.println("in Pic18, nextWord is: " + Integer.toHexString(nextWord));
-				//Goto GOTO = new Goto(instruction, nextWord, this, "goto");
-				Goto GOTO = new Goto(instruction, nextWord, this, "goto");
-				GOTO.execute();
-			}
-			else if(hByteLnibble == 0x0e00){
-				nextWord = pc.getWord();
-				Lfsr lfsr = new Lfsr(nextWord, this, "lfsr");
-				lfsr.execute();
-			}
-			else if(hByteLnibble == 0x0400){
-				Bov bov = new Bov(instruction, this, "bov");
-				bov.execute();
-			}
-			else if(hByteLnibble == 0x0500){
-				Bnov bnov = new Bnov(instruction, this, "bnov");
-				bnov.execute();
-			}
-			else if(hByteLnibble == 0x0600){
-				Bn bn = new Bn(instruction, this, "bn");
-				bn.execute();
-			}
-			else if(hByteLnibble == 0x0700){
-				Bnn bnn = new Bnn(instruction, this, "bnn");
-				bnn.execute();
-			}
-			else if(hByteLnibble == 0x0100){
-				Bnz bnz = new Bnz(instruction, this, "bnz");
-				bnz.execute();
-			}
-			else if(hByteLnibble == 0x0000){
-				Bz bz = new Bz(instruction, this, "bz");
-				bz.execute();
-			}
-			else if(hByteLnibble == 0x0200){
-				Bc bc = new Bc(instruction, this, "bc");
-				bc.execute();
-			}
-			else if(hByteLnibble == 0x0300){
-				Bnc bnc = new Bnc(instruction, this, "bnc");
-				bnc.execute();
-			}
-			else{
-				System.out.println("instruction not implemented");
-			}
-		}
-		else if(hByteHnibble == 0xf000){
-				//System.out.println("command low nibble has been decoded as 0X0000");
-				Nop nop = new Nop(instruction, this, "nop");
-				nop.execute();
-		}
-		else{
-			System.out.println("instruction not implemented " + Integer.toHexString(instruction));
+		switch(hByteHnibble){
+			case 0x0000 : decode0000(hByteLnibble, lByte);
+			break;
+			case 0x1000 : decode1000(hByteLnibble, lByte);
+			break;
+			case 0x2000 : decode2000(hByteLnibble, lByte);
+			break;
+			case 0x3000 : decode3000(hByteLnibble, lByte);
+			break;
+			case 0x4000 : decode4000(hByteLnibble, lByte);
+			break;
+			case 0x5000 : decode5000(hByteLnibble, lByte);
+			break;
+			case 0x6000 : decode6000(hByteLnibble, lByte);
+			break;
+			case 0x7000 : decode7000(hByteLnibble, lByte);
+			break;
+			case 0x8000 : decode8000(hByteLnibble, lByte);
+			break;
+			case 0x9000 : decode9000(hByteLnibble, lByte);
+			break;
+			case 0xa000 : decodea000(hByteLnibble, lByte);
+			break;
+			case 0xb000 : decodeb000(hByteLnibble, lByte);
+			break;
+			case 0xc000 : decodec000(hByteLnibble, lByte);
+			break;
+			case 0xd000 : decoded000(hByteLnibble, lByte);
+			break;
+			case 0xe000 : decodee000(hByteLnibble, lByte);
+			break;
+			case 0xf000 : decodef000(hByteLnibble, lByte);
+			break;
+			default : System.out.println("instruction not implemented");
 		}
 		//System.out.println("wreg after " + Integer.toHexString(instruction) + " is " + dataMem.getWreg().read());
 		//printStatusReg();
