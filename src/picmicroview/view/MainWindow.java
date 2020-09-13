@@ -246,9 +246,6 @@ public class MainWindow extends JFrame{
 	private PortRegTableModel dtm_portReg;
 	
 	private JTabbedPane mainTabs;
-	private JScrollPane pgmMemTabPane;
-	private JScrollPane accessMemTabPane;
-	private JScrollPane portRegTabPane;
 	
 	private HashMap<Integer, Integer> portRegList;
 
@@ -617,12 +614,12 @@ public class MainWindow extends JFrame{
 		portRegTab.setToolTipText("Register | Contents");
 		
 		//make access memory / special function vertical split pane and load components
-		portRegTabPane = new JScrollPane(portRegTab);
+		JScrollPane portRegTabPane = new JScrollPane(portRegTab);
 		portRegTabPane.getVerticalScrollBar().setUnitIncrement(16);
 		JSplitPane splitPaneAccSpFunction = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
 //		splitPaneAccSpFunction.setTopComponent(new JScrollPane(portRegTab));
 		splitPaneAccSpFunction.setTopComponent(portRegTabPane);
-		accessMemTabPane = new JScrollPane(accessMemTab);
+		JScrollPane accessMemTabPane = new JScrollPane(accessMemTab);
 		accessMemTabPane.getVerticalScrollBar().setUnitIncrement(48);
 //		splitPaneAccSpFunction.setTopComponent(accessMemTabPane);
 //		splitPaneAccSpFunction.setBottomComponent(new JScrollPane(accessMemTab)); 
@@ -633,7 +630,7 @@ public class MainWindow extends JFrame{
 		JTabbedPane pgmMemTab = new JTabbedPane();
 		pgmMemTab.add("Program Memory", pgmMemTable);
 		pgmMemTab.setToolTipText("Address | Contents");
-		pgmMemTabPane = new JScrollPane(pgmMemTab);
+		JScrollPane pgmMemTabPane = new JScrollPane(pgmMemTab);
 		pgmMemTabPane.getVerticalScrollBar().setUnitIncrement(96);
 		
 		JSplitPane rightHalf = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
