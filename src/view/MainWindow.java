@@ -1397,7 +1397,7 @@ public class MainWindow extends JFrame{
 //		DemoController demoController = new DemoController(this);
 //	}
 	
-	
+
 	private void addRegisterToPortRegMemTable(ArrayList<Integer> dm, int address, String addressName){
 		//add register
 		Vector<String> ob = new Vector<>();
