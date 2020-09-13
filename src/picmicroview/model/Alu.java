@@ -4,15 +4,13 @@ import java.util.HashSet;
 
 class Alu {
 
-	private HashSet<Integer> indfs;
-	
 	Alu(){
 
 		//indfs is hashset of addresses that are INDFx registers: INDF, PLUSW,
 		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 
 		//disregard banked addressing. This causes a hole in all banks within
 		//the ranges below. See addwf.asm or addwf.lst for more complete explanation.
-		indfs = new HashSet<>();
+		HashSet<Integer> indfs = new HashSet<>();
 		int i;
 		for(i = 0x0eb; i < 0x0f0; i++)	//add INDF0's to hashset
 			indfs.add(i);

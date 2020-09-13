@@ -72,22 +72,22 @@ public class RequestController{
 	}
 	
 	public void initialize(){
-		pool.execute(this::initialize_pvt);
+		pool.execute(this::initializePvt);
 	}
 
 	//called as a thread by loadAction(), stepAction, and initialize()
-	private void initialize_pvt() {
+	private void initializePvt() {
 		//updateDataMemory();
-		ArrayList<Integer> dm = getDataMemory_pvt();
+		ArrayList<Integer> dm = getDataMemoryPvt();
 		repCont.initDataMemTable(dm);
 		repCont.initPortRegMemTable(dm);
-		ArrayList<Integer> pm = getPgmMemory_pvt();
+		ArrayList<Integer> pm = getPgmMemoryPvt();
 		repCont.initPgmMemTable(pm);
 	}
 	
 	//called by RequestControler.stepAction() and RequestController.stopAction()
 	private void updateDataMemory(){
-		ArrayList<Integer> dm = getDataMemory_pvt();
+		ArrayList<Integer> dm = getDataMemoryPvt();
 		HashSet<Integer> changes = pic18.getChanges();
 		Object[] dm_changes = new Object[2];
 		dm_changes[0] = changes;	//address of change
@@ -96,15 +96,15 @@ public class RequestController{
 	}
 	
 	private void updateDataMemoryOnStop(){
-		ArrayList<Integer> dm = getDataMemory_pvt();
+		ArrayList<Integer> dm = getDataMemoryPvt();
 		repCont.updateMemTables(dm);
 	}
 	
-	private ArrayList<Integer> getDataMemory_pvt(){
+	private ArrayList<Integer> getDataMemoryPvt(){
 		return pic18.getDataMemory();
 	}
 	
-	private ArrayList<Integer> getPgmMemory_pvt(){
+	private ArrayList<Integer> getPgmMemoryPvt(){
 		return pic18.getPgmMemory();
 	}
 }

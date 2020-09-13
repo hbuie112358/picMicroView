@@ -1,6 +1,6 @@
 package picmicroview.model;
 
-
+//future
 public class PclatH extends Register {
 
 	public PclatH(Pic18F452 pic18, int address, String name) {
@@ -9,7 +9,7 @@ public class PclatH extends Register {
 
 	@Override
 	public void write(int value) {
-		
+		//inherited function unimplemented for this class
 	}
 	
 }

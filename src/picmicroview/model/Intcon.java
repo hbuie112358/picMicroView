@@ -1,6 +1,6 @@
 package picmicroview.model;
 
-
+//future
 public class Intcon extends Register {
 
 	Intcon(Pic18F452 pic18, int address, String name) {
@@ -9,8 +9,7 @@ public class Intcon extends Register {
 
 	@Override
 	public void write(int value) {
-		
-		
+		//inherited function unimplemented for this class
 	}
 
 }
