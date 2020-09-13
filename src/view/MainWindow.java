@@ -1318,7 +1318,7 @@ public class MainWindow extends JFrame{
 		for(int i = 0; i < dm.size(); i++){
 			
 			//if value currently in jtable is different from value in pic data memory
-			if(!(Integer.parseInt((String)dtm_data.getValueAt(i, 1), 2) == (dm.get(i)))){
+			if(Integer.parseInt((String)dtm_data.getValueAt(i, 1), 2) != (dm.get(i))){
 				dtm_data.setValueAt((int)dm.get(i), i, 1);
 				dataMemTable.addChange(i);
 				if(portRegList.containsKey(i)){
