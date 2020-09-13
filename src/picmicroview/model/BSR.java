@@ -29,13 +29,11 @@ public class BSR extends Register {
 		@Override
 		public void write(int value){
 			//ignore write if bank not implemented (only 0-f is implemented)
-			if(value > 0x0f)
-				return;
-			else{
+			if(value < 0x10){
 				//mask bits 7-4 so that only lower nibble is used
-				value = value & 0x000f;
-				register.contents = value;
-				
+				int newValue = value & 0x000f;
+				register.contents = newValue;
+
 				//System.out.println("in Register, written by register at address: " + Integer.toHexString(address));
 			}
 		}
