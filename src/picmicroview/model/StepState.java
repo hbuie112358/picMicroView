@@ -17,7 +17,7 @@ public class StepState implements Pic18F452State {
 	}
 	
 	public void stop(){
-		
+		//inherited function unimplemented for this class
 	}
 
 	@Override
