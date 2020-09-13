@@ -53,6 +53,7 @@ import picmicroview.controller.RequestController;
 
 public class MainWindow extends JFrame{
 
+
 	private static final long serialVersionUID = 782592750591591329L;
 
 	private LstFileWindow lstPanel;
@@ -289,10 +290,62 @@ public class MainWindow extends JFrame{
 		testItem.addActionListener(new HelpAction("instructionTest", "instructionTest"));
 //		helpMenu.add(testItem);///////////////////////////////////////////////////////////
 		
-
 		examples.add(instructions);
 		instructions.add(basic);
-		instructions.add(inDepth);
+		initBasicInstructionExamples();
+		initInDepthInstructionExamples();
+		initGeneralConceptExamples();
+
+		menuBar.add(programMenu);
+		programMenu.setMnemonic('P');
+		runItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		runItem.addActionListener(runAction);
+		runButton.addActionListener(runAction);
+		programMenu.add(runItem);
+		
+		stepItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		stepItem.addActionListener(stepAction);
+		stepButton.addActionListener(stepAction);
+		programMenu.add(stepItem);
+		
+		programMenu.add(assembleItem);
+		
+		stopItem.setAccelerator(KeyStroke.getKeyStroke('H', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		stopItem.addActionListener(stopAction);
+		stopButton.addActionListener(stopAction);
+		programMenu.add(stopItem);
+		
+		menuBar.add(examples);
+		menuBar.add(helpMenu);
+		
+		toolBar.add(stepButton);
+		toolBar.add(runButton);
+		toolBar.add(stopButton);
+
+		initPanes();
+
+		//initialize hashmap for portRegTable  changes during stepping
+		//(address of change, row in portRegTable)
+		portRegList = new HashMap<>();
+		portRegList.put(0xfd8, 1);
+		portRegList.put(0xfe8, 0);
+		portRegList.put(0xf80, 4);
+		portRegList.put(0xf81, 6);
+		portRegList.put(0xf82, 8);
+		portRegList.put(0xf83, 10);
+		portRegList.put(0xf84, 12);
+		portRegList.put(0xfe0, 13);
+		portRegList.put(0xfe9, 14);
+		portRegList.put(0xfea, 15);
+		portRegList.put(0xfe1, 16);
+		portRegList.put(0xfe2, 17);
+		portRegList.put(0xfd9, 18);
+		portRegList.put(0xfda, 19);
+		portRegList.put(0xff3, 20);
+		portRegList.put(0xff4, 21);
+	}
+
+	private void initBasicInstructionExamples(){
 		basic.add(a);
 		basic.add(b);
 		basic.add(c);
@@ -424,7 +477,10 @@ public class MainWindow extends JFrame{
 		xorlw.addActionListener(new ExampleAction("basic","xorlw"));
 		x.add(xorwf);
 		xorwf.addActionListener(new ExampleAction("basic","xorwf"));
-		
+	}
+
+	private void initInDepthInstructionExamples(){
+		instructions.add(inDepth);
 		inDepth.add(aID);
 		inDepth.add(bID);
 		inDepth.add(cID);
@@ -530,7 +586,115 @@ public class MainWindow extends JFrame{
 		xorlwIDItem.addActionListener(new ExampleAction("inDepth", "xorlw"));
 		xID.add(xorwfIDItem);
 		xorwfIDItem.addActionListener(new ExampleAction("inDepth", "xorwf"));
-		
+	}
+
+	private void initPanes(){
+		rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+
+		//program memory table setup
+		String[] colNames = {"Address (0x)", "Data (0x)"};
+		dtm_pgm = new MemoryTableModel(colNames);
+		pgmMemTable.setModel(dtm_pgm);
+		TableCellRenderer colRenderer = new PgmColumnColorRenderer(leftRenderer);
+		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
+		colRenderer = new PgmRtColumnColorRenderer(rightRenderer);
+		pgmMemTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
+
+		//data memory table setup
+		String[] colNames1  = {"Address (0x)", "Data"};
+		dtm_data = new DataTableModel(colNames1);
+		dataMemTable.setModel(dtm_data);
+		colRenderer = new PgmColumnColorRenderer(leftRenderer);
+		dataMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
+		colRenderer = new ColumnColorRenderer(rightRenderer);
+		dataMemTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
+
+		//port register table setup
+		String[] colNames2 = {"Port/Register", "Data"};
+		dtm_portReg = new PortRegTableModel(colNames2);
+		portRegTable.setModel(dtm_portReg);
+		colRenderer = new PgmColumnColorRenderer(leftRenderer);
+		portRegTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
+		colRenderer = new ColumnColorRenderer(rightRenderer);
+		portRegTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
+
+		JTabbedPane accessMemTab = new JTabbedPane();
+		accessMemTab.add("Data Memory", dataMemTable);
+		accessMemTab.setToolTipText("Address | Contents");
+		JTabbedPane portRegTab = new JTabbedPane();
+		portRegTab.add("Special Function", portRegTable);
+		portRegTab.setToolTipText("Register | Contents");
+
+		//make access memory / special function vertical split pane and load components
+		JScrollPane portRegTabPane = new JScrollPane(portRegTab);
+		portRegTabPane.getVerticalScrollBar().setUnitIncrement(16);
+		JSplitPane splitPaneAccSpFunction = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
+//		splitPaneAccSpFunction.setTopComponent(new JScrollPane(portRegTab));
+		splitPaneAccSpFunction.setTopComponent(portRegTabPane);
+		JScrollPane accessMemTabPane = new JScrollPane(accessMemTab);
+		accessMemTabPane.getVerticalScrollBar().setUnitIncrement(48);
+//		splitPaneAccSpFunction.setTopComponent(accessMemTabPane);
+//		splitPaneAccSpFunction.setBottomComponent(new JScrollPane(accessMemTab));
+		splitPaneAccSpFunction.setBottomComponent(accessMemTabPane);
+		splitPaneAccSpFunction.setDividerLocation(350);
+
+
+		JTabbedPane pgmMemTab = new JTabbedPane();
+		pgmMemTab.add("Program Memory", pgmMemTable);
+		pgmMemTab.setToolTipText("Address | Contents");
+		JScrollPane pgmMemTabPane = new JScrollPane(pgmMemTab);
+		pgmMemTabPane.getVerticalScrollBar().setUnitIncrement(96);
+
+		JSplitPane rightHalf = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+
+//		rightHalf.setLeftComponent(new JScrollPane(pgmMemTab));
+		rightHalf.setLeftComponent(pgmMemTabPane);
+
+		rightHalf.setRightComponent(splitPaneAccSpFunction);
+		rightHalf.getLeftComponent().setMinimumSize(new Dimension(200, 300));
+		rightHalf.getRightComponent().setMinimumSize(new Dimension(200, 300));
+
+		//this creates an ICEpdf jpanel showing the pic user manual in a separate tab
+//		String leftPdf = "./documentation/pic18C39500a.pdf";
+//		SwingController picmicroview.controller = new SwingController();
+//		SwingViewBuilder factory = new SwingViewBuilder(picmicroview.controller);
+//		JPanel viewerComponentPanel = factory.buildViewerPanel();
+//		ComponentKeyBinding.install(picmicroview.controller, viewerComponentPanel);
+//		picmicroview.controller.getDocumentViewController().setAnnotationCallback(
+//			      new org.icepdf.ri.common.MyAnnotationCallback(
+//			             picmicroview.controller.getDocumentViewController()));
+//		picmicroview.controller.openDocument(leftPdf);
+
+		lstPanel = new LstFileWindow();
+		JScrollPane lstPanelScroll = new JScrollPane(lstPanel);
+		lstPanelScroll.getVerticalScrollBar().setUnitIncrement(32);
+
+
+		JSplitPane whole = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		whole.setLeftComponent(lstPanelScroll);
+		whole.setRightComponent(rightHalf);
+		whole.setResizeWeight(1);
+
+		mainTabs = new JTabbedPane();
+		mainTabs.add("Pic18F452", whole);
+
+		//adds tab showing pic usr manual, removed for license considerations
+//		mainTabs.add("Reference", viewerComponentPanel);
+		mainPanel.setLayout(new BorderLayout());
+
+		mainPanel.add(toolBar, BorderLayout.NORTH);
+		mainPanel.add(mainTabs, BorderLayout.CENTER);
+
+		getContentPane().add(mainPanel);
+		initialize();
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		pack();
+		setVisible(true);
+	}
+
+	private void initGeneralConceptExamples(){
 		examples.add(generalConcepts);
 		generalConcepts.add(indirectAddressing);
 		indirectAddressing.add(indfItem);
@@ -548,156 +712,6 @@ public class MainWindow extends JFrame{
 		fastPortAToggleItem.addActionListener(new ExampleAction("loops", "fastPortAToggle"));
 		loops.add(slowToggleAllPortsItem);
 		slowToggleAllPortsItem.addActionListener(new ExampleAction("loops", "slowToggleAllPorts"));
-
-		menuBar.add(programMenu);
-		programMenu.setMnemonic('P');
-		runItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-		runItem.addActionListener(runAction);
-		runButton.addActionListener(runAction);
-		programMenu.add(runItem);
-		
-		stepItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-		stepItem.addActionListener(stepAction);
-		stepButton.addActionListener(stepAction);
-		programMenu.add(stepItem);
-		
-		programMenu.add(assembleItem);
-		
-		stopItem.setAccelerator(KeyStroke.getKeyStroke('H', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-		stopItem.addActionListener(stopAction);
-		stopButton.addActionListener(stopAction);
-		programMenu.add(stopItem);
-		
-		menuBar.add(examples);
-		menuBar.add(helpMenu);
-		
-		toolBar.add(stepButton);
-		toolBar.add(runButton);
-		toolBar.add(stopButton);
-		
-		rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-
-		//program memory table setup
-		String[] colNames = {"Address (0x)", "Data (0x)"};
-		dtm_pgm = new MemoryTableModel(colNames);
-		pgmMemTable.setModel(dtm_pgm);
-		TableCellRenderer colRenderer = new PgmColumnColorRenderer(leftRenderer);
-		pgmMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
-		colRenderer = new PgmRtColumnColorRenderer(rightRenderer);
-		pgmMemTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
-		
-		//data memory table setup
-		String[] colNames1  = {"Address (0x)", "Data"};
-		dtm_data = new DataTableModel(colNames1);
-		dataMemTable.setModel(dtm_data);
-		colRenderer = new PgmColumnColorRenderer(leftRenderer);
-		dataMemTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
-		colRenderer = new ColumnColorRenderer(rightRenderer);
-		dataMemTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
-		
-		//port register table setup
-		String[] colNames2 = {"Port/Register", "Data"};
-		dtm_portReg = new PortRegTableModel(colNames2);
-		portRegTable.setModel(dtm_portReg);
-		colRenderer = new PgmColumnColorRenderer(leftRenderer);
-		portRegTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
-		colRenderer = new ColumnColorRenderer(rightRenderer);
-		portRegTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
-		
-		JTabbedPane accessMemTab = new JTabbedPane();
-		accessMemTab.add("Data Memory", dataMemTable);
-		accessMemTab.setToolTipText("Address | Contents");
-		JTabbedPane portRegTab = new JTabbedPane();
-		portRegTab.add("Special Function", portRegTable);
-		portRegTab.setToolTipText("Register | Contents");
-		
-		//make access memory / special function vertical split pane and load components
-		JScrollPane portRegTabPane = new JScrollPane(portRegTab);
-		portRegTabPane.getVerticalScrollBar().setUnitIncrement(16);
-		JSplitPane splitPaneAccSpFunction = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-//		splitPaneAccSpFunction.setTopComponent(new JScrollPane(portRegTab));
-		splitPaneAccSpFunction.setTopComponent(portRegTabPane);
-		JScrollPane accessMemTabPane = new JScrollPane(accessMemTab);
-		accessMemTabPane.getVerticalScrollBar().setUnitIncrement(48);
-//		splitPaneAccSpFunction.setTopComponent(accessMemTabPane);
-//		splitPaneAccSpFunction.setBottomComponent(new JScrollPane(accessMemTab)); 
-		splitPaneAccSpFunction.setBottomComponent(accessMemTabPane); 
-		splitPaneAccSpFunction.setDividerLocation(350);
-		
-		
-		JTabbedPane pgmMemTab = new JTabbedPane();
-		pgmMemTab.add("Program Memory", pgmMemTable);
-		pgmMemTab.setToolTipText("Address | Contents");
-		JScrollPane pgmMemTabPane = new JScrollPane(pgmMemTab);
-		pgmMemTabPane.getVerticalScrollBar().setUnitIncrement(96);
-		
-		JSplitPane rightHalf = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-		
-//		rightHalf.setLeftComponent(new JScrollPane(pgmMemTab));
-		rightHalf.setLeftComponent(pgmMemTabPane);
-		
-		rightHalf.setRightComponent(splitPaneAccSpFunction);
-		rightHalf.getLeftComponent().setMinimumSize(new Dimension(200, 300));
-		rightHalf.getRightComponent().setMinimumSize(new Dimension(200, 300));
-		
-		//this creates an ICEpdf jpanel showing the pic user manual in a separate tab
-//		String leftPdf = "./documentation/pic18C39500a.pdf";
-//		SwingController picmicroview.controller = new SwingController();
-//		SwingViewBuilder factory = new SwingViewBuilder(picmicroview.controller);
-//		JPanel viewerComponentPanel = factory.buildViewerPanel();
-//		ComponentKeyBinding.install(picmicroview.controller, viewerComponentPanel);
-//		picmicroview.controller.getDocumentViewController().setAnnotationCallback(
-//			      new org.icepdf.ri.common.MyAnnotationCallback(
-//			             picmicroview.controller.getDocumentViewController()));
-//		picmicroview.controller.openDocument(leftPdf);
-		
-		lstPanel = new LstFileWindow();
-		JScrollPane lstPanelScroll = new JScrollPane(lstPanel);
-		lstPanelScroll.getVerticalScrollBar().setUnitIncrement(32);
-		
-	
-		JSplitPane whole = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-		whole.setLeftComponent(lstPanelScroll);
-		whole.setRightComponent(rightHalf);
-		whole.setResizeWeight(1);
-		
-		mainTabs = new JTabbedPane();
-		mainTabs.add("Pic18F452", whole);
-		
-		//adds tab showing pic usr manual, removed for license considerations
-//		mainTabs.add("Reference", viewerComponentPanel);
-		mainPanel.setLayout(new BorderLayout());
-		
-		mainPanel.add(toolBar, BorderLayout.NORTH);
-		mainPanel.add(mainTabs, BorderLayout.CENTER);
-
-		getContentPane().add(mainPanel);
-		initialize();
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		pack();
-		setVisible(true);		
-		
-		//initialize hashmap for portRegTable  changes during stepping
-		//(address of change, row in portRegTable)
-		portRegList = new HashMap<>();
-		portRegList.put(0xfd8, 1);
-		portRegList.put(0xfe8, 0);
-		portRegList.put(0xf80, 4);
-		portRegList.put(0xf81, 6);
-		portRegList.put(0xf82, 8);
-		portRegList.put(0xf83, 10);
-		portRegList.put(0xf84, 12);
-		portRegList.put(0xfe0, 13);
-		portRegList.put(0xfe9, 14);
-		portRegList.put(0xfea, 15);
-		portRegList.put(0xfe1, 16);
-		portRegList.put(0xfe2, 17);
-		portRegList.put(0xfd9, 18);
-		portRegList.put(0xfda, 19);
-		portRegList.put(0xff3, 20);
-		portRegList.put(0xff4, 21);
 	}
 	
 	class PortRegTable extends JTable{
