@@ -611,6 +611,73 @@ public class MainWindow extends JFrame{
 
 		leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
 
+		initMemoryTables();
+
+		JTabbedPane accessMemTab = new JTabbedPane();
+		accessMemTab.add("Data Memory", dataMemTable);
+		accessMemTab.setToolTipText("Address | Contents");
+		JTabbedPane portRegTab = new JTabbedPane();
+		portRegTab.add("Special Function", portRegTable);
+		portRegTab.setToolTipText("Register | Contents");
+
+		//make access memory / special function vertical split pane and load components
+		JScrollPane portRegTabPane = new JScrollPane(portRegTab);
+		portRegTabPane.getVerticalScrollBar().setUnitIncrement(16);
+		JSplitPane splitPaneAccSpFunction = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
+		splitPaneAccSpFunction.setTopComponent(portRegTabPane);
+		JScrollPane accessMemTabPane = new JScrollPane(accessMemTab);
+		accessMemTabPane.getVerticalScrollBar().setUnitIncrement(48);
+		splitPaneAccSpFunction.setBottomComponent(accessMemTabPane);
+		splitPaneAccSpFunction.setDividerLocation(350);
+
+
+		JTabbedPane pgmMemTab = new JTabbedPane();
+		pgmMemTab.add("Program Memory", pgmMemTable);
+		pgmMemTab.setToolTipText("Address | Contents");
+		JScrollPane pgmMemTabPane = new JScrollPane(pgmMemTab);
+		pgmMemTabPane.getVerticalScrollBar().setUnitIncrement(96);
+
+		JSplitPane rightHalf = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		rightHalf.setLeftComponent(pgmMemTabPane);
+
+		rightHalf.setRightComponent(splitPaneAccSpFunction);
+		rightHalf.getLeftComponent().setMinimumSize(new Dimension(200, 300));
+		rightHalf.getRightComponent().setMinimumSize(new Dimension(200, 300));
+
+		//this creates an ICEpdf jpanel showing the pic user manual in a separate tab
+//		String leftPdf = "./documentation/pic18C39500a.pdf";
+//		SwingController picmicroview.controller = new SwingController();
+//		SwingViewBuilder factory = new SwingViewBuilder(picmicroview.controller);
+//		JPanel viewerComponentPanel = factory.buildViewerPanel();
+//		ComponentKeyBinding.install(picmicroview.controller, viewerComponentPanel);
+//		picmicroview.controller.getDocumentViewController().setAnnotationCallback(
+//			      new org.icepdf.ri.common.MyAnnotationCallback(
+//			             picmicroview.controller.getDocumentViewController()));
+//		picmicroview.controller.openDocument(leftPdf);
+
+		lstPanel = new LstFileWindow();
+		JScrollPane lstPanelScroll = new JScrollPane(lstPanel);
+		lstPanelScroll.getVerticalScrollBar().setUnitIncrement(32);
+		JSplitPane whole = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		whole.setLeftComponent(lstPanelScroll);
+		whole.setRightComponent(rightHalf);
+		whole.setResizeWeight(1);
+		mainTabs = new JTabbedPane();
+		mainTabs.add("Pic18F452", whole);
+
+		//adds tab showing pic usr manual, removed for license considerations
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(toolBar, BorderLayout.NORTH);
+		mainPanel.add(mainTabs, BorderLayout.CENTER);
+
+		getContentPane().add(mainPanel);
+		initialize();
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		pack();
+		setVisible(true);
+	}
+
+	private void initMemoryTables(){
 		//program memory table setup
 		String[] colNames = {"Address (0x)", "Data (0x)"};
 		dtm_pgm = new MemoryTableModel(colNames);
@@ -637,79 +704,6 @@ public class MainWindow extends JFrame{
 		portRegTable.getColumnModel().getColumn(0).setCellRenderer(colRenderer);
 		colRenderer = new ColumnColorRenderer(rightRenderer);
 		portRegTable.getColumnModel().getColumn(1).setCellRenderer(colRenderer);
-
-		JTabbedPane accessMemTab = new JTabbedPane();
-		accessMemTab.add("Data Memory", dataMemTable);
-		accessMemTab.setToolTipText("Address | Contents");
-		JTabbedPane portRegTab = new JTabbedPane();
-		portRegTab.add("Special Function", portRegTable);
-		portRegTab.setToolTipText("Register | Contents");
-
-		//make access memory / special function vertical split pane and load components
-		JScrollPane portRegTabPane = new JScrollPane(portRegTab);
-		portRegTabPane.getVerticalScrollBar().setUnitIncrement(16);
-		JSplitPane splitPaneAccSpFunction = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-//		splitPaneAccSpFunction.setTopComponent(new JScrollPane(portRegTab));
-		splitPaneAccSpFunction.setTopComponent(portRegTabPane);
-		JScrollPane accessMemTabPane = new JScrollPane(accessMemTab);
-		accessMemTabPane.getVerticalScrollBar().setUnitIncrement(48);
-//		splitPaneAccSpFunction.setTopComponent(accessMemTabPane);
-//		splitPaneAccSpFunction.setBottomComponent(new JScrollPane(accessMemTab));
-		splitPaneAccSpFunction.setBottomComponent(accessMemTabPane);
-		splitPaneAccSpFunction.setDividerLocation(350);
-
-
-		JTabbedPane pgmMemTab = new JTabbedPane();
-		pgmMemTab.add("Program Memory", pgmMemTable);
-		pgmMemTab.setToolTipText("Address | Contents");
-		JScrollPane pgmMemTabPane = new JScrollPane(pgmMemTab);
-		pgmMemTabPane.getVerticalScrollBar().setUnitIncrement(96);
-
-		JSplitPane rightHalf = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-
-//		rightHalf.setLeftComponent(new JScrollPane(pgmMemTab));
-		rightHalf.setLeftComponent(pgmMemTabPane);
-
-		rightHalf.setRightComponent(splitPaneAccSpFunction);
-		rightHalf.getLeftComponent().setMinimumSize(new Dimension(200, 300));
-		rightHalf.getRightComponent().setMinimumSize(new Dimension(200, 300));
-
-		//this creates an ICEpdf jpanel showing the pic user manual in a separate tab
-//		String leftPdf = "./documentation/pic18C39500a.pdf";
-//		SwingController picmicroview.controller = new SwingController();
-//		SwingViewBuilder factory = new SwingViewBuilder(picmicroview.controller);
-//		JPanel viewerComponentPanel = factory.buildViewerPanel();
-//		ComponentKeyBinding.install(picmicroview.controller, viewerComponentPanel);
-//		picmicroview.controller.getDocumentViewController().setAnnotationCallback(
-//			      new org.icepdf.ri.common.MyAnnotationCallback(
-//			             picmicroview.controller.getDocumentViewController()));
-//		picmicroview.controller.openDocument(leftPdf);
-
-		lstPanel = new LstFileWindow();
-		JScrollPane lstPanelScroll = new JScrollPane(lstPanel);
-		lstPanelScroll.getVerticalScrollBar().setUnitIncrement(32);
-
-
-		JSplitPane whole = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-		whole.setLeftComponent(lstPanelScroll);
-		whole.setRightComponent(rightHalf);
-		whole.setResizeWeight(1);
-
-		mainTabs = new JTabbedPane();
-		mainTabs.add("Pic18F452", whole);
-
-		//adds tab showing pic usr manual, removed for license considerations
-//		mainTabs.add("Reference", viewerComponentPanel);
-		mainPanel.setLayout(new BorderLayout());
-
-		mainPanel.add(toolBar, BorderLayout.NORTH);
-		mainPanel.add(mainTabs, BorderLayout.CENTER);
-
-		getContentPane().add(mainPanel);
-		initialize();
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		pack();
-		setVisible(true);
 	}
 
 	private void initGeneralConceptExamples(){
