@@ -251,7 +251,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode1000(int hByteLnibble, int lByte){
+	private void decode1000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
 				|| (hByteLnibble == 0x0300)){
@@ -279,7 +279,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode2000(int hByteLnibble, int lByte){
+	private void decode2000(int hByteLnibble){
 //			System.out.println("command high nibble has been decoded as 0x2000");
 		if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
 				|| (hByteLnibble == 0x0700)){
@@ -308,7 +308,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode3000(int hByteLnibble, int lByte){
+	private void decode3000(int hByteLnibble){
 		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
 				|| (hByteLnibble == 0x0300)){
 			//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
@@ -332,7 +332,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode4000(int hByteLnibble, int lByte){
+	private void decode4000(int hByteLnibble){
 		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
 				|| (hByteLnibble == 0x0300)){
 			//System.out.println("in inner case " + Integer.toHexString(hByteLnibble));
@@ -356,7 +356,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode5000(int hByteLnibble, int lByte){
+	private void decode5000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		if((hByteLnibble == 0x0000) || (hByteLnibble == 0x0100) || (hByteLnibble == 0x0200)
 				|| (hByteLnibble == 0x0300)){
@@ -384,7 +384,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode6000(int hByteLnibble, int lByte){
+	private void decode6000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x6000");
 		if((hByteLnibble == 0x0E00) || (hByteLnibble == 0x0F00)){
 			//System.out.println("command low nibble has been decoded as 0X0E00");
@@ -425,42 +425,42 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode7000(int hByteLnibble, int lByte){
+	private void decode7000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Btg btg = new Btg(instruction, this, "btg");
 		btg.execute();
 	}
 
-	private void decode8000(int hByteLnibble, int lByte){
+	private void decode8000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Bsf bsf = new Bsf(instruction, this, "bsf");
 		bsf.execute();
 	}
 
-	private void decode9000(int hByteLnibble, int lByte){
+	private void decode9000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Bcf bcf = new Bcf(instruction, this, "bcf");
 		bcf.execute();
 	}
 
-	private void decodea000(int hByteLnibble, int lByte){
+	private void decodea000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Btfss btfss = new Btfss(instruction, this, "btfss");
 		btfss.execute();
 	}
 
-	private void decodeb000(int hByteLnibble, int lByte){
+	private void decodeb000(int hByteLnibble){
 		Btfsc btfsc = new Btfsc(instruction, this, "btfsc");
 		btfsc.execute();
 	}
 
-	private void decodec000(int hByteLnibble, int lByte){
+	private void decodec000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Movff movff = new Movff(instruction, this, "movff");
 		movff.execute();
 	}
 
-	private void decoded000(int hByteLnibble, int lByte){
+	private void decoded000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0xd000");
 		if((hByteLnibble & 0x0800) == 0x0000){
 			//System.out.println("command low nibble has been decoded as 0x0000");
@@ -477,7 +477,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decodee000(int hByteLnibble, int lByte){
+	private void decodee000(int hByteLnibble){
 		//System.out.println("command high nibble has been decoded as 0xE000");
 		if(hByteLnibble == 0x0f00){
 			//System.out.println("command low nibble has been decoded as 0X0F00");
@@ -528,7 +528,7 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decodef000(int hByteLnibble, int lByte){
+	private void decodef000(int hByteLnibble){
 		//System.out.println("command low nibble has been decoded as 0X0000");
 		Nop nop = new Nop(instruction, this, "nop");
 		nop.execute();
@@ -555,37 +555,38 @@ public class Pic18F452 implements SetState{
 		switch(hByteHnibble){
 			case 0x0000 : decode0000(hByteLnibble, lByte);
 			break;
-			case 0x1000 : decode1000(hByteLnibble, lByte);
+			case 0x1000 : decode1000(hByteLnibble);
 			break;
-			case 0x2000 : decode2000(hByteLnibble, lByte);
+			case 0x2000 : decode2000(hByteLnibble);
 			break;
-			case 0x3000 : decode3000(hByteLnibble, lByte);
+			case 0x3000 : decode3000(hByteLnibble);
 			break;
-			case 0x4000 : decode4000(hByteLnibble, lByte);
+			case 0x4000 : decode4000(hByteLnibble);
 			break;
-			case 0x5000 : decode5000(hByteLnibble, lByte);
+			case 0x5000 : decode5000(hByteLnibble);
 			break;
-			case 0x6000 : decode6000(hByteLnibble, lByte);
+			case 0x6000 : decode6000(hByteLnibble);
 			break;
-			case 0x7000 : decode7000(hByteLnibble, lByte);
+			case 0x7000 : decode7000(hByteLnibble);
 			break;
-			case 0x8000 : decode8000(hByteLnibble, lByte);
+			case 0x8000 : decode8000(hByteLnibble);
 			break;
-			case 0x9000 : decode9000(hByteLnibble, lByte);
+			case 0x9000 : decode9000(hByteLnibble);
 			break;
-			case 0xa000 : decodea000(hByteLnibble, lByte);
+			case 0xa000 : decodea000(hByteLnibble);
 			break;
-			case 0xb000 : decodeb000(hByteLnibble, lByte);
+			case 0xb000 : decodeb000(hByteLnibble);
 			break;
-			case 0xc000 : decodec000(hByteLnibble, lByte);
+			case 0xc000 : decodec000(hByteLnibble);
 			break;
-			case 0xd000 : decoded000(hByteLnibble, lByte);
+			case 0xd000 : decoded000(hByteLnibble);
 			break;
-			case 0xe000 : decodee000(hByteLnibble, lByte);
+			case 0xe000 : decodee000(hByteLnibble);
 			break;
-			case 0xf000 : decodef000(hByteLnibble, lByte);
+			case 0xf000 : decodef000(hByteLnibble);
 			break;
 			default : System.out.println("instruction not implemented");
+			break;
 		}
 		//System.out.println("wreg after " + Integer.toHexString(instruction) + " is " + dataMem.getWreg().read());
 		//printStatusReg();
