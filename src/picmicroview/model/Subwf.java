@@ -1,6 +1,6 @@
 package picmicroview.model;
 
-import static picmicroview.model.ALU.getTwosComplement;
+import static picmicroview.model.ArithmeticLogicUnitUtil.getTwosComplement;
 
 public class Subwf extends PicInstruction {
 

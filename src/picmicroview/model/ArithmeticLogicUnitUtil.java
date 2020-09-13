@@ -2,9 +2,9 @@ package picmicroview.model;
 
 import java.util.HashSet;
 
-class ALU {
+class ArithmeticLogicUnitUtil {
 
-	ALU(){
+	ArithmeticLogicUnitUtil(){
 
 		//indfs is hashset of addresses that are INDFx registers: INDF, PLUSW,
 		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 
@@ -28,7 +28,7 @@ class ALU {
 	}
 	
 	static int getTwosComplement(int arg){
-//		System.out.println("in ALU.getTC arg is: " + Integer.toHexString(arg) +
+//		System.out.println("in ArithmeticLogicUnitUtil.getTC arg is: " + Integer.toHexString(arg) +
 //				"~arg is: " + Integer.toHexString(~arg) + 
 //				", two's complement is: " + Integer.toHexString((0xff & (~arg)) + 1));
 		return (0xff & (~arg)) + 1;
