@@ -186,6 +186,66 @@ public class Pic18F452 implements SetState{
 	public HashSet<Integer> getChanges(){
 		return changes;
 	}
+	
+	void runInstruction(){
+		int hByteHnibble;
+		int hByteLnibble;
+		int lByte;
+		//fetch
+		instruction = pc.getWord();//increments program counter
+			
+		hByteHnibble = instruction & 0xf000;
+		hByteLnibble = instruction & 0x0f00;
+		lByte = instruction & 0x00ff;
+
+		//decode
+//		String tempInstruction = Integer.toHexString(instruction);
+//		String temphByteHnibble = Integer.toHexString(hByteHnibble);
+//		String temphByteLnibble = Integer.toHexString(hByteLnibble);
+//		String templByte = Integer.toHexString(lByte);
+//		System.out.println("instruction is: " + Integer.toHexString(instruction));
+
+		switch(hByteHnibble){
+			case 0x0000 : decode0000(hByteLnibble, lByte);
+			break;
+			case 0x1000 : decode1000(hByteLnibble);
+			break;
+			case 0x2000 : decode2000(hByteLnibble);
+			break;
+			case 0x3000 : decode3000(hByteLnibble);
+			break;
+			case 0x4000 : decode4000(hByteLnibble);
+			break;
+			case 0x5000 : decode5000(hByteLnibble);
+			break;
+			case 0x6000 : decode6000(hByteLnibble);
+			break;
+			case 0x7000 : decode7000();
+			break;
+			case 0x8000 : decode8000();
+			break;
+			case 0x9000 : decode9000();
+			break;
+			case 0xa000 : decodea000();
+			break;
+			case 0xb000 : decodeb000();
+			break;
+			case 0xc000 : decodec000();
+			break;
+			case 0xd000 : decoded000(hByteLnibble);
+			break;
+			case 0xe000 : decodee000(hByteLnibble);
+			break;
+			case 0xf000 : decodef000();
+			break;
+			default : System.out.println("instruction not implemented");
+			break;
+		}
+		//System.out.println("wreg after " + Integer.toHexString(instruction) + " is " + dataMem.getWreg().read());
+		//printStatusReg();
+	
+		//System.out.println("ran instruction: " + Integer.toHexString(instruction));
+	}
 
 	private void decode0000(int hByteLnibble, int lByte){
 		//System.out.println("command high nibble has been decoded as 0x0000");
@@ -425,36 +485,36 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decode7000(int hByteLnibble){
+	private void decode7000(){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Btg btg = new Btg(instruction, this, "btg");
 		btg.execute();
 	}
 
-	private void decode8000(int hByteLnibble){
+	private void decode8000(){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Bsf bsf = new Bsf(instruction, this, "bsf");
 		bsf.execute();
 	}
 
-	private void decode9000(int hByteLnibble){
+	private void decode9000(){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Bcf bcf = new Bcf(instruction, this, "bcf");
 		bcf.execute();
 	}
 
-	private void decodea000(int hByteLnibble){
+	private void decodea000(){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Btfss btfss = new Btfss(instruction, this, "btfss");
 		btfss.execute();
 	}
 
-	private void decodeb000(int hByteLnibble){
+	private void decodeb000(){
 		Btfsc btfsc = new Btfsc(instruction, this, "btfsc");
 		btfsc.execute();
 	}
 
-	private void decodec000(int hByteLnibble){
+	private void decodec000(){
 		//System.out.println("command high nibble has been decoded as 0x2000");
 		Movff movff = new Movff(instruction, this, "movff");
 		movff.execute();
@@ -528,72 +588,11 @@ public class Pic18F452 implements SetState{
 		}
 	}
 
-	private void decodef000(int hByteLnibble){
+	private void decodef000(){
 		//System.out.println("command low nibble has been decoded as 0X0000");
 		Nop nop = new Nop(instruction, this, "nop");
 		nop.execute();
 	}
-	
-	void runInstruction(){
-		int hByteHnibble;
-		int hByteLnibble;
-		int lByte;
-		//fetch
-		instruction = pc.getWord();//increments program counter
-			
-		hByteHnibble = instruction & 0xf000;
-		hByteLnibble = instruction & 0x0f00;
-		lByte = instruction & 0x00ff;
-
-		//decode
-//		String tempInstruction = Integer.toHexString(instruction);
-//		String temphByteHnibble = Integer.toHexString(hByteHnibble);
-//		String temphByteLnibble = Integer.toHexString(hByteLnibble);
-//		String templByte = Integer.toHexString(lByte);
-//		System.out.println("instruction is: " + Integer.toHexString(instruction));
-
-		switch(hByteHnibble){
-			case 0x0000 : decode0000(hByteLnibble, lByte);
-			break;
-			case 0x1000 : decode1000(hByteLnibble);
-			break;
-			case 0x2000 : decode2000(hByteLnibble);
-			break;
-			case 0x3000 : decode3000(hByteLnibble);
-			break;
-			case 0x4000 : decode4000(hByteLnibble);
-			break;
-			case 0x5000 : decode5000(hByteLnibble);
-			break;
-			case 0x6000 : decode6000(hByteLnibble);
-			break;
-			case 0x7000 : decode7000(hByteLnibble);
-			break;
-			case 0x8000 : decode8000(hByteLnibble);
-			break;
-			case 0x9000 : decode9000(hByteLnibble);
-			break;
-			case 0xa000 : decodea000(hByteLnibble);
-			break;
-			case 0xb000 : decodeb000(hByteLnibble);
-			break;
-			case 0xc000 : decodec000(hByteLnibble);
-			break;
-			case 0xd000 : decoded000(hByteLnibble);
-			break;
-			case 0xe000 : decodee000(hByteLnibble);
-			break;
-			case 0xf000 : decodef000(hByteLnibble);
-			break;
-			default : System.out.println("instruction not implemented");
-			break;
-		}
-		//System.out.println("wreg after " + Integer.toHexString(instruction) + " is " + dataMem.getWreg().read());
-		//printStatusReg();
-	
-		//System.out.println("ran instruction: " + Integer.toHexString(instruction));
-	}
-	
 	
 	
 	/*
