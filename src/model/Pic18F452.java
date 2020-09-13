@@ -399,12 +399,12 @@ public class Pic18F452 implements SetState{
 			Rrncf rrncf = new Rrncf(instruction, this, "rrncf");
 			rrncf.execute();
 		}
-		if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
+		else if((hByteLnibble == 0x0400) || (hByteLnibble == 0x0500) || (hByteLnibble == 0x0600)
 				|| (hByteLnibble == 0x0700)){
 			Rlncf rlncf = new Rlncf(instruction, this, "rlncf");
 			rlncf.execute();
 		}
-		if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
+		else if((hByteLnibble == 0x0800) || (hByteLnibble == 0x0900) || (hByteLnibble == 0x0a00)
 				|| hByteLnibble == 0x0b00){
 			Infsnz infsnz = new Infsnz(instruction, this, "infsnz");
 			infsnz.execute();

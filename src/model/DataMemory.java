@@ -32,7 +32,6 @@ public class DataMemory {
 		initialize();
 		wreg = gpMem[0x0e8];
 		status = gpMem[0x0d8];
-		Register pcL = gpMem[0x0f9];
 		pclatH = gpMem[0x0fa];
 		pclatU = gpMem[0x0fb];
 		stkptr = gpMem[0x0fc];
@@ -68,7 +67,8 @@ public class DataMemory {
 //		Register postdec2 = gpMem[0x0dd];
 //		Register postinc2 = gpMem[0x0de];
 //		Register indf2 = gpMem[0x0df];
-
+//      Register pcL = gpMem[0x0f9];
+		
 		//indfs is hashset of addresses that are INDFx registers: INDF, PLUSW,
 		//POSTINC, PREINC, POSTDEC registers, when addressed, are supposed to 
 		//disregard banked addressing. This causes a hole in all banks within
