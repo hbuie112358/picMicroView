@@ -622,7 +622,7 @@ public class Pic18F452 implements SetState{
 
 	@SuppressWarnings("UnusedAssignment")
     private void clearPgmMem(){
-		for ( int item : programMemory){
+		for ( int item : programMemory) {
 			item = 0;
 		}
 	}
