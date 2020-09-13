@@ -24,6 +24,10 @@ public abstract class PicInstruction implements Instruction {
 		this.name = name;
 		//execute();
 	}
+
+	protected String getName(){
+		return name;
+	}
 	
 	public abstract void execute();
 

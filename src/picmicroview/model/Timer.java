@@ -13,8 +13,12 @@ public class Timer {
 		this.pic18 = pic18;
 		this.name = name;
 	}
+
+	protected String getName(){
+		return name;
+	}
 	
-	public void increment(){
+	protected void increment(){
 		count = count + 1;
 		//if((count & 0x10000) == 0x10000){
 		if(count > 0x10000){
@@ -28,20 +32,20 @@ public class Timer {
 		//System.out.println("contents of memory 0x03 is " + pic18.dataMem.getGpMem()[0x03].read());
 
 	}
-	
-	public void set(int count){
+
+	protected void set(int count){
 		this.count = count;
 	}
-	
-	public void clear(){
+
+	protected void clear(){
 		count = 0x0000;
 	}
-	
-	public long getCount(){
+
+	protected long getCount(){
 		return count;
 	}
-	
-	public void timeTest(){
+
+	protected void timeTest(){
 		long a = 0;
 		long b = 1;
 		while(a < 65536){

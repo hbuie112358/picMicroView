@@ -26,7 +26,6 @@ public class Pic18F452 implements SetState{
 	
 	private final int[] programMemory;
 
-	private final ArithmeticLogicUnitUtil alu;
 	private Timer timer0;
 	private final Clock clock;
 	private ProgramCounter pc;
@@ -46,7 +45,6 @@ public class Pic18F452 implements SetState{
 		dataMem = new DataMemory(this);
 		initPic();
 		clock = new Clock(this);
-		alu = new ArithmeticLogicUnitUtil();
 		stack = new Stack(this);
 		testMain = new TestMain(this);
 	}
