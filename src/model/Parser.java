@@ -39,7 +39,8 @@ public class Parser {
 		}
 			//change from little Endian to big Endian, add to program hashMap
 		else if(s.getRecType() == RecType.DATA){
-			int temp, index = 0;
+			int temp;
+			int index = 0;
 			while(index < s.getInfoData().size()){
 				temp = s.getInfoData().get(index);
 				s.setInfoData(index, s.getInfoData().get(index + 1));

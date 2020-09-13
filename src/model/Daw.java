@@ -9,7 +9,8 @@ public class Daw extends PicInstruction {
 	@Override
 	public void execute() {
 
-		int lowNibble, highNibble = 0;
+		int lowNibble;
+		int highNibble = 0;
 		DataMemory dataMem = getPic18().getDataMem();
 		int freg = dataMem.getRegAddress(getInstruction());
 		int wreg = dataMem.getWreg().read();

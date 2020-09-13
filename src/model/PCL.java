@@ -30,7 +30,7 @@ public class PCL extends Register {
 	
 	public class PclRunState extends RegRunState{
 		
-		public PclRunState(Register register){
+		PclRunState(Register register){
 			super(register);
 		}
 		//PCL lsb only allowed to be zero. This is to keep pc at instruction border
@@ -40,9 +40,9 @@ public class PCL extends Register {
 //			System.out.println("in PCL write()");
 			this.write(value); 
 			clearBit(0);
-			int newValue
-					, pch
-					, pcu;
+			int newValue;
+			int pch;
+			int pcu;
 			pch = pic18.getDataMem().pclatH.read() * 256;
 			pcu = pic18.getDataMem().pclatU.read() & 0x1f;
 			pcu = pcu * 65536;
@@ -53,7 +53,7 @@ public class PCL extends Register {
 
 	public class PclStepState extends RegStepState{
 		
-		public PclStepState(Register register){
+		PclStepState(Register register){
 			super(register);
 		}
 		//PCL lsb only allowed to be zero. This is to keep pc at instruction border
@@ -69,7 +69,7 @@ public class PCL extends Register {
 			pcu = pcu * 65536;
 			newValue = pcu + pch + read();	
 			pic18.setPcValue(newValue);
-			register.pic18.changes.add((Integer)address);	//tracks changes pic state during instruction
+			register.pic18.changes.add(address);	//tracks changes pic state during instruction
 
 		}	
 	}

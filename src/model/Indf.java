@@ -1,10 +1,12 @@
 package model;
 
-public class Indf extends Register {
+class Indf extends Register {
 
-	int fullAddress, highAddress, lowAddress;
+	int fullAddress;
+	int highAddress;
+	int lowAddress;
 	
-	public Indf(Pic18F452 pic18, int address, String name) {
+	Indf(Pic18F452 pic18, int address, String name) {
 		super(pic18, address, name);
 
 		//indf contents is always 0
@@ -110,7 +112,7 @@ public class Indf extends Register {
 	
 	class IndfStepState extends RegStepState{
 		
-		public IndfStepState(Register register){
+		IndfStepState(Register register){
 			super(register);
 		}
 		

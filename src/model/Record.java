@@ -29,18 +29,19 @@ class Record {
 		String type = Character.toString(r.charAt(7)) + r.charAt(8);
 		switch(type){
 		case "00": setRecType(RecType.DATA);
-					break;
+		break;
 		case "01": setRecType(RecType.EOF);
-					break;
+		break;
 		case "02": setRecType(RecType.EXTENDED_SEG_ADDRESS);
-					break;
+		break;
 		case "03": setRecType(RecType.START_SEG_ADDRESS);
-					break;
+		break;
 		case "04": setRecType(RecType.EXTENDED_LIN_ADDRESS);
-					break;
+		break;
 		case "05": setRecType(RecType.START_LIN_ADDRESS);
-					break;
+		break;
 		default : setRecType(RecType.ERROR);
+		break;
 		}
 		
 		infoData = new ArrayList<>();
