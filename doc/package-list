@@ -1,4 +1,4 @@
 net.sourceforge.picmicroview
-controller
-model
-view
+picmicroview.controller
+picmicroview.model
+picmicroview.view
