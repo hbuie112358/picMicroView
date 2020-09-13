@@ -289,7 +289,7 @@ public class MainWindow extends JFrame{
 		
 		testItem.addActionListener(new HelpAction("instructionTest", "instructionTest"));
 //		helpMenu.add(testItem);///////////////////////////////////////////////////////////
-		
+
 		examples.add(instructions);
 		instructions.add(basic);
 		initBasicInstructionExamples();
@@ -359,6 +359,13 @@ public class MainWindow extends JFrame{
 		basic.add(s);
 		basic.add(t);
 		basic.add(x);
+
+		initInstExamplesAThruI();
+		initInstExamplesIThruX();
+
+	}
+
+	private void initInstExamplesAThruI(){
 		a.add(addlw);
 		addlw.addActionListener(new ExampleAction("basic", "addlw"));
 		a.add(addwf);
@@ -419,6 +426,9 @@ public class MainWindow extends JFrame{
 		gotoItem.addActionListener(new ExampleAction("basic","goto"));
 		i.add(incf);
 		incf.addActionListener(new ExampleAction("basic", "incf"));
+	}
+
+	private void initInstExamplesIThruX(){
 		i.add(incfsz);
 		incfsz.addActionListener(new ExampleAction("basic", "incfsz"));
 		i.add(infsnz);
