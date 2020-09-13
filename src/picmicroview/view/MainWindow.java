@@ -502,6 +502,60 @@ public class MainWindow extends JFrame{
 		inDepth.add(sID);
 		inDepth.add(tID);
 		inDepth.add(xID);
+		initInDepthInstExamplesAThruD();
+		initInDepthInstExamplesDThruX();
+	}
+
+	private void initInDepthInstExamplesDThruX(){
+		dID.add(decfszIDItem);
+		decfszIDItem.addActionListener(new ExampleAction("inDepth", "decfsz"));
+		iID.add(incfIDItem);
+		incfIDItem.addActionListener(new ExampleAction("inDepth", "incf"));
+		iID.add(incfszIDItem);
+		incfszIDItem.addActionListener(new ExampleAction("inDepth", "incfsz"));
+		iID.add(infsnzIDItem);
+		infsnzIDItem.addActionListener(new ExampleAction("inDepth", "infsnz"));
+		iID.add(iorlwIDItem);
+		iorlwIDItem.addActionListener(new ExampleAction("inDepth", "iorlw"));
+		iID.add(iorwfIDItem);
+		iorwfIDItem.addActionListener(new ExampleAction("inDepth", "iorwf"));
+		mID.add(movfIDItem);
+		movfIDItem.addActionListener(new ExampleAction("inDepth", "movf"));
+		mID.add(movwfIDItem);
+		movwfIDItem.addActionListener(new ExampleAction("inDepth", "movwf"));
+		mID.add(mullwIDItem);
+		mullwIDItem.addActionListener(new ExampleAction("inDepth", "mullw"));
+		nID.add(negfIDItem);
+		negfIDItem.addActionListener(new ExampleAction("inDepth", "negf"));
+		rID.add(rlcfIDItem);
+		rlcfIDItem.addActionListener(new ExampleAction("inDepth", "rlcf"));
+		rID.add(rlncfIDItem);
+		rlncfIDItem.addActionListener(new ExampleAction("inDepth", "rlncf"));
+		rID.add(rrcfIDItem);
+		rrcfIDItem.addActionListener(new ExampleAction("inDepth", "rrcf"));
+		rID.add(rrncfIDItem);
+		rrncfIDItem.addActionListener(new ExampleAction("inDepth", "rrncf"));
+		sID.add(setfIDItem);
+		setfIDItem.addActionListener(new ExampleAction("inDepth", "setf"));
+		sID.add(sublwIDItem);
+		sublwIDItem.addActionListener(new ExampleAction("inDepth", "sublw"));
+		sID.add(subfwbIDItem);
+		subfwbIDItem.addActionListener(new ExampleAction("inDepth", "subfwb"));
+		sID.add(subwfIDItem);
+		subwfIDItem.addActionListener(new ExampleAction("inDepth", "subwf"));
+		sID.add(subwfbIDItem);
+		subwfbIDItem.addActionListener(new ExampleAction("inDepth", "subwfb"));
+		sID.add(swapfIDItem);
+		swapfIDItem.addActionListener(new ExampleAction("inDepth", "swapf"));
+		tID.add(tstfszIDItem);
+		tstfszIDItem.addActionListener(new ExampleAction("inDepth", "tstfsz"));
+		xID.add(xorlwIDItem);
+		xorlwIDItem.addActionListener(new ExampleAction("inDepth", "xorlw"));
+		xID.add(xorwfIDItem);
+		xorwfIDItem.addActionListener(new ExampleAction("inDepth", "xorwf"));
+	}
+
+	private void initInDepthInstExamplesAThruD(){
 		aID.add(addlwIDItem);
 		addlwIDItem.addActionListener(new ExampleAction("inDepth", "addlw"));
 		aID.add(addwfcIDItem);
@@ -550,52 +604,6 @@ public class MainWindow extends JFrame{
 		dcfsnzIDItem.addActionListener(new ExampleAction("inDepth", "dcfsnz"));
 		dID.add(decfIDItem);
 		decfIDItem.addActionListener(new ExampleAction("inDepth", "decf"));
-		dID.add(decfszIDItem);
-		decfszIDItem.addActionListener(new ExampleAction("inDepth", "decfsz"));
-		iID.add(incfIDItem);
-		incfIDItem.addActionListener(new ExampleAction("inDepth", "incf"));
-		iID.add(incfszIDItem);
-		incfszIDItem.addActionListener(new ExampleAction("inDepth", "incfsz"));
-		iID.add(infsnzIDItem);
-		infsnzIDItem.addActionListener(new ExampleAction("inDepth", "infsnz"));
-		iID.add(iorlwIDItem);
-		iorlwIDItem.addActionListener(new ExampleAction("inDepth", "iorlw"));
-		iID.add(iorwfIDItem);
-		iorwfIDItem.addActionListener(new ExampleAction("inDepth", "iorwf"));
-		mID.add(movfIDItem);
-		movfIDItem.addActionListener(new ExampleAction("inDepth", "movf"));
-		mID.add(movwfIDItem);
-		movwfIDItem.addActionListener(new ExampleAction("inDepth", "movwf"));
-		mID.add(mullwIDItem);
-		mullwIDItem.addActionListener(new ExampleAction("inDepth", "mullw"));
-		nID.add(negfIDItem);
-		negfIDItem.addActionListener(new ExampleAction("inDepth", "negf"));
-		rID.add(rlcfIDItem);
-		rlcfIDItem.addActionListener(new ExampleAction("inDepth", "rlcf"));
-		rID.add(rlncfIDItem);
-		rlncfIDItem.addActionListener(new ExampleAction("inDepth", "rlncf"));
-		rID.add(rrcfIDItem);
-		rrcfIDItem.addActionListener(new ExampleAction("inDepth", "rrcf"));
-		rID.add(rrncfIDItem);
-		rrncfIDItem.addActionListener(new ExampleAction("inDepth", "rrncf"));
-		sID.add(setfIDItem);
-		setfIDItem.addActionListener(new ExampleAction("inDepth", "setf"));
-		sID.add(sublwIDItem);
-		sublwIDItem.addActionListener(new ExampleAction("inDepth", "sublw"));
-		sID.add(subfwbIDItem);
-		subfwbIDItem.addActionListener(new ExampleAction("inDepth", "subfwb"));
-		sID.add(subwfIDItem);
-		subwfIDItem.addActionListener(new ExampleAction("inDepth", "subwf"));
-		sID.add(subwfbIDItem);
-		subwfbIDItem.addActionListener(new ExampleAction("inDepth", "subwfb"));
-		sID.add(swapfIDItem);
-		swapfIDItem.addActionListener(new ExampleAction("inDepth", "swapf"));
-		tID.add(tstfszIDItem);
-		tstfszIDItem.addActionListener(new ExampleAction("inDepth", "tstfsz"));
-		xID.add(xorlwIDItem);
-		xorlwIDItem.addActionListener(new ExampleAction("inDepth", "xorlw"));
-		xID.add(xorwfIDItem);
-		xorwfIDItem.addActionListener(new ExampleAction("inDepth", "xorwf"));
 	}
 
 	private void initPanes(){
