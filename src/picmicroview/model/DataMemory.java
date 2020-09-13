@@ -128,6 +128,18 @@ public class DataMemory {
 			gpMem[i] = new Register(pic18, i, "gpr");
 			i++;
 		}
+		initialize8sAnd9s();
+		initializeAsAndBs();
+		initializeCsAndDs();
+		initializeEsAndFs();
+		i = 0x100;
+		while(i < 0xf80){
+			gpMem[i] = new Register(pic18, i, "gpr");
+			i++;
+		}
+	}
+
+	private void initialize8sAnd9s(){
 		gpMem[0x080] = gpMem[0xf80] = new PortA(pic18, 0xf80, "portA");
 //		gpMem[0x080].printInfo();
 //		System.out.println("gmMem[0x080] is object of type: " + gpMem[0x080].getClass() + " " + gpMem[0x080] + " " + porta);
@@ -163,6 +175,9 @@ public class DataMemory {
 		gpMem[0x09d] = gpMem[0xf9d] = new Register(pic18, 0xf9d, "pie1");
 		gpMem[0x09e] = gpMem[0xf9e] = new Register(pic18, 0xf9e, "pir1");
 		gpMem[0x09f] = gpMem[0xf9f] = new Register(pic18, 0xf9f, "ipr1");
+	}
+
+	private void initializeAsAndBs(){
 		gpMem[0x0a0] = gpMem[0xfa0] = new Register(pic18, 0xfa0, "pie2");
 		gpMem[0x0a1] = gpMem[0xfa1] = new Register(pic18, 0xfa1, "pir2");
 		gpMem[0x0a2] = gpMem[0xfa2] = new Register(pic18, 0xfa2, "ipr2");
@@ -195,6 +210,9 @@ public class DataMemory {
 		gpMem[0x0bd] = gpMem[0xfbd] = new Register(pic18, 0xfbd, "ccp1con");
 		gpMem[0x0be] = gpMem[0xfbe] = new Register(pic18, 0xfbe, "ccpr1L");
 		gpMem[0x0bf] = gpMem[0xfbf] = new Register(pic18, 0xfbf, "ccpr1H");
+	}
+
+	private void initializeCsAndDs(){
 		gpMem[0x0c0] = gpMem[0xfc0] = new Register(pic18, 0xfc0, "unused");
 		gpMem[0x0c1] = gpMem[0xfc1] = new Register(pic18, 0xfc1, "unused");
 		gpMem[0x0c2] = gpMem[0xfc2] = new Register(pic18, 0xfc2, "unused");
@@ -227,6 +245,9 @@ public class DataMemory {
 		gpMem[0x0dd] = gpMem[0xfdd] = new Postdec(pic18, 0xfdd, "postdec2");
 		gpMem[0x0de] = gpMem[0xfde] = new Postinc(pic18, 0xfde, "postinc2");
 		gpMem[0x0df] = gpMem[0xfdf] = new Indf(pic18, 0xfdf, "indf2");
+	}
+
+	private void initializeEsAndFs(){
 		gpMem[0x0e0] = gpMem[0xfe0] = new BSR(pic18, 0xfe0, "bsr");
 		gpMem[0x0e1] = gpMem[0xfe1] = new FsrL(pic18, 0xfe1, "fsr1L");
 		gpMem[0x0e2] = gpMem[0xfe2] = new FsrH(pic18, 0xfe2, "fsr1h");
@@ -259,13 +280,6 @@ public class DataMemory {
 		gpMem[0x0fd] = gpMem[0xffd] = new Register(pic18, 0xffd, "unused");
 		gpMem[0x0fe] = gpMem[0xffe] = new Register(pic18, 0xffe, "unused");
 		gpMem[0x0ff] = gpMem[0xfff] = new Register(pic18, 0xfff, "unused");
-
-		
-		i = 0x100;
-		while(i < 0xf80){
-			gpMem[i] = new Register(pic18, i, "gpr");
-			i++;
-		}
 	}
 	
 	//Checks to see if "a" bit, which is bit 8, of op code is set. If set, value in
