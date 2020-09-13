@@ -92,7 +92,7 @@ class Postdec extends Register {
 		}
 		
 		public void clear(Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void setBit(int bit){
@@ -102,7 +102,7 @@ class Postdec extends Register {
 		}
 		
 		public void setBit(int bit, Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void clearBit(int bit){
@@ -112,7 +112,7 @@ class Postdec extends Register {
 		}
 		
 		public void clearBit(int bit, Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void decrement(){
@@ -122,7 +122,7 @@ class Postdec extends Register {
 		}
 		
 		public void decrement(Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void increment(){
@@ -132,7 +132,7 @@ class Postdec extends Register {
 		}
 		
 		public void increment(Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 	}
@@ -163,7 +163,7 @@ class Postdec extends Register {
 		//cause an attempt by one indf to access another indf to have no effect by letting the function
 		//know that it is being called by another indf. It is inherited from Register.
 		public void write(int value, Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void clear(){
@@ -174,7 +174,7 @@ class Postdec extends Register {
 		}
 		
 		public void clear(Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void setBit(int bit){
@@ -185,7 +185,7 @@ class Postdec extends Register {
 		}
 		
 		public void setBit(int bit, Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void clearBit(int bit){
@@ -196,7 +196,7 @@ class Postdec extends Register {
 		}
 		
 		public void clearBit(int bit, Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void decrement(){
@@ -207,7 +207,7 @@ class Postdec extends Register {
 		}
 		
 		public void decrement(Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 		
 		public void increment(){
@@ -218,7 +218,7 @@ class Postdec extends Register {
 		}
 		
 		public void increment(Register r){
-			return;
+			//inherited function unimplemented for this class
 		}
 	}
 }
