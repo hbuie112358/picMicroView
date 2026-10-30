@@ -95,7 +95,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    committed on its own:
    - 4a `[x]` *Housekeeping* (6138d53; the user ran the old app from the new jar): tag the Swing code `swing-final`; `git mv` `src/`, `tests/`,
      `doc/` to `legacy/`; `legacy/pom.xml` (D19); track `.gitignore` (F6).
-   - 4b `[x]` *Maven skeleton and `core`:* root `pom.xml` with modules `core`, `app`, `web`;
+   - 4b `[x]` *Maven skeleton and `core`* (1403ce9): root `pom.xml` with modules `core`, `app`, `web`;
      Maven Wrapper; Toolchains choosing JDK 25; Enforcer; `core` with one JUnit 6 and AssertJ test
      and the ArchUnit rules (D14, D15). How the root gets library versions without giving `core`
      a Spring dependency is decided here.

@@ -2,43 +2,60 @@
 # No secrets in this file.
 
 project: picMicroView
-timestamp: 2026-10-30T10:32:24-04:00
-current_branch: master
-last_commit: 095cf86
+timestamp: 2026-10-30T15:06:05-04:00
+current_branch: rewrite
+last_commit: 1403ce9
 
 working_mode: rolling-wave
 active_plan: docs/planning/rewrite-plan.md
 
 last_work: >
-  Set the project up for the shared multi-project rules: removed another project's name from
-  this project's memory, wrote the project's CLAUDE.md, this file and the rewrite plan
-  (committed 095cf86). Read the Swing code and agreed decisions D1-D7 (rewrite with a web UI,
-  table-driven decoder, simulated time, on-screen LEDs paced to real time). Added a global
-  WORKING_STYLE.md rule: always say "the global CLAUDE.md" or "the project's CLAUDE.md".
-  This pause is a test of pause and resume, not a real stop.
+  Resume test passed (all checkpoint parts ran cleanly). Finished plan step 2 (the stack,
+  decisions D8-D20): build file as single source of truth, no dev container, Java 25 via Maven
+  Toolchains (host default stays 21; JDK 25 installed, ~/.m2/toolchains.xml and VS Code
+  java.configuration.runtimes set up), Maven, Spring Boot with Spring MVC and virtual threads,
+  modules core/app/web, multi-user deployment later, simulator in the browser compiled by TeaVM,
+  JUnit 6 and the test tools, the Swing code in legacy/, React with TypeScript and Vite.
+  Step 3: datasheet DS39564C downloaded to reference/ (git-ignored), inventory.md written,
+  findings F6-F9. Step 4 started on the new long-lived branch `rewrite`: 4a moved the Swing code
+  to legacy/ with its own pom.xml (tag swing-final; the user ran the old app), 4b added the root
+  Maven build, the wrapper and the core module with ArithmeticLogicUnit.add (20 tests passing,
+  each safety check shown to fail when broken).
 
 next_action: >
-  The next resume is a test: Claude reports whether each checkpoint part ran cleanly (standards
-  loaded, project check passed, rolling-wave plan read, JAVA_STANDARDS.md content in context)
-  and names anything that did not. Then plan step 2: choose the stack.
+  Plan step 4c: the `app` module (Spring Boot 4.1.2, MVC, virtual threads) and the `web` module
+  (React, TypeScript, Vite, built through Maven with its own Node.js), with one @WebMvcTest, one
+  @SpringBootTest and one Vitest test. Before writing code, Claude explains what is new (with
+  Quarkus parallels) and proposes the details; the user decides.
 
 verification:
-  java_installed: OpenJDK 21.0.11
-  build_tools_installed: Maven (no Gradle)
-  swing_version_build: IntelliJ project, language level JDK 17, no build file
-  remote: origin https://github.com/hbuie112358/picMicroView.git (master tracks origin/master)
-  pushed: no; master is ahead of origin/master by the setup and pause commits
+  java_installed: OpenJDK 21.0.11 (default, alternatives in manual mode) and 25.0.4.1
+  maven: Maven Wrapper 3.10.0 in the repository (SHA-256 checked); system Maven 3.8.7 unused
+  toolchains: ~/.m2/toolchains.xml lists JDK 21 and 25; the build requires [25,26)
+  build_status: ./mvnw test passes (20 run, 0 failed, 0 skipped) at 1403ce9
+  legacy_build: ./mvnw -f legacy/pom.xml package; java -jar legacy/target/picmicroview-legacy.jar
+  datasheet: reference/39564c.pdf (DS39564C, git-ignored; link and checksum in the plan, step 3)
+  remote: origin https://github.com/hbuie112358/picMicroView.git
+  pushed: >
+    no; master is 12 commits ahead of origin/master, the rewrite branch (2 commits past master)
+    and the tag swing-final exist only locally
 
 uncommitted_changes: []
 
 waiting_on_user:
-  - Approve the JAVA_STANDARDS.md import once from the terminal CLI (cd to the project, run
-    claude, accept the external-import prompt, exit). Until then the VS Code extension skips it.
-  - ~/.claude/settings.json is uncommitted (default model changed to opus[1m]); the user leaves
-    it uncommitted on purpose, so it needs no commit command.
+  - >
+    ~/.claude has uncommitted changes to this project's memory (MEMORY.md, project-goals.md,
+    new decisions-need-explicit-choice.md and user-learning-goals.md). Commit on the host:
+    git -C ~/.claude add projects/<this project's folder>/memory &&
+    git -C ~/.claude commit -m "memory(picMicroView): learning goals, explicit decisions, deployment goal"
+  - ~/.claude/settings.json is uncommitted on purpose (default model change); no commit needed.
+  - Pushing master, the rewrite branch and the swing-final tag to GitHub, whenever the user wants.
 
 pending_decisions:
-  - Plan step 2 - the stack (Java version, build tool, web framework, browser update channel)
-    and where the old code lives during the rewrite. No recommendation given yet.
-  - Name of the first working branch, chosen once step 2 settles what comes first.
+  - >
+    Where assembling happens (plan step 11): A gpasm on the server, B gpasm compiled to
+    WebAssembly, C an own assembler in core (Claude leans to C). Best settled before step 7.
+  - >
+    Within 4c-4e, decided there: details of the app and web modules; WebAssembly or JavaScript
+    output and how core logs (4d); Playwright for Java or Node (4e).
   - Whether to delete the local branch 04_02_start (same commit as master, nothing unique).
