@@ -3,42 +3,42 @@
 # No secrets in this file.
 
 project: picMicroView
-timestamp: 2026-10-30T16:30:07-04:00
+timestamp: 2026-10-30T19:54:08-04:00
 current_branch: rewrite
-last_commit: 4e7a4d1
+last_commit: 3072273
 
 working_mode: rolling-wave
 active_plan: docs/planning/rewrite-plan.md
 
 last_work: >
-  Resumed, and repaired the plan: decisions D17-D20 had been scrambled by mid-row insertions
-  (restored from git history and verified), and stale entries in Current position, D9, 4b, F2
-  and F6 were corrected (3e672c4). Set up time tracking: the user's time-report tool in
-  ~/.claude/tools/time-report (shared by all projects, committed there by the user as 5c7669b),
-  the project's log docs/time-log.csv (active minutes and exchanges per day; gaps over 7 minutes
-  are breaks, chosen from measured reply times), and a pause step in the project's CLAUDE.md
-  that runs it with --weekly. Claude Code now keeps session records 365 days. Added to the
-  plan's Current position: a check of the time tracking once the log has 7 working days, and
-  the idea of splitting time by category, to consider at the next session.
+  Dropped the time-by-category idea (the user's choice; not to be raised again unless the user
+  does). Moved time tracking into the global setup for every project: the rules in
+  ~/.claude/TIME_TRACKING.md (written with the user step by step), a pointer in the global
+  CLAUDE.md, a time-report step and a "Time spent" section in ~/.claude/PAUSE_CONVENTION.md, and
+  the log moved from docs/time-log.csv to ~/.claude/projects/<this project's folder>/
+  time-log.csv (the tool's new default, tracked by ~/.claude/.gitignore; 16 tool tests pass).
+  The project's CLAUDE.md lost its Time tracking section; the plan's pending check was reworded
+  (3072273).
 
 next_action: >
   At resume, the plan's Current position first: if the project's time log
   (~/.claude/projects/<this project's folder>/time-log.csv) has 7 or more days, the
-  time-tracking check comes before other work. Then plan step 4c: the `app` module (Spring Boot 4.1.2, MVC,
-  virtual threads) and the `web` module (React, TypeScript, Vite, built through Maven with its
-  own Node.js); Claude explains what is new (with Quarkus parallels) and proposes the details
-  before writing code.
+  time-tracking check comes before other work. Then plan step 4c: the `app` module (Spring Boot
+  4.1.2, MVC, virtual threads) and the `web` module (React, TypeScript, Vite, built through Maven
+  with its own Node.js); Claude explains what is new (with Quarkus parallels) and proposes the
+  details before writing code.
 
 verification:
   build_status: ./mvnw test passes (20 run, 0 failed, 0 skipped) at 1403ce9; unchanged since
-  time_log: 2 days logged (2026-10-29, 2026-10-30), 5.8 hours, 165 exchanges at this pause
+  time_log: 2 days logged (2026-10-29, 2026-10-30), 6.7 hours, 202 exchanges at this pause
   pushed: >
-    no; master is 12 commits ahead of origin/master, and the rewrite branch (8 commits past
-    master) and the tag swing-final exist only locally
+    no; master is 12 commits ahead of origin/master, and the rewrite branch and the tag
+    swing-final exist only locally
 
 uncommitted_changes: []
 
 waiting_on_user:
+  - Committing the updated time log in ~/.claude on the host.
   - Pushing master, the rewrite branch and the swing-final tag to GitHub, whenever the user wants.
 
 pending_decisions:
