@@ -11,15 +11,17 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 
 *Updated 2026-10-30.*
 
-- **Where the work stands:** planning has started on `master`. Decisions D1–D14 are made (D8–D13
-  settle part of step 2; D10's host setup is done). The user's other project on this
-  host is pinned to JDK 21 on its own, so the host setup cannot affect it. No new code exists yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
+- **Where the work stands:** planning has started on `master`. Decisions D1–D16 are made (D8–D13,
+  D15 and D16 settle most of step 2; D10's host setup is done; D15 partly replaces D13). The user's other project on this
+  host is pinned to JDK 21 on its own, so the host setup cannot affect it. No new code exists
+  yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
 - **Next:** step 2 (choose the stack).
 - **Order of the coming steps:** 2, 3, 4, then the core in 5–9; the UI (10) after the core can
   run a program headless.
 - **Open decisions waiting on the user:**
-  - the rest of the stack (step 2): Spring MVC or WebFlux, how the browser gets updates, test
-    tools;
+  - the rest of the stack (step 2): Spring MVC or WebFlux (Claude recommended MVC with virtual
+    threads; not chosen; with D15 the server only serves pages and data, so it matters less),
+    test tools (JUnit 5 or 6, the browser end-to-end tool);
   - where the old code lives during the rewrite (step 2): left in `src/` beside a new module, or
     moved to a `legacy/` folder;
   - the name of the first working branch, chosen once step 2 settles what comes first.
@@ -43,29 +45,40 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 | D10 | Java 25 (LTS), with no preview features. The build selects JDK 25 through Maven Toolchains and fails fast through a Maven Enforcer `requireJavaVersion` rule; the host's default JDK stays 21. | Chosen for longevity (the newer LTS, supported years longer than 21; tooling has had a year to catch up) and as a trial before the user's other project upgrades. Preview features can change between releases and would undo the longevity. Toolchains keep the choice in the build (D8) and leave other projects on the host untouched. JDK 25 sits beside 11, 17 and 21 under `/usr/lib/jvm`, so D9's revisit condition does not call for a dev container. |
 | D11 | Maven is the build tool, run through the Maven Wrapper (`mvnw`); the Maven version is chosen in step 4 from the then-current release, not from the host's package (3.8.7). | The user already knows Maven and uses it in another project; `pom.xml` is declarative configuration, which suits D8; the build is small and needs none of Gradle's flexibility. D9 and D10 already rely on the Wrapper, Toolchains and Enforcer. |
 | D12 | Spring Boot (4.x) is the web framework. Spring MVC or WebFlux is still to be chosen. | Chosen by the user to learn Spring, a goal of the project alongside fit. Spring's constructor injection matches the construction rule, and it brings externalized configuration, Actuator metrics, testing support and Spring Security (needed for D14). Java 25 support verified 2026-10-30: Spring Boot 4.0's system requirements say "compatible up to and including Java 25". Javalin fits the present server size slightly better; Quarkus would reuse the user's existing knowledge but teach less that is new. |
-| D13 | Two Maven modules: `core` (the simulator, plain Java, no Spring dependency and no annotations) and `app` (Spring Boot, depends on `core`). Core objects are created explicitly in `@Bean` methods in `app`. | The core must run headless and be testable without a framework (D1–D5). With the boundary in the build, a Spring import in `core` does not compile. Explicit `@Bean` wiring keeps the most important wiring readable, which serves the user's goal of seeing what Spring does. |
-| D14 | The app will later be deployed for other learners, with user logins. Not built now, but from step 5 on the core supports many independent simulator instances in one process: no static or global simulator state; one instance per user session. | The project is a learning tool for others too. Retrofitting multi-instance support into a core built around one global simulator would be a rewrite of its own. |
+| D13 | Two Maven modules: `core` (the simulator, plain Java, no Spring dependency and no annotations) and `app` (Spring Boot, depends on `core`). Core objects are created explicitly in `@Bean` methods in `app`. | The core must run headless and be testable without a framework (D1–D5). With the boundary in the build, a Spring import in `core` does not compile. Explicit `@Bean` wiring keeps the most important wiring readable, which serves the user's goal of seeing what Spring does. **Partly replaced by D15:** the core runs in the browser, not inside `app`, so the `@Bean` wiring of core objects no longer applies; the two-module split and the no-Spring rule for `core` stand. |
+| D14 | The app will later be deployed for other learners, with user logins. Not built now, but from step 5 on the core supports many independent simulator instances in one process: no static or global simulator state; one instance per user session. | The project is a learning tool for others too. Retrofitting multi-instance support into a core built around one global simulator would be a rewrite of its own. Note: a server-side simulator costs server CPU per running user (small when paced to real time, a whole core in a run-as-fast-as-possible mode); see step 2, "where the simulator runs". With D15 each user's simulator runs in their own browser, so server CPU per user no longer applies; the no-static-state rule stays (several simulators on one page, tests in parallel). |
+| D15 | The simulator runs in the browser. The `core` module is cross-compiled by TeaVM (a build-time compiler from Java bytecode, run by Maven) to WebAssembly or JavaScript; which of the two is decided in step 4 (Claude leans to WebAssembly: real 32-bit integers for byte arithmetic). The Spring Boot server (`app`) serves the pages and the compiled core, and later logins and saved programs (D14). `core` uses only what TeaVM supports (no reflection, class loading or JNI; a limited standard library), and the TeaVM build enforces it. | The user's requirement: a light that should flash every half second must flash every half second whatever the network does; "late but correct" is not acceptable. A server-side simulator can guarantee that only for programs that repeat exactly; in the browser, the program (which is fixed) runs locally and the network matters only for pages, logins and saving. It also removes input lag on simulated buttons and server CPU per user. TeaVM chosen 2026-10-30 over GraalVM Web Image (experimental), CheerpJ (no Java 25 support) and J2CL (alpha, built for Google's tools): TeaVM 0.13 added Java 25 support, it is actively released (0.16 current) and has a Maven plugin. Output size not yet measured; TeaVM includes only the code actually used. Checked for real in step 4, not in a separate trial (the user's choice). |
+| D16 | All Java tests use JUnit Jupiter (JUnit 5, or JUnit 6 with the same style; version chosen with the test tools in step 2). The compiled core is checked by end-to-end tests in a real browser, comparing against reference results written by the JVM tests, not by TeaVM's JUnit 4 browser runner. | JUnit 5's parameterized tests (datasheet tables of inputs and expected flags), dynamic tests (one test per `examples/` program) and nested tests suit this project; TeaVM's browser runner supports only JUnit 4. Browser end-to-end tests are needed for the UI anyway (step 10), so checking the compiled core there adds no new tool. |
 
 ## Steps
 
 1. `[x]` **Project setup** (095cf86): the project's `CLAUDE.md` (shape from
    `~/.claude/MULTI_PROJECT_SETUP.md` step 3) and `project-state.yaml` with
    `working_mode: rolling-wave`.
-2. `[ ]` **Choose the stack:** Java version, build tool, web framework, browser update channel
-   (for example WebSocket or server-sent events), test tools for each level, and where the old
-   code lives during the rewrite. Recorded as decisions. Already settled: D8 (the build file is
-   the single source of truth), D9 (no dev container for now), D10 (Java 25), D11 (Maven), D12 (Spring Boot) and D13 (two
-   modules).
+2. `[ ]` **Choose the stack:** Java version, build tool, web framework, where the simulator runs,
+   test tools for each level, and where the old code lives during the rewrite. Recorded as
+   decisions. Already settled: D8 (the build file is the single source of truth), D9 (no dev
+   container for now), D10 (Java 25), D11 (Maven), D12 (Spring Boot), D13 (two modules), D15
+   (simulator in the browser, compiled by TeaVM) and D16 (JUnit Jupiter; browser end-to-end
+   tests for the compiled core). Still open: Spring MVC or WebFlux, the test tools (JUnit
+   version, browser end-to-end tool), where the old code lives.
    Host setup for D10, done 2026-10-30 (JDK 25.0.4.1; java alternatives now in manual mode on
    21): install
    `openjdk-25-jdk` with apt; check with `update-alternatives` that `java` and `javac` still
    default to 21 and reset them if not; create `~/.m2/toolchains.xml` listing JDK 21 and 25; add
    both JDKs to VS Code's `java.configuration.runtimes` user setting.
+   Where the simulator runs was settled by D15 (option B, in the browser). Option A (on the
+   server, streaming cycle-stamped pin changes) was set aside: input reaches the simulator
+   0.2–0.4 s late, it costs server CPU per user, and during an outage output is correct only
+   for programs that repeat exactly.
 3. `[ ]` **Reference sources:** the PIC18F452 datasheet's instruction set and memory chapters as
    the authority for behaviour (a pointer, not a copy in the repo); an inventory of what the Swing
    version implements and which `examples/` exist for each instruction.
 4. `[ ]` **Build skeleton:** an empty project that builds, runs one test of each level, and is
-   wired into the commands in `CLAUDE.md`.
+   wired into the commands in `CLAUDE.md`. Includes the TeaVM build of `core` (D15) and one
+   browser end-to-end test of the compiled output (D16); this is where TeaVM with Java 25 is
+   first checked, where WebAssembly or JavaScript is chosen (confirming browser support), and
+   where the output size is measured.
 5. `[ ]` **Program loading:** Intel HEX parsing into program memory, with tests for malformed
    input.
 6. `[ ]` **Data memory:** general-purpose RAM, special function registers, banking (BSR) and the
@@ -76,6 +89,17 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 9. `[ ]` **Execution and time:** step and run, cycle counter, Timer0 with prescaler (D4).
 10. `[ ]` **Web UI:** program and data memory views, the `.lst` view with the current line,
     changed-register highlighting, step/run controls, on-screen LEDs (D5, D6).
+    **Requirement: robust and forgiving of an unstable network.** The user asked that this be
+    considered throughout the design, not added at the end. With D15 the simulator and its
+    output timing run locally, so the network matters only for what still crosses it: loading
+    the page and compiled core (cached after the first visit), logins, and loading and saving
+    programs (D14). For those: an info message (not an error) when the network is slow or
+    down, and no lost work when a save fails. Details decided when that work is planned.
+    Ideas raised before D15 for a server-to-browser event stream, kept in case a stream returns
+    (for example the hardware bridge, D7): a heartbeat ("simulated up to cycle N, nothing
+    changed"); each batch saying when the next change is due; proven repetition (identical
+    complete chip state at cycles A and B means A→B repeats exactly until an input arrives, so
+    the browser can replay it through an outage without guessing); batching fast toggling.
 
 Later, not yet planned: other timers and peripherals, an editor and assembler integration (the
 README's original plan), the hardware bridge (D7), deployment for other learners with user
