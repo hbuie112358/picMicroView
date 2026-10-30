@@ -32,7 +32,7 @@ started in the project folder; the VS Code extension skips it silently until the
 The Swing version has its own Maven build, outside the main build (Java 17, the examples on its
 classpath):
 
-- Build: `mvn -f legacy/pom.xml package`
+- Build: `./mvnw -f legacy/pom.xml package` (from the repository root)
 - Run: `java -jar legacy/target/picmicroview-legacy.jar`
 
 The rewrite's build and run commands come with plan step 4.

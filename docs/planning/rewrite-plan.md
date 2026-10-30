@@ -18,7 +18,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
   behaviour reference (D1, D19).
 - **Branch:** the rewrite happens on one long-lived branch, `rewrite`, created from `master`
   after commit for D20 (the user's choice, 2026-10-30); merged to `master` at milestones.
-- **Next:** step 4 (build skeleton): 4a is done, 4b (Maven skeleton and `core`) is next. Step 3 is done: the datasheet is in `reference/` and the
+- **Next:** step 4 (build skeleton): 4a and 4b are done, 4c (`app` and `web`) is next. Step 3 is done: the datasheet is in `reference/` and the
   inventory in `inventory.md`.
 - **Order of the coming steps:** 3, 4, then the core in 5–9; the UI (10) after the core can run a
   program headless; then write, assemble and run (11).
@@ -42,7 +42,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 | D7 | Physical hardware output is possible later, not in scope now. | On-screen timing serves the teaching goal; hardware needs a separate bridge board for µs precision. |
 | D8 | The build file is the single source of truth for building, running and testing (Java version, source folders, dependencies, test command). Editor files (`.vscode/`, `.idea/`) hold only conveniences such as launch configurations and recommended extensions. | The Swing version is defined only by IntelliJ's `.iml` and cannot be built outside IntelliJ; the user has since moved to VS Code. Claude runs builds and tests from the terminal, so they must work there exactly as in the editor. The project should still build years from now. |
 | D9 | No dev container for now; reproducibility comes from the build (Maven Wrapper pinning the Maven version, the Enforcer plugin checking the JDK version). Revisit if the chosen Java version is not installed on the host or other contributors join. | The stack is a JDK and a build tool with no services to run. A dev container adds friction under the global rules (file permissions in `~/.claude`, git safe-directory reads, port forwarding) and can be added later as one file without code changes. |
-| D10 | Java 25 (LTS), with no preview features. The build selects JDK 25 through Maven Toolchains and fails fast through a Maven Enforcer `requireJavaVersion` rule; the host's default JDK stays 21. | Chosen for longevity (the newer LTS, supported years longer than 21; tooling has had a year to catch up) and as a trial before the user's other project upgrades. Preview features can change between releases and would undo the longevity. Toolchains keep the choice in the build (D8) and leave other projects on the host untouched. JDK 25 sits beside 11, 17 and 21 under `/usr/lib/jvm`, so D9's revisit condition does not call for a dev container. |
+| D10 | Java 25 (LTS), with no preview features. The build selects JDK 25 through Maven Toolchains and fails fast through a Maven Enforcer `requireJavaVersion` rule; the host's default JDK stays 21. **Amended 2026-10-30 (step 4b):** the fail-fast check for JDK 25 is the Toolchains plugin's requirement (it stops the build with a clear message when `~/.m2/toolchains.xml` has no JDK 25); the Enforcer checks Maven's own runtime (JDK 21 or newer, and the Maven version). The original wording was wrong: with Toolchains, Maven itself runs on the default JDK 21, and `requireJavaVersion` checks that runtime, so requiring 25 there would always fail. | Chosen for longevity (the newer LTS, supported years longer than 21; tooling has had a year to catch up) and as a trial before the user's other project upgrades. Preview features can change between releases and would undo the longevity. Toolchains keep the choice in the build (D8) and leave other projects on the host untouched. JDK 25 sits beside 11, 17 and 21 under `/usr/lib/jvm`, so D9's revisit condition does not call for a dev container. |
 | D11 | Maven is the build tool, run through the Maven Wrapper (`mvnw`); the Maven version is chosen in step 4 from the then-current release, not from the host's package (3.8.7). | The user already knows Maven and uses it in another project; `pom.xml` is declarative configuration, which suits D8; the build is small and needs none of Gradle's flexibility. D9 and D10 already rely on the Wrapper, Toolchains and Enforcer. |
 | D12 | Spring Boot (4.x) is the web framework. Spring MVC or WebFlux is still to be chosen (settled by D17: MVC). | Chosen by the user to learn Spring, a goal of the project alongside fit. Spring's constructor injection matches the construction rule, and it brings externalized configuration, Actuator metrics, testing support and Spring Security (needed for D14). Java 25 support verified 2026-10-30: Spring Boot 4.0's system requirements say "compatible up to and including Java 25". Javalin fits the present server size slightly better; Quarkus would reuse the user's existing knowledge but teach less that is new. |
 | D13 | Two Maven modules: `core` (the simulator, plain Java, no Spring dependency and no annotations) and `app` (Spring Boot, depends on `core`). Core objects are created explicitly in `@Bean` methods in `app`. | The core must run headless and be testable without a framework (D1–D5). With the boundary in the build, a Spring import in `core` does not compile. Explicit `@Bean` wiring keeps the most important wiring readable, which serves the user's goal of seeing what Spring does. **Partly replaced by D15:** the core runs in the browser, not inside `app`, so the `@Bean` wiring of core objects no longer applies; the two-module split and the no-Spring rule for `core` stand. **Extended by D20:** a third module, `web`. |
@@ -93,17 +93,25 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 4. `[ ]` **Build skeleton:** an empty project that builds, runs one test of each level, and is
    wired into the commands in `CLAUDE.md`. Done in sub-steps, each explained, reviewed and
    committed on its own:
-   - 4a `[x]` *Housekeeping* (done 2026-10-30; the user ran the old app from the new jar): tag the Swing code `swing-final`; `git mv` `src/`, `tests/`,
+   - 4a `[x]` *Housekeeping* (6138d53; the user ran the old app from the new jar): tag the Swing code `swing-final`; `git mv` `src/`, `tests/`,
      `doc/` to `legacy/`; `legacy/pom.xml` (D19); track `.gitignore` (F6).
-   - 4b `[ ]` *Maven skeleton and `core`:* root `pom.xml` with modules `core`, `app`, `web`;
+   - 4b `[x]` *Maven skeleton and `core`:* root `pom.xml` with modules `core`, `app`, `web`;
      Maven Wrapper; Toolchains choosing JDK 25; Enforcer; `core` with one JUnit 6 and AssertJ test
      and the ArchUnit rules (D14, D15). How the root gets library versions without giving `core`
      a Spring dependency is decided here.
+     Done: Maven 3.10.0 (Wrapper), Spring Boot 4.1.2's BOM imported by the root (versions only),
+     ArchUnit 1.5.1; Toolchains require JDK `[25,26)` (a bare `25` would match any JDK); Enforcer
+     bans `org.springframework*` in `core`; compiler warnings fail the build. Packages under
+     `io.github.hbuie112358.picmicroview`. First code: `ArithmeticLogicUnit.add` (8-bit addition
+     with C, DC, Z, OV, N from datasheet page 52 and 217). Each safety check was shown to fail
+     when broken on purpose (a Spring dependency, a static field, `>=` for `>`).
    - 4c `[ ]` *`app` and `web`:* Spring Boot 4 with MVC and virtual threads (D17) serving the
      React app built by Vite in `web` (D20); one `@WebMvcTest`, one `@SpringBootTest`, one
      Vitest component test.
    - 4d `[ ]` *TeaVM:* compile a small piece of `core`, run it in a Web Worker, show its result in
      React; choose WebAssembly or JavaScript (confirming browser support); measure the size.
+     Also decide how `core` logs (4b review A2: logging libraries may not compile with TeaVM),
+     and confirm TeaVM compiles `String.formatted` (its class library implements it).
    - 4e `[ ]` *Browser end-to-end test:* one Playwright test run by `./mvnw verify`, checking the
      compiled code gives the JVM's result (D16); Playwright for Java or Node decided here.
    - 4f `[ ]` *Wire up:* build and run commands in the project's `CLAUDE.md`; optionally a VS Code
@@ -118,8 +126,10 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    datasheet; the `examples/` programs as scenario tests. Cycle counts per instruction (D3).
    Test design (the user's direction, 2026-10-30): the main tests are readable edge-case tables
    from the datasheet (JUnit 6 parameterized tests), one row per case where something happens,
-   for example 255 + 1 = 0 with C, Z and DC set; 0x0F + 0x01 with DC only; 127 + 1 with OV and
-   N; plus one plain case showing no flag is set by mistake. An exhaustive check (every input,
+   for example 255 + 1 = 0 with C, Z and DC set; 0x0F + 0x01 with DC only; 127 + 1 with DC, OV
+   and N (corrected in 4b: the low nibble 0xF + 0x1 also carries); the largest sums without a
+   carry (0x80 + 0x7F, 0x08 + 0x07), which catch `>=` written for `>` (found in 4b when such a
+   bug survived the first table); plus one plain case showing no flag is set by mistake. An exhaustive check (every input,
    compared with the datasheet's flag rules written as simple formulas) is optional, decided
    per instruction group.
 9. `[ ]` **Execution and time:** step and run, cycle counter, Timer0 with prescaler (D4).

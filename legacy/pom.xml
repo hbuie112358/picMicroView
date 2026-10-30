@@ -4,7 +4,7 @@
   (docs/planning/rewrite-plan.md, D1 and D19). Not part of the main build and exempt from the
   new code's standards; deleted once the rewrite covers everything it did.
 
-  Build: mvn -f legacy/pom.xml package
+  Build: ./mvnw -f legacy/pom.xml package   (from the repository root)
   Run:   java -jar legacy/target/picmicroview-legacy.jar
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
