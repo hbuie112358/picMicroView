@@ -11,13 +11,14 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 
 *Updated 2026-10-30.*
 
-- **Where the work stands:** planning has started on `master`. Decisions D1–D9 are made (D8, D9
-  settle part of step 2). No new code exists yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
+- **Where the work stands:** planning has started on `master`. Decisions D1–D10 are made (D8–D10
+  settle part of step 2; D10's host setup is not done yet). No new code exists yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
 - **Next:** step 2 (choose the stack).
 - **Order of the coming steps:** 2, 3, 4, then the core in 5–9; the UI (10) after the core can
   run a program headless.
 - **Open decisions waiting on the user:**
-  - the stack (step 2): Java version, build tool, web framework, how the browser gets updates;
+  - the rest of the stack (step 2): build tool, web framework, how the browser gets updates,
+    test tools;
   - where the old code lives during the rewrite (step 2): left in `src/` beside a new module, or
     moved to a `legacy/` folder;
   - the name of the first working branch, chosen once step 2 settles what comes first.
@@ -38,6 +39,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 | D7 | Physical hardware output is possible later, not in scope now. | On-screen timing serves the teaching goal; hardware needs a separate bridge board for µs precision. |
 | D8 | The build file is the single source of truth for building, running and testing (Java version, source folders, dependencies, test command). Editor files (`.vscode/`, `.idea/`) hold only conveniences such as launch configurations and recommended extensions. | The Swing version is defined only by IntelliJ's `.iml` and cannot be built outside IntelliJ; the user has since moved to VS Code. Claude runs builds and tests from the terminal, so they must work there exactly as in the editor. The project should still build years from now. |
 | D9 | No dev container for now; reproducibility comes from the build (Maven Wrapper pinning the Maven version, the Enforcer plugin checking the JDK version). Revisit if the chosen Java version is not installed on the host or other contributors join. | The stack is a JDK and a build tool with no services to run. A dev container adds friction under the global rules (file permissions in `~/.claude`, git safe-directory reads, port forwarding) and can be added later as one file without code changes. |
+| D10 | Java 25 (LTS), with no preview features. The build selects JDK 25 through Maven Toolchains and fails fast through a Maven Enforcer `requireJavaVersion` rule; the host's default JDK stays 21. | Chosen for longevity (the newer LTS, supported years longer than 21; tooling has had a year to catch up) and as a trial before the user's other project upgrades. Preview features can change between releases and would undo the longevity. Toolchains keep the choice in the build (D8) and leave other projects on the host untouched. JDK 25 sits beside 11, 17 and 21 under `/usr/lib/jvm`, so D9's revisit condition does not call for a dev container. |
 
 ## Steps
 
@@ -47,7 +49,11 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 2. `[ ]` **Choose the stack:** Java version, build tool, web framework, browser update channel
    (for example WebSocket or server-sent events), test tools for each level, and where the old
    code lives during the rewrite. Recorded as decisions. Already settled: D8 (the build file is
-   the single source of truth) and D9 (no dev container for now).
+   the single source of truth), D9 (no dev container for now) and D10 (Java 25).
+   Host setup for D10, run by the user once (Claude shows each command): install
+   `openjdk-25-jdk` with apt; check with `update-alternatives` that `java` and `javac` still
+   default to 21 and reset them if not; create `~/.m2/toolchains.xml` listing JDK 21 and 25; add
+   both JDKs to VS Code's `java.configuration.runtimes` user setting.
 3. `[ ]` **Reference sources:** the PIC18F452 datasheet's instruction set and memory chapters as
    the authority for behaviour (a pointer, not a copy in the repo); an inventory of what the Swing
    version implements and which `examples/` exist for each instruction.
