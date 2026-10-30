@@ -26,6 +26,14 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 - **Open decisions waiting on the user:**
   - where assembling happens (step 11, options A, B, C); not needed before step 11, but option
     C would add an assembler to `core`, so it is best settled before step 7 (decoder, D2).
+- **Pending check, time tracking (raised 2026-10-30):** at each resume, Claude counts the days in
+  `docs/time-log.csv`; once it has 7 or more, Claude asks the user to evaluate the tracking
+  before other work: do the hours and exchanges match the user's sense of the time spent; does
+  the 7-minute break rule still fit the newer reply times; was the log updated and committed at
+  every pause. If it works, Claude proposes moving the time-tracking instructions from the
+  project's `CLAUDE.md` into the global setup (an opt-in pause step in
+  `~/.claude/PAUSE_CONVENTION.md`, naming no project), and the user decides. If not, Claude and
+  the user adjust the tool first.
 - **Stale documents (do not trust):** `README.md` (describes the Swing version 0.7),
   `legacy/doc/` (Javadoc from 2015, old package names),
   `legacy/tests/instructionTest/insTestDefault` (unreadable, see F2).
