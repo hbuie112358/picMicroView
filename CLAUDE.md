@@ -50,8 +50,9 @@ with plan step 4f. The old Swing version has no usable tests (plan F1).
 The user wants to know how many active hours the project takes, in total and per week.
 
 - **At every pause** (in addition to `~/.claude/PAUSE_CONVENTION.md`), Claude runs
-  `python3 ~/.claude/tools/time-report/time_report.py` from the repository root, commits
-  `docs/time-log.csv` with the state snapshot, and shows its summary in the pause output.
+  `python3 ~/.claude/tools/time-report/time_report.py --weekly` from the repository root,
+  commits `docs/time-log.csv` with the state snapshot, and shows its summary and weekly lines
+  (weeks run Monday to Sunday, the user's choice) in the pause output.
 - The tool is the user's, shared by all projects and versioned in `~/.claude`; it is not part of
   this project. Only the log is.
 - Active time comes from the timestamps in Claude Code's session records: gaps up to 7 minutes
