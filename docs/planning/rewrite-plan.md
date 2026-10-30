@@ -34,6 +34,14 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
   project's `CLAUDE.md` into the global setup (an opt-in pause step in
   `~/.claude/PAUSE_CONVENTION.md`, naming no project), and the user decides. If not, Claude and
   the user adjust the tool first.
+- **To consider at the next session (raised 2026-10-30):** splitting the tracked time by
+  category: planning, coding, learning, workspace (setup, tools, configuration,
+  troubleshooting). Timestamps cannot tell these apart, so Claude proposed labelling each
+  exchange with its main category at pause time (the tool listing each exchange's duration,
+  the log gaining one column per category), with written category definitions for consistent
+  labels, and optionally labelling the days already logged. Automatic guessing from edited
+  files was judged too noisy (learning leaves no trace), and tagging by the user too
+  burdensome. Open: whether to build it, the category list, and whether to label past days.
 - **Stale documents (do not trust):** `README.md` (describes the Swing version 0.7),
   `legacy/doc/` (Javadoc from 2015, old package names),
   `legacy/tests/instructionTest/insTestDefault` (unreadable, see F2).

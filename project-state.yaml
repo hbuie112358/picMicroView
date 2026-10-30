@@ -1,54 +1,44 @@
 # Session state for pause and resume (~/.claude/PAUSE_CONVENTION.md, global CLAUDE.md).
+# A snapshot of one moment: standing rules and commands live in the project's CLAUDE.md.
 # No secrets in this file.
 
 project: picMicroView
-timestamp: 2026-10-30T15:06:05-04:00
+timestamp: 2026-10-30T16:30:07-04:00
 current_branch: rewrite
-last_commit: 1403ce9
+last_commit: 4e7a4d1
 
 working_mode: rolling-wave
 active_plan: docs/planning/rewrite-plan.md
 
 last_work: >
-  Resume test passed (all checkpoint parts ran cleanly). Finished plan step 2 (the stack,
-  decisions D8-D20): build file as single source of truth, no dev container, Java 25 via Maven
-  Toolchains (host default stays 21; JDK 25 installed, ~/.m2/toolchains.xml and VS Code
-  java.configuration.runtimes set up), Maven, Spring Boot with Spring MVC and virtual threads,
-  modules core/app/web, multi-user deployment later, simulator in the browser compiled by TeaVM,
-  JUnit 6 and the test tools, the Swing code in legacy/, React with TypeScript and Vite.
-  Step 3: datasheet DS39564C downloaded to reference/ (git-ignored), inventory.md written,
-  findings F6-F9. Step 4 started on the new long-lived branch `rewrite`: 4a moved the Swing code
-  to legacy/ with its own pom.xml (tag swing-final; the user ran the old app), 4b added the root
-  Maven build, the wrapper and the core module with ArithmeticLogicUnit.add (20 tests passing,
-  each safety check shown to fail when broken).
+  Resumed, and repaired the plan: decisions D17-D20 had been scrambled by mid-row insertions
+  (restored from git history and verified), and stale entries in Current position, D9, 4b, F2
+  and F6 were corrected (3e672c4). Set up time tracking: the user's time-report tool in
+  ~/.claude/tools/time-report (shared by all projects, committed there by the user as 5c7669b),
+  the project's log docs/time-log.csv (active minutes and exchanges per day; gaps over 7 minutes
+  are breaks, chosen from measured reply times), and a pause step in the project's CLAUDE.md
+  that runs it with --weekly. Claude Code now keeps session records 365 days. Added to the
+  plan's Current position: a check of the time tracking once the log has 7 working days, and
+  the idea of splitting time by category, to consider at the next session.
 
 next_action: >
-  Plan step 4c: the `app` module (Spring Boot 4.1.2, MVC, virtual threads) and the `web` module
-  (React, TypeScript, Vite, built through Maven with its own Node.js), with one @WebMvcTest, one
-  @SpringBootTest and one Vitest test. Before writing code, Claude explains what is new (with
-  Quarkus parallels) and proposes the details; the user decides.
+  At resume, the plan's Current position first: if docs/time-log.csv has 7 or more days, the
+  time-tracking check comes before other work; otherwise raise the time-by-category idea (to
+  consider at the next session). Then plan step 4c: the `app` module (Spring Boot 4.1.2, MVC,
+  virtual threads) and the `web` module (React, TypeScript, Vite, built through Maven with its
+  own Node.js); Claude explains what is new (with Quarkus parallels) and proposes the details
+  before writing code.
 
 verification:
-  java_installed: OpenJDK 21.0.11 (default, alternatives in manual mode) and 25.0.4.1
-  maven: Maven Wrapper 3.10.0 in the repository (SHA-256 checked); system Maven 3.8.7 unused
-  toolchains: ~/.m2/toolchains.xml lists JDK 21 and 25; the build requires [25,26)
-  build_status: ./mvnw test passes (20 run, 0 failed, 0 skipped) at 1403ce9
-  legacy_build: ./mvnw -f legacy/pom.xml package; java -jar legacy/target/picmicroview-legacy.jar
-  datasheet: reference/39564c.pdf (DS39564C, git-ignored; link and checksum in the plan, step 3)
-  remote: origin https://github.com/hbuie112358/picMicroView.git
+  build_status: ./mvnw test passes (20 run, 0 failed, 0 skipped) at 1403ce9; unchanged since
+  time_log: 2 days logged (2026-10-29, 2026-10-30), 5.8 hours, 165 exchanges at this pause
   pushed: >
-    no; master is 12 commits ahead of origin/master, the rewrite branch (2 commits past master)
-    and the tag swing-final exist only locally
+    no; master is 12 commits ahead of origin/master, and the rewrite branch (8 commits past
+    master) and the tag swing-final exist only locally
 
 uncommitted_changes: []
 
 waiting_on_user:
-  - >
-    ~/.claude has uncommitted changes to this project's memory (MEMORY.md, project-goals.md,
-    new decisions-need-explicit-choice.md and user-learning-goals.md). Commit on the host:
-    git -C ~/.claude add projects/<this project's folder>/memory &&
-    git -C ~/.claude commit -m "memory(picMicroView): learning goals, explicit decisions, deployment goal"
-  - ~/.claude/settings.json is uncommitted on purpose (default model change); no commit needed.
   - Pushing master, the rewrite branch and the swing-final tag to GitHub, whenever the user wants.
 
 pending_decisions:
@@ -56,6 +46,9 @@ pending_decisions:
     Where assembling happens (plan step 11): A gpasm on the server, B gpasm compiled to
     WebAssembly, C an own assembler in core (Claude leans to C). Best settled before step 7.
   - >
-    Within 4c-4e, decided there: details of the app and web modules; WebAssembly or JavaScript
-    output and how core logs (4d); Playwright for Java or Node (4e).
+    Time by category (plan Current position): whether to build it, the category list (planning,
+    coding, learning, workspace proposed), and whether to label the days already logged.
+  - >
+    A live ~/.claude check at resume, as a separate step 5 in the global CLAUDE.md's resume
+    protocol: proposed and shown on 2026-10-30; the user chose to skip it for now.
   - Whether to delete the local branch 04_02_start (same commit as master, nothing unique).
