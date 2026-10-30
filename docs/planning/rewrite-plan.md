@@ -12,7 +12,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 *Updated 2026-10-30.*
 
 - **Where the work stands:** planning has started on `master`. Decisions D1–D11 are made (D8–D11
-  settle part of step 2; D10's host setup is not done yet). The user's other project on this
+  settle part of step 2; D10's host setup is done). The user's other project on this
   host is pinned to JDK 21 on its own, so the host setup cannot affect it. No new code exists yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
 - **Next:** step 2 (choose the stack).
 - **Order of the coming steps:** 2, 3, 4, then the core in 5–9; the UI (10) after the core can
@@ -51,7 +51,8 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    (for example WebSocket or server-sent events), test tools for each level, and where the old
    code lives during the rewrite. Recorded as decisions. Already settled: D8 (the build file is
    the single source of truth), D9 (no dev container for now), D10 (Java 25) and D11 (Maven).
-   Host setup for D10, run by the user once (Claude shows each command): install
+   Host setup for D10, done 2026-10-30 (JDK 25.0.4.1; java alternatives now in manual mode on
+   21): install
    `openjdk-25-jdk` with apt; check with `update-alternatives` that `java` and `javac` still
    default to 21 and reset them if not; create `~/.m2/toolchains.xml` listing JDK 21 and 25; add
    both JDKs to VS Code's `java.configuration.runtimes` user setting.
