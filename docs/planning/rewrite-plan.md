@@ -11,8 +11,8 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 
 *Updated 2026-10-30.*
 
-- **Where the work stands:** planning has started on `master`. Decisions D1–D7 are made. No new
-  code exists yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
+- **Where the work stands:** planning has started on `master`. Decisions D1–D9 are made (D8, D9
+  settle part of step 2). No new code exists yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
 - **Next:** step 2 (choose the stack).
 - **Order of the coming steps:** 2, 3, 4, then the core in 5–9; the UI (10) after the core can
   run a program headless.
@@ -36,6 +36,8 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 | D5 | Port I/O goes through an interface (working name `PortBridge`); every pin change carries its cycle time stamp. | New outputs (screen, USB adapter, microcontroller bridge) are added as new implementations without touching the core. |
 | D6 | First output: LEDs on screen paced to real time without drift (each frame shows the state for the cycle that matches the time). Toggling faster than the screen can show is drawn dimmed by duty cycle with a frequency readout; the UI shows when the simulator runs slower than real time. | A 1-second blink stays exact for as long as it runs; the screen's ~17 ms frame time is invisible and never accumulates. |
 | D7 | Physical hardware output is possible later, not in scope now. | On-screen timing serves the teaching goal; hardware needs a separate bridge board for µs precision. |
+| D8 | The build file is the single source of truth for building, running and testing (Java version, source folders, dependencies, test command). Editor files (`.vscode/`, `.idea/`) hold only conveniences such as launch configurations and recommended extensions. | The Swing version is defined only by IntelliJ's `.iml` and cannot be built outside IntelliJ; the user has since moved to VS Code. Claude runs builds and tests from the terminal, so they must work there exactly as in the editor. The project should still build years from now. |
+| D9 | No dev container for now; reproducibility comes from the build (Maven Wrapper pinning the Maven version, the Enforcer plugin checking the JDK version). Revisit if the chosen Java version is not installed on the host or other contributors join. | The stack is a JDK and a build tool with no services to run. A dev container adds friction under the global rules (file permissions in `~/.claude`, git safe-directory reads, port forwarding) and can be added later as one file without code changes. |
 
 ## Steps
 
@@ -44,7 +46,8 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    `working_mode: rolling-wave`.
 2. `[ ]` **Choose the stack:** Java version, build tool, web framework, browser update channel
    (for example WebSocket or server-sent events), test tools for each level, and where the old
-   code lives during the rewrite. Recorded as decisions.
+   code lives during the rewrite. Recorded as decisions. Already settled: D8 (the build file is
+   the single source of truth) and D9 (no dev container for now).
 3. `[ ]` **Reference sources:** the PIC18F452 datasheet's instruction set and memory chapters as
    the authority for behaviour (a pointer, not a copy in the repo); an inventory of what the Swing
    version implements and which `examples/` exist for each instruction.
