@@ -27,21 +27,11 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
   - where assembling happens (step 11, options A, B, C); not needed before step 11, but option
     C would add an assembler to `core`, so it is best settled before step 7 (decoder, D2).
 - **Pending check, time tracking (raised 2026-10-30):** at each resume, Claude counts the days in
-  `docs/time-log.csv`; once it has 7 or more, Claude asks the user to evaluate the tracking
-  before other work: do the hours and exchanges match the user's sense of the time spent; does
-  the 7-minute break rule still fit the newer reply times; was the log updated and committed at
-  every pause. If it works, Claude proposes moving the time-tracking instructions from the
-  project's `CLAUDE.md` into the global setup (an opt-in pause step in
-  `~/.claude/PAUSE_CONVENTION.md`, naming no project), and the user decides. If not, Claude and
-  the user adjust the tool first.
-- **To consider at the next session (raised 2026-10-30):** splitting the tracked time by
-  category: planning, coding, learning, workspace (setup, tools, configuration,
-  troubleshooting). Timestamps cannot tell these apart, so Claude proposed labelling each
-  exchange with its main category at pause time (the tool listing each exchange's duration,
-  the log gaining one column per category), with written category definitions for consistent
-  labels, and optionally labelling the days already logged. Automatic guessing from edited
-  files was judged too noisy (learning leaves no trace), and tagging by the user too
-  burdensome. Open: whether to build it, the category list, and whether to label past days.
+  this project's log (`~/.claude/projects/<this project's folder>/time-log.csv`; the rules are
+  in `~/.claude/TIME_TRACKING.md`). Once it has 7 or more, Claude asks the user to evaluate the
+  tracking before other work: do the hours and exchanges match the user's sense of the time
+  spent; does the 7-minute break rule still fit the newer reply times; was the log updated at
+  every pause. If not, Claude and the user adjust the tool or `TIME_TRACKING.md`.
 - **Stale documents (do not trust):** `README.md` (describes the Swing version 0.7),
   `legacy/doc/` (Javadoc from 2015, old package names),
   `legacy/tests/instructionTest/insTestDefault` (unreadable, see F2).
