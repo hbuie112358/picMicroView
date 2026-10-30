@@ -12,9 +12,9 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 *Updated 2026-10-30.*
 
 - **Where the work stands:** planning has started on `master`. Decisions D1–D7 are made. No new
-  code exists yet. The Swing code under `src/` is the behaviour reference (D1).
-- **Next:** step 1 (project `CLAUDE.md` and `project-state.yaml`), then step 2 (choose the stack).
-- **Order of the coming steps:** 1, 2, 3, 4, then the core in 5–9; the UI (10) after the core can
+  code exists yet. The Swing code under `src/` is the behaviour reference (D1). Step 1 is done.
+- **Next:** step 2 (choose the stack).
+- **Order of the coming steps:** 2, 3, 4, then the core in 5–9; the UI (10) after the core can
   run a program headless.
 - **Open decisions waiting on the user:**
   - the stack (step 2): Java version, build tool, web framework, how the browser gets updates;
@@ -39,9 +39,9 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 
 ## Steps
 
-1. `[ ]` **Project setup:** project `CLAUDE.md` (shape from `~/.claude/MULTI_PROJECT_SETUP.md`
-   step 3) and `project-state.yaml` with `working_mode: rolling-wave`. The user approves the
-   `JAVA_STANDARDS.md` import once from the terminal CLI.
+1. `[x]` **Project setup** (095cf86): the project's `CLAUDE.md` (shape from
+   `~/.claude/MULTI_PROJECT_SETUP.md` step 3) and `project-state.yaml` with
+   `working_mode: rolling-wave`.
 2. `[ ]` **Choose the stack:** Java version, build tool, web framework, browser update channel
    (for example WebSocket or server-sent events), test tools for each level, and where the old
    code lives during the rewrite. Recorded as decisions.
