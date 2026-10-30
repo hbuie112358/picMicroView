@@ -1,0 +1,35 @@
+# Session state for pause and resume (~/.claude/PAUSE_CONVENTION.md, global CLAUDE.md).
+# No secrets in this file.
+
+project: picMicroView
+timestamp: 2026-10-30T10:19:56-04:00
+current_branch: master
+last_commit: 8a2abb7
+
+working_mode: rolling-wave
+active_plan: docs/planning/rewrite-plan.md
+
+last_work: >
+  Set the project up for the shared multi-project rules: removed another project's name from
+  this project's memory, wrote CLAUDE.md, this file and the rewrite plan. Read the Swing code
+  and agreed decisions D1-D7 (rewrite with a web UI, table-driven decoder, simulated time,
+  on-screen LEDs paced to real time).
+
+next_action: >
+  Plan step 1: the user approves the JAVA_STANDARDS.md import once from the terminal CLI, then
+  checks the setup in a fresh session (MULTI_PROJECT_SETUP.md step 11). Then plan step 2:
+  choose the stack.
+
+verification:
+  java_installed: OpenJDK 21.0.11
+  build_tools_installed: Maven (no Gradle)
+  swing_version_build: IntelliJ project, language level JDK 17, no build file
+  remote: origin https://github.com/hbuie112358/picMicroView.git (master tracks origin/master)
+
+uncommitted_changes: []
+
+pending_decisions:
+  - Plan step 2 - the stack (Java version, build tool, web framework, browser update channel)
+    and where the old code lives during the rewrite. No recommendation given yet.
+  - Name of the first working branch, chosen once step 2 settles what comes first.
+  - Whether to delete the local branch 04_02_start (same commit as master, nothing unique).
