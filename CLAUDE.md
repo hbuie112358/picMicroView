@@ -20,20 +20,27 @@ started in the project folder; the VS Code extension skips it silently until the
 - Active plan: `docs/planning/rewrite-plan.md` (rolling-wave mode; its Current position comes
   first).
 - Session state: `project-state.yaml` at the repository root.
-- The Swing version: `src/picmicroview/` (model, view, controller).
+- The Swing version: `legacy/src/picmicroview/` (model, view, controller), tagged `swing-final`
+  (plan D19).
+- The datasheet: `reference/39564c.pdf` (git-ignored; download link in the plan, step 3). The
+  inventory of instructions, Swing classes and examples: `docs/planning/inventory.md`.
 - Example programs: `examples/`, with `.asm`, `.hex`, `.lst` and `.cod` files per instruction and
   per concept.
 
 ## Commands
 
-The Swing version has no build tool. It is an IntelliJ project (`picMicroView.iml`, language level
-JDK 17, output to `out/`), run from IntelliJ with the main class in
-`src/picmicroview/PicMain.java`. The rewrite's build and run commands come with plan step 4.
+The Swing version has its own Maven build, outside the main build (Java 17, the examples on its
+classpath):
+
+- Build: `mvn -f legacy/pom.xml package`
+- Run: `java -jar legacy/target/picmicroview-legacy.jar`
+
+The rewrite's build and run commands come with plan step 4.
 
 ## Testing
 
 No automated tests exist yet (plan finding F1). The test tools for each level of the global
-`TESTING_APPROACH.md` are chosen in plan step 2.
+`TESTING_APPROACH.md` are chosen in plan D18; how to run them comes with plan step 4.
 
 ## Project rules
 

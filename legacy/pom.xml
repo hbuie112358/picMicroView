@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Build for the old Swing version, kept as the behaviour reference during the rewrite
+  (docs/planning/rewrite-plan.md, D1 and D19). Not part of the main build and exempt from the
+  new code's standards; deleted once the rewrite covers everything it did.
+
+  Build: mvn -f legacy/pom.xml package
+  Run:   java -jar legacy/target/picmicroview-legacy.jar
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.github.hbuie112358.picmicroview</groupId>
+  <artifactId>picmicroview-legacy</artifactId>
+  <version>0.75.1-swing</version>
+  <name>picMicroView (Swing, legacy)</name>
+
+  <properties>
+    <!-- The IntelliJ project targeted Java 17; any JDK 17 or newer builds it. -->
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <build>
+    <finalName>picmicroview-legacy</finalName>
+    <!-- The 2015 layout: packages directly under src/, not src/main/java. -->
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <!-- The examples menu loads /<group>/<letter>/<name>/<name>.hex from the classpath. -->
+      <resource>
+        <directory>../examples</directory>
+      </resource>
+    </resources>
+
+    <pluginManagement>
+      <!-- Pinned so the build does not depend on the defaults of whichever Maven runs it. -->
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.16.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.5.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>picmicroview.PicMain</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

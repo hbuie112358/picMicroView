@@ -14,20 +14,20 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 - **Where the work stands:** planning on `master`. Steps 1–3 are done; decisions D1–D20 are
   made (D8–D20 are the stack; D15 partly replaces D13; D20 adds the `web` module and React). JDK 25 is installed on the host beside
   21, which stays the default; the user's other project is pinned to JDK 21 on its own. No new
-  code exists yet. The Swing code under `src/` is the behaviour reference (D1); it moves to
-  `legacy/` in step 4 (D19).
+  code exists yet. The Swing code, now under `legacy/` (tagged `swing-final`), is the
+  behaviour reference (D1, D19).
 - **Branch:** the rewrite happens on one long-lived branch, `rewrite`, created from `master`
   after commit for D20 (the user's choice, 2026-10-30); merged to `master` at milestones.
-- **Next:** step 4 (build skeleton), starting with 4a. Step 3 is done: the datasheet is in `reference/` and the
+- **Next:** step 4 (build skeleton): 4a is done, 4b (Maven skeleton and `core`) is next. Step 3 is done: the datasheet is in `reference/` and the
   inventory in `inventory.md`.
 - **Order of the coming steps:** 3, 4, then the core in 5–9; the UI (10) after the core can run a
   program headless; then write, assemble and run (11).
 - **Open decisions waiting on the user:**
   - where assembling happens (step 11, options A, B, C); not needed before step 11, but option
     C would add an assembler to `core`, so it is best settled before step 7 (decoder, D2);
-- **Stale documents (do not trust):** `README.md` (describes the Swing version 0.7), `doc/`
-  (Javadoc from 2015, old package names), `tests/instructionTest/insTestDefault` (unreadable,
-  see F2).
+- **Stale documents (do not trust):** `README.md` (describes the Swing version 0.7),
+  `legacy/doc/` (Javadoc from 2015, old package names),
+  `legacy/tests/instructionTest/insTestDefault` (unreadable, see F2).
 
 ## Decisions
 
@@ -93,7 +93,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 4. `[ ]` **Build skeleton:** an empty project that builds, runs one test of each level, and is
    wired into the commands in `CLAUDE.md`. Done in sub-steps, each explained, reviewed and
    committed on its own:
-   - 4a `[ ]` *Housekeeping:* tag the Swing code `swing-final`; `git mv` `src/`, `tests/`,
+   - 4a `[x]` *Housekeeping* (done 2026-10-30; the user ran the old app from the new jar): tag the Swing code `swing-final`; `git mv` `src/`, `tests/`,
      `doc/` to `legacy/`; `legacy/pom.xml` (D19); track `.gitignore` (F6).
    - 4b `[ ]` *Maven skeleton and `core`:* root `pom.xml` with modules `core`, `app`, `web`;
      Maven Wrapper; Toolchains choosing JDK 25; Enforcer; `core` with one JUnit 6 and AssertJ test

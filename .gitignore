@@ -1,0 +1,9 @@
+# IntelliJ project files (local only)
+.idea/
+*.iml
+# Old IntelliJ build output
+out/
+# Maven build output
+target/
+# Vendor documents (Microchip datasheet), copyrighted; download link in docs/planning/rewrite-plan.md
+reference/
