@@ -26,6 +26,8 @@ started in the project folder; the VS Code extension skips it silently until the
   inventory of instructions, Swing classes and examples: `docs/planning/inventory.md`.
 - Example programs: `examples/`, with `.asm`, `.hex`, `.lst` and `.cod` files per instruction and
   per concept.
+- Time log: `docs/time-log.csv` (active minutes per day), kept by the user's time-report tool
+  (see Time tracking).
 
 ## Commands
 
@@ -39,8 +41,26 @@ The rewrite's build and run commands come with plan step 4.
 
 ## Testing
 
-No automated tests exist yet (plan finding F1). The test tools for each level of the global
-`TESTING_APPROACH.md` are chosen in plan D18; how to run them comes with plan step 4.
+The test tools for each level of the global `TESTING_APPROACH.md` are chosen in plan D18. So far
+`core` has unit and architecture tests, run with `./mvnw test`; the full set of commands comes
+with plan step 4f. The old Swing version has no usable tests (plan F1).
+
+## Time tracking
+
+The user wants to know how many active hours the project takes, in total and per week.
+
+- **At every pause** (in addition to `~/.claude/PAUSE_CONVENTION.md`), Claude runs
+  `python3 ~/.claude/tools/time-report/time_report.py` from the repository root, commits
+  `docs/time-log.csv` with the state snapshot, and shows its summary in the pause output.
+- The tool is the user's, shared by all projects and versioned in `~/.claude`; it is not part of
+  this project. Only the log is.
+- Active time comes from the timestamps in Claude Code's session records: gaps up to 7 minutes
+  count as work, longer gaps as breaks (the user's choice on 2026-10-30, from measured reply
+  times: reading and answering took under 7–8 minutes, breaks 14 minutes or more). All or
+  nothing: a longer gap counts zero. Time spent without a Claude session is not counted.
+- Claude Code deletes session records after `cleanupPeriodDays` (set to 365 in the user's global
+  settings on 2026-10-30); the log keeps every day already computed, so it survives that.
+  *Why:* a lasting record of the effort, from the first session (2026-10-29) to the end.
 
 ## Project rules
 
