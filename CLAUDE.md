@@ -26,8 +26,8 @@ started in the project folder; the VS Code extension skips it silently until the
   inventory of instructions, Swing classes and examples: `docs/planning/inventory.md`.
 - Example programs: `examples/`, with `.asm`, `.hex`, `.lst` and `.cod` files per instruction and
   per concept.
-- Time log: `docs/time-log.csv` (active minutes per day), kept by the user's time-report tool
-  (see Time tracking).
+- Time log: `docs/time-log.csv` (active minutes and exchanges per day), kept by the user's
+  time-report tool (see Time tracking).
 
 ## Commands
 
@@ -47,7 +47,8 @@ with plan step 4f. The old Swing version has no usable tests (plan F1).
 
 ## Time tracking
 
-The user wants to know how many active hours the project takes, in total and per week.
+The user wants to know how many active hours the project takes, in total and per week, and how
+many exchanges (one message from the user and Claude's reply) it took.
 
 - **At every pause** (in addition to `~/.claude/PAUSE_CONVENTION.md`), Claude runs
   `python3 ~/.claude/tools/time-report/time_report.py --weekly` from the repository root,
