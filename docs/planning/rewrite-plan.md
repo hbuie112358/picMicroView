@@ -11,13 +11,13 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 
 *Updated 2026-10-30.*
 
-- **Where the work stands:** planning on `master`. Steps 1 and 2 are done; decisions D1–D19 are
+- **Where the work stands:** planning on `master`. Steps 1–3 are done; decisions D1–D19 are
   made (D8–D19 are the stack; D15 partly replaces D13). JDK 25 is installed on the host beside
   21, which stays the default; the user's other project is pinned to JDK 21 on its own. No new
   code exists yet. The Swing code under `src/` is the behaviour reference (D1); it moves to
   `legacy/` in step 4 (D19).
-- **Next:** step 3 (reference sources) is in progress: the datasheet is downloaded and
-  recorded; the inventory is next.
+- **Next:** step 4 (build skeleton). Step 3 is done: the datasheet is in `reference/` and the
+  inventory in `inventory.md`.
 - **Order of the coming steps:** 3, 4, then the core in 5–9; the UI (10) after the core can run a
   program headless; then write, assemble and run (11).
 - **Open decisions waiting on the user:**
@@ -57,7 +57,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 1. `[x]` **Project setup** (095cf86): the project's `CLAUDE.md` (shape from
    `~/.claude/MULTI_PROJECT_SETUP.md` step 3) and `project-state.yaml` with
    `working_mode: rolling-wave`.
-2. `[x]` **Choose the stack:** Java version, build tool, web framework, where the simulator runs,
+2. `[x]` **Choose the stack** (1584c51): Java version, build tool, web framework, where the simulator runs,
    test tools for each level, and where the old code lives during the rewrite. Recorded as
    decisions. Already settled: D8 (the build file is the single source of truth), D9 (no dev
    container for now), D10 (Java 25), D11 (Maven), D12 (Spring Boot), D13 (two modules), D15
@@ -73,7 +73,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    server, streaming cycle-stamped pin changes) was set aside: input reaches the simulator
    0.2–0.4 s late, it costs server CPU per user, and during an outage output is correct only
    for programs that repeat exactly.
-3. `[~]` **Reference sources:** the PIC18F452 datasheet's instruction set and memory chapters as
+3. `[x]` **Reference sources:** the PIC18F452 datasheet's instruction set and memory chapters as
    the authority for behaviour (a pointer, not a copy in the repo); an inventory of what the Swing
    version implements and which `examples/` exist for each instruction.
    **The datasheet:** Microchip *PIC18FXX2 Data Sheet*, DS39564C (2006, the current revision;
@@ -84,7 +84,10 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    user calls "the manual". Printed page numbers are PDF page numbers minus 2. Chapters used:
    4.0 Memory Organization (page 35), 8.0 Interrupts (73), 9.0 I/O Ports (87), 10.0 Timer0
    (103), 20.0 Instruction Set Summary (211).
-   **Inventory:** not started; to go in `docs/planning/inventory.md`.
+   **Inventory:** [`inventory.md`](inventory.md). The datasheet has 69 instructions (75 counting
+   the `TBLRD`/`TBLWT` forms); the Swing version implements 59, all with examples; 10 are
+   missing (`CALL`, `CLRWDT`, `POP`, `PUSH`, `RESET`, `RETFIE`, `RETLW`, `SLEEP`, `TBLRD`,
+   `TBLWT`) and have no examples. No interrupt support.
 4. `[ ]` **Build skeleton:** an empty project that builds, runs one test of each level, and is
    wired into the commands in `CLAUDE.md`. Includes the TeaVM build of `core` (D15) and one
    browser end-to-end test of the compiled output (D16); this is where TeaVM with Java 25 is
@@ -161,3 +164,13 @@ step 8 where marked.
   `out/`, and since 2026-10-30 `reference/`) exist only on this machine, and a fresh clone has
   none. To fix in step 4: remove the self-reference and commit `.gitignore` with the build's
   ignores (for example `target/`).
+- **F7:** the datasheet's summary table (Table 20-2, printed page 214) has printing errors:
+  ADDWF's encoding `0010 01da0` (one bit too many), ADDWFC's `0010 0da` (one bit short), BTG's
+  operands `f, d, a` (should be `f, b, a`); confirmed on the page image, not an extraction error.
+  The decoder (step 7, D2) takes opcode patterns from each instruction's own page in section 20.1,
+  never from Table 20-2 alone.
+- **F8:** `examples/basic/r/rlfnc` and `examples/inDepth/r/rlfnc` are misnamed: no instruction
+  RLFNC exists; their programs exercise `RLNCF`. To rename (or merge) when the examples become
+  scenario tests (step 8).
+- **F9:** the Swing version's **Assemble** menu item has no action attached; the old version never
+  assembled programs. Relevant to step 11.
