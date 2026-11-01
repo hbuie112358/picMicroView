@@ -5,7 +5,7 @@
 project: picMicroView
 timestamp: 2026-10-30T19:54:08-04:00
 current_branch: rewrite
-last_commit: 3072273
+last_commit: 95c33ef
 
 working_mode: rolling-wave
 active_plan: docs/planning/rewrite-plan.md
@@ -18,7 +18,7 @@ last_work: >
   the log moved from docs/time-log.csv to ~/.claude/projects/<this project's folder>/
   time-log.csv (the tool's new default, tracked by ~/.claude/.gitignore; 16 tool tests pass).
   The project's CLAUDE.md lost its Time tracking section; the plan's pending check was reworded
-  (3072273).
+  (95c33ef).
 
 next_action: >
   At resume, the plan's Current position first: if the project's time log
@@ -29,7 +29,7 @@ next_action: >
   details before writing code.
 
 verification:
-  build_status: ./mvnw test passes (20 run, 0 failed, 0 skipped) at 1403ce9; unchanged since
+  build_status: ./mvnw test passes (20 run, 0 failed, 0 skipped) at 5d1e527; unchanged since
   time_log: 2 days logged (2026-10-29, 2026-10-30), 6.7 hours, 202 exchanges at this pause
   pushed: >
     no; master is 12 commits ahead of origin/master, and the rewrite branch and the tag

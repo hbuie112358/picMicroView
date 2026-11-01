@@ -14,8 +14,8 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 - **Where the work stands:** on the `rewrite` branch. Steps 1–3 are done; decisions D1–D20
   are made (D8–D20 are the stack; D15 partly replaces D13; D20 adds the `web` module and
   React). JDK 25 is installed on the host beside 21, which stays the default; the user's other
-  project is pinned to JDK 21 on its own. Step 4 has started: 4a (6138d53) moved the Swing
-  code to `legacy/`; 4b (1403ce9) added the Maven build and `core`, where `./mvnw test` passes
+  project is pinned to JDK 21 on its own. Step 4 has started: 4a (f7703f6) moved the Swing
+  code to `legacy/`; 4b (5d1e527) added the Maven build and `core`, where `./mvnw test` passes
   (20 tests). The Swing code, under `legacy/` (tagged `swing-final`), is the behaviour
   reference (D1, D19).
 - **Branch:** the rewrite happens on one long-lived branch, `rewrite`, created from `master`
@@ -63,10 +63,10 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 
 ## Steps
 
-1. `[x]` **Project setup** (095cf86): the project's `CLAUDE.md` (shape from
+1. `[x]` **Project setup** (ec6e604): the project's `CLAUDE.md` (shape from
    `~/.claude/MULTI_PROJECT_SETUP.md` step 3) and `project-state.yaml` with
    `working_mode: rolling-wave`.
-2. `[x]` **Choose the stack** (1584c51): Java version, build tool, web framework, where the
+2. `[x]` **Choose the stack** (14be4a9): Java version, build tool, web framework, where the
    simulator runs, test tools for each level, and where the old code lives during the rewrite.
    Recorded as
    decisions. Already settled: D8 (the build file is the single source of truth), D9 (no dev
@@ -84,7 +84,7 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    server, streaming cycle-stamped pin changes) was set aside: input reaches the simulator
    0.2–0.4 s late, it costs server CPU per user, and during an outage output is correct only
    for programs that repeat exactly.
-3. `[x]` **Reference sources** (d7ef226): the PIC18F452 datasheet's instruction set and memory
+3. `[x]` **Reference sources** (406fe2c): the PIC18F452 datasheet's instruction set and memory
    chapters as the authority for behaviour (a pointer, not a copy in the repo); an inventory of
    what the Swing version implements and which `examples/` exist for each instruction.
    **The datasheet:** Microchip *PIC18FXX2 Data Sheet*, DS39564C (2006, the current revision;
@@ -102,10 +102,10 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
 4. `[ ]` **Build skeleton:** an empty project that builds, runs one test of each level, and is
    wired into the commands in `CLAUDE.md`. Done in sub-steps, each explained, reviewed and
    committed on its own:
-   - 4a `[x]` *Housekeeping* (6138d53; the user ran the old app from the new jar): tag the
+   - 4a `[x]` *Housekeeping* (f7703f6; the user ran the old app from the new jar): tag the
      Swing code `swing-final`; `git mv` `src/`, `tests/`, `doc/` to `legacy/`; `legacy/pom.xml`
      (D19); track `.gitignore` (F6).
-   - 4b `[x]` *Maven skeleton and `core`* (1403ce9): root `pom.xml` with modules `core`, `app`,
+   - 4b `[x]` *Maven skeleton and `core`* (5d1e527): root `pom.xml` with modules `core`, `app`,
      `web`; Maven Wrapper; Toolchains choosing JDK 25; Enforcer; `core` with one JUnit 6 and
      AssertJ test
      and the ArchUnit rules (D14, D15). How the root gets library versions without giving `core`
@@ -196,7 +196,7 @@ checked against the datasheet in step 8 where marked.
   Claude believes the real chip only sets C.
 - **F5:** `Clock.start()` runs a busy loop on the calling thread and increments Timer0 once per
   instruction; `Timer` overflows at `0x10000` whatever Timer0's configuration. Replaced by D3/D4.
-- **F6:** **Fixed in 4a (6138d53).** `.gitignore` lists itself, so git does not track it: its
+- **F6:** **Fixed in 4a (f7703f6).** `.gitignore` lists itself, so git does not track it: its
   rules (`.idea/`, `*.iml`, `out/`, and since 2026-10-30 `reference/`) exist only on this
   machine, and a fresh clone has none. To fix in step 4: remove the self-reference and commit
   `.gitignore` with the build's ignores (for example `target/`).
