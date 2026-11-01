@@ -47,30 +47,7 @@ public class Window extends JFrame implements MouseListener, PicListener{
         pack();
         setVisible(true);
 		String filename;
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//picMicroView1600p.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//picBasicWithAddwf.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//picBasicGotoTrapStop.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//picBasicWithDecf.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//RelativeAddressTestFiles//picBnz.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//RelativeAddressTestFiles//picBnzAlternate.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//testPc.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//RelativeAddressTestFiles//picBz.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//bsfTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//btgTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//bcfTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//movffTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//btfssTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//iorwfTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//RelativeAddressTestFiles//rcallReturnTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//RelativeAddressTestFiles//braTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//andlwTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//movfTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//statusRegTestFiles//addwfcTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//clockPortToggleTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//portaTest.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//p1Test.hex";
-		filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//p1ModEven.hex";
-		//filename = "//home//hb//taylorplyr@gmail.com//summerDev//picFiles//p1orig//p1orig.hex";
+		filename = "picFiles//p1ModEven.hex";
 
 
 
