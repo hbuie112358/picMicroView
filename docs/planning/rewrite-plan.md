@@ -127,7 +127,10 @@ Java, a web UI instead of Swing, and tests checked against the datasheet.
    - 4e `[ ]` *Browser end-to-end test:* one Playwright test run by `./mvnw verify`, checking the
      compiled code gives the JVM's result (D16); Playwright for Java or Node decided here.
    - 4f `[ ]` *Wire up:* build and run commands in the project's `CLAUDE.md`; optionally a VS Code
-     launch configuration.
+     launch configuration. Also CI: a GitHub Actions workflow with a job named "Build and test"
+     (`./mvnw verify`); then, on GitHub, add that job as a required check to the `master` rule
+     set (`main-reviewed-changes-only`, created 2026-11-01 without it, since no workflow existed),
+     and allow only GitHub-owned actions, pinned by full commit SHA.
    TeaVM with Java 25 is first checked for real in 4d.
 5. `[ ]` **Program loading:** Intel HEX parsing into program memory, with tests for malformed
    input.
